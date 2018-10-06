@@ -29,13 +29,15 @@ SOURCES += \
         mainwindow.cpp \
     player.cpp \
     world.cpp \
-    map.cpp
+    map.cpp \
+    rectangle.cpp
 
 HEADERS += \
         mainwindow.h \
     player.h \
     world.h \
-    map.h
+    map.h \
+    rectangle.h
 
 FORMS +=
 

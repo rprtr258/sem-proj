@@ -1,8 +1,9 @@
 #include "world.h"
 
 World::World() {
-    player = new Player();
+    player = new Player(map);
     map.fillRectangle(0, 0, 20, 480);
+    map.fillRectangle(620, 0, 640, 480);
 }
 
 World::~World() {
