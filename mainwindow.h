@@ -1,14 +1,17 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "helper.h"
 #include <QOpenGLWidget>
 #include <QKeyEvent>
+#include <QPen>
 
 class MainWindow : public QOpenGLWidget {
     public:
         MainWindow(QWidget *parent = nullptr);
         void keyPressEvent(QKeyEvent *event) override;
+        void keyReleaseEvent(QKeyEvent *event) override;
+        void paint(QPainter *painter, QPaintEvent *event, int elapsed);
+        void move(int dx);
 
     public slots:
         void animate();
@@ -17,8 +20,12 @@ class MainWindow : public QOpenGLWidget {
         void paintEvent(QPaintEvent *event) override;
 
     private:
-        Helper *helper;
         int elapsed;
+        QBrush background;
+        QBrush circleBrush;
+        QPen circlePen;
+        int x;
+        int speed;
 };
 
 #endif // MAINWINDOW_H
