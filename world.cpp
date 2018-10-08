@@ -4,6 +4,7 @@ World::World() {
     player = new Player(map);
     map.fillRectangle(0, 0, 20, 480);
     map.fillRectangle(620, 0, 640, 480);
+    map.fillRectangle(0, 460, 640, 480);
 }
 
 World::~World() {
@@ -16,6 +17,10 @@ void World::keyPressEvent(QKeyEvent *event) {
     } else if (event->key() == Qt::Key_D) {
         player->goRight();
     }
+}
+
+void World::update() {
+    player->update();
 }
 
 void World::draw(QPainter *painter) {

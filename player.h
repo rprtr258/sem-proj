@@ -13,9 +13,12 @@ class Player {
         void goLeft();
         void goRight();
 
+        void update();
+
         void draw(QPainter *painter);
     private:
         int x;
+        int y;
         Rectangle boundingBox;
         QPixmap sprite;
         Map *map;

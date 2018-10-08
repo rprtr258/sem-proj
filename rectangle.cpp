@@ -9,3 +9,8 @@ void Rectangle::moveHorizontal(const int &dx) {
     right += dx;
 }
 
+void Rectangle::moveVertical(const int &dy) {
+    top += dy;
+    bottom += dy;
+}
+

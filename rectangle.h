@@ -7,6 +7,7 @@ class Rectangle {
         Rectangle();
 
         void moveHorizontal(const int &dx);
+        void moveVertical(const int &dy);
 
     public:
         int left, right, top, bottom;

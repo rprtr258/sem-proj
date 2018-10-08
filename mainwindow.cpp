@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) : QOpenGLWidget(parent) {
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::animate);
-    timer->start(50);
+    timer->start(1);
     elapsed = 0;
     setAutoFillBackground(false);
 }
@@ -26,6 +26,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 
 void MainWindow::animate() {
     elapsed += qobject_cast<QTimer*>(sender())->interval();
+    world->update();
     update();
 }
 

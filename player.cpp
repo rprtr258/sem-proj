@@ -3,19 +3,14 @@
 
 Player::Player(Map &worldMap) {
     x = 170;
+    y = 0;
     map = &worldMap;
     boundingBox.left = x;
     boundingBox.right = x + 55;
-    boundingBox.top = 0;
-    boundingBox.bottom = 95;
-    sprite.load("C:\\Users\\rprtr258\\projects\\prototype\\img\\hero.png");
+    boundingBox.top = y;
+    boundingBox.bottom = y + 95;
+    sprite.load("C:\\Users\\rprtr258\\projects\\sem-proj\\img\\hero.png");
     sprite.setMask(sprite.createHeuristicMask());
-}
-
-Rectangle getDeltaRect(const Rectangle &rect, const int &dx) {
-    Rectangle res = rect;
-    res.moveHorizontal(dx);
-    return res;
 }
 
 bool doesIntersectWall(const Map &map, const Rectangle &rect) {
@@ -24,12 +19,13 @@ bool doesIntersectWall(const Map &map, const Rectangle &rect) {
 
 void Player::goLeft() {
     int dx = -5;
-    Rectangle newRect = getDeltaRect(boundingBox, dx);
+    Rectangle newRect = boundingBox;
+    newRect.moveHorizontal(dx);
     while (doesIntersectWall(*map, newRect) and dx < 0) {
         dx++;
-        newRect = getDeltaRect(boundingBox, dx);
+        newRect.moveHorizontal(1);
     }
-    if (doesIntersectWall(*map, newRect) or dx == 0)
+    if (dx == 0)
         return;
     x += dx;
     boundingBox.moveHorizontal(dx);
@@ -37,17 +33,32 @@ void Player::goLeft() {
 
 void Player::goRight() {
     int dx = 5;
-    Rectangle newRect = getDeltaRect(boundingBox, dx);
+    Rectangle newRect = boundingBox;
+    newRect.moveHorizontal(dx);
     while (doesIntersectWall(*map, newRect) and dx > 0) {
         dx--;
-        newRect = getDeltaRect(boundingBox, dx);
+        newRect.moveHorizontal(-1);
     }
-    if (doesIntersectWall(*map, newRect) or dx == 0)
+    if (dx == 0)
         return;
     x += dx;
     boundingBox.moveHorizontal(dx);
 }
 
+void Player::update() {
+    int dy = 10;
+    Rectangle newRect = boundingBox;
+    newRect.moveVertical(dy);
+    while (doesIntersectWall(*map, newRect) and dy > 0) {
+        dy--;
+        newRect.moveVertical(-1);
+    }
+    if (dy == 0)
+        return;
+    y += dy;
+    boundingBox.moveVertical(dy);
+}
+
 void Player::draw(QPainter *painter) {
-    painter->drawPixmap(x, 0, sprite.copy(0, 28, 55, 95));
+    painter->drawPixmap(x, y, sprite.copy(0, 28, 55, 95));
 }

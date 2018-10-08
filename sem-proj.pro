@@ -8,7 +8,7 @@ QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = prototype
+TARGET = sem-proj
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -27,19 +27,17 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    player.cpp \
-    world.cpp \
-    map.cpp \
-    rectangle.cpp
+        player.cpp \
+        world.cpp \
+        map.cpp \
+        rectangle.cpp
 
 HEADERS += \
         mainwindow.h \
-    player.h \
-    world.h \
-    map.h \
-    rectangle.h
-
-FORMS +=
+        player.h \
+        world.h \
+        map.h \
+        rectangle.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

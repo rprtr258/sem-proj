@@ -6,7 +6,7 @@ Map::Map() {
 
 bool Map::isFilled(const int &x, const int &y) const {
     for (unsigned int i = 0; i < x1s.size(); i++)
-        if (x1s[i] <= x and x <= x2s[i] and y1s[i] <= y and y <= y2s[i])
+        if (x1s[i] < x and x < x2s[i] and y1s[i] < y and y < y2s[i])
             return true;
     return false;
 }
