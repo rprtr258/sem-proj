@@ -9,7 +9,7 @@ Player::Player(Map &worldMap) {
     boundingBox.right = x + 55;
     boundingBox.top = y;
     boundingBox.bottom = y + 95;
-    sprite.load("C:\\Users\\rprtr258\\projects\\sem-proj\\img\\hero.png");
+    sprite.load(":/img/hero.png");
     sprite.setMask(sprite.createHeuristicMask());
 }
 
