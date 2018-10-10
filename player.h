@@ -20,6 +20,7 @@ class Player {
         void draw(QPainter *painter);
     private:
         void flipSprite();
+        void moveHorizontal(int speed);
     private:
         int x;
         int y;

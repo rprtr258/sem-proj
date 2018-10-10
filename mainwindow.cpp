@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) : QOpenGLWidget(parent) {
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::animate);
-    timer->start(1);
+    timer->start(20);
     elapsed = 0;
     setAutoFillBackground(false);
 }

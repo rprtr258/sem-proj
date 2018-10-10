@@ -19,9 +19,11 @@ bool doesIntersectWall(const Map &map, const Rectangle &rect) {
 }
 
 void Player::goLeft() {
-    if (spriteFlipped)
-        flipSprite();
-    isKeyPressed[Qt::Key_A] = true;
+    if (not isKeyPressed[Qt::Key_A] and not isKeyPressed[Qt::Key_D]) {
+        if (spriteFlipped)
+            flipSprite();
+        isKeyPressed[Qt::Key_A] = true;
+    }
 }
 
 void Player::stopLeft() {
@@ -29,9 +31,11 @@ void Player::stopLeft() {
 }
 
 void Player::goRight() {
-    if (not spriteFlipped)
-        flipSprite();
-    isKeyPressed[Qt::Key_D] = true;
+    if (not isKeyPressed[Qt::Key_A] and not isKeyPressed[Qt::Key_D]) {
+        if (not spriteFlipped)
+            flipSprite();
+        isKeyPressed[Qt::Key_D] = true;
+    }
 }
 
 void Player::stopRight() {
@@ -40,29 +44,10 @@ void Player::stopRight() {
 
 void Player::update() {
     if (isKeyPressed[Qt::Key_A]) {
-        int dx = -5;
-        Rectangle newRect = boundingBox;
-        newRect.moveHorizontal(dx);
-        while (doesIntersectWall(*map, newRect) and dx < 0) {
-            dx++;
-            newRect.moveHorizontal(1);
-        }
-        if (dx == 0)
-            return;
-        x += dx;
-        boundingBox.moveHorizontal(dx);
-    } else if (isKeyPressed[Qt::Key_D]) {
-        int dx = 5;
-        Rectangle newRect = boundingBox;
-        newRect.moveHorizontal(dx);
-        while (doesIntersectWall(*map, newRect) and dx > 0) {
-            dx--;
-            newRect.moveHorizontal(-1);
-        }
-        if (dx == 0)
-            return;
-        x += dx;
-        boundingBox.moveHorizontal(dx);
+        moveHorizontal(-5);
+    }
+    if (isKeyPressed[Qt::Key_D]) {
+        moveHorizontal(5);
     }
     int dy = 10;
     Rectangle newRect = boundingBox;
@@ -84,4 +69,23 @@ void Player::draw(QPainter *painter) {
 void Player::flipSprite() {
     spriteFlipped = not spriteFlipped;
     sprite = sprite.transformed(QMatrix(-1, 0, 0, 1, 0, 0));
+}
+
+int sign(const int &x) {
+    return (x > 0) - (x < 0);
+}
+
+void Player::moveHorizontal(int speed) {
+    int dx = speed;
+    int delta = sign(speed);
+    Rectangle newRect = boundingBox;
+    newRect.moveHorizontal(dx);
+    while (doesIntersectWall(*map, newRect) and dx * delta > 0) {
+        dx -= delta;
+        newRect.moveHorizontal(1);
+    }
+    if (dx == 0)
+        return;
+    x += dx;
+    boundingBox.moveHorizontal(dx);
 }
