@@ -14,17 +14,16 @@ World::~World() {
 void World::keyPressEvent(QKeyEvent *event) {
     if (isKeyPressed[event->key()])
         return;
-    if ((isKeyPressed[Qt::Key_A] and event->key() == Qt::Key_D) or
-        (isKeyPressed[Qt::Key_D] and event->key() == Qt::Key_A))
-        return;
     isKeyPressed[event->key()] = true;
     switch (event->key()) {
         case (Qt::Key_A): {
-            player->goLeft();
+            if (not isKeyPressed[Qt::Key_D])
+                player->goLeft();
             break;
         }
         case (Qt::Key_D): {
-            player->goRight();
+            if (not isKeyPressed[Qt::Key_A])
+                player->goRight();
             break;
         }
     }
@@ -35,10 +34,14 @@ void World::keyReleaseEvent(QKeyEvent *event) {
     switch (event->key()) {
         case (Qt::Key_A): {
             player->stopLeft();
+            if (isKeyPressed[Qt::Key_D])
+                player->goRight();
             break;
         }
         case (Qt::Key_D): {
             player->stopRight();
+            if (isKeyPressed[Qt::Key_A])
+                player->goLeft();
             break;
         }
     }
