@@ -5,6 +5,7 @@
 #include "player.h"
 
 #include <QKeyEvent>
+#include <QMap>
 
 class World {
     public:
@@ -19,6 +20,7 @@ class World {
     private:
         Player *player;
         Map map;
+        QMap<int, bool> isKeyPressed;
 };
 
 #endif // WORLD_H

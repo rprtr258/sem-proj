@@ -27,7 +27,8 @@ class Player {
         Rectangle boundingBox;
         QPixmap sprite;
         Map *map;
-        std::map<int, bool> isKeyPressed;
+        bool goingLeft;
+        bool goingRight;
         bool spriteFlipped;
 };
 

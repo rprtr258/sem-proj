@@ -2,6 +2,7 @@
 #include <QBitmap>
 
 Player::Player(Map &worldMap) {
+    goingLeft = goingRight = false;
     x = 170;
     y = 0;
     map = &worldMap;
@@ -19,36 +20,30 @@ bool doesIntersectWall(const Map &map, const Rectangle &rect) {
 }
 
 void Player::goLeft() {
-    if (not isKeyPressed[Qt::Key_A] and not isKeyPressed[Qt::Key_D]) {
-        if (spriteFlipped)
-            flipSprite();
-        isKeyPressed[Qt::Key_A] = true;
-    }
+    goingLeft = true;
+    if (spriteFlipped)
+        flipSprite();
 }
 
 void Player::stopLeft() {
-    isKeyPressed[Qt::Key_A] = false;
+    goingLeft = false;
 }
 
 void Player::goRight() {
-    if (not isKeyPressed[Qt::Key_A] and not isKeyPressed[Qt::Key_D]) {
-        if (not spriteFlipped)
-            flipSprite();
-        isKeyPressed[Qt::Key_D] = true;
-    }
+    goingRight = true;
+    if (not spriteFlipped)
+        flipSprite();
 }
 
 void Player::stopRight() {
-    isKeyPressed[Qt::Key_D] = false;
+    goingRight = false;
 }
 
 void Player::update() {
-    if (isKeyPressed[Qt::Key_A]) {
+    if (goingLeft)
         moveHorizontal(-5);
-    }
-    if (isKeyPressed[Qt::Key_D]) {
+    if (goingRight)
         moveHorizontal(5);
-    }
     int dy = 10;
     Rectangle newRect = boundingBox;
     newRect.moveVertical(dy);
