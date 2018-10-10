@@ -3,6 +3,7 @@
 
 Player::Player(Map &worldMap) {
     goingLeft = goingRight = false;
+    vspeed = 0;
     x = 170;
     y = 0;
     map = &worldMap;
@@ -39,12 +40,22 @@ void Player::stopRight() {
     goingRight = false;
 }
 
+void Player::jump() {
+    if (map->isFilled(boundingBox.left, boundingBox.bottom + 1))
+        vspeed = 30;
+}
+
+void Player::stopJump() {
+
+}
+
 void Player::update() {
     if (goingLeft)
         moveHorizontal(-5);
     if (goingRight)
         moveHorizontal(5);
-    int dy = 10;
+    int dy = 10 - vspeed;
+    vspeed = std::max(vspeed - 1, 0);
     Rectangle newRect = boundingBox;
     newRect.moveVertical(dy);
     while (doesIntersectWall(*map, newRect) and dy > 0) {
@@ -59,6 +70,7 @@ void Player::update() {
 
 void Player::draw(QPainter *painter) {
     painter->drawPixmap(x, y, sprite.copy(0, 28, 55, 95));
+    painter->drawRect(boundingBox.left, boundingBox.top, boundingBox.right - boundingBox.left, boundingBox.bottom - boundingBox.top);
 }
 
 void Player::flipSprite() {

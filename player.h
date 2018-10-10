@@ -14,6 +14,8 @@ class Player {
         void stopLeft();
         void goRight();
         void stopRight();
+        void jump();
+        void stopJump();
 
         void update();
 
@@ -24,6 +26,7 @@ class Player {
     private:
         int x;
         int y;
+        int vspeed;
         Rectangle boundingBox;
         QPixmap sprite;
         Map *map;

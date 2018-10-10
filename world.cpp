@@ -3,6 +3,7 @@
 World::World() {
     player = new Player(map);
     map.fillRectangle(0, 0, 20, 480);
+    map.fillRectangle(0, 300, 100, 320);
     map.fillRectangle(620, 0, 640, 480);
     map.fillRectangle(0, 460, 640, 480);
 }
@@ -26,6 +27,10 @@ void World::keyPressEvent(QKeyEvent *event) {
                 player->goRight();
             break;
         }
+        case (Qt::Key_Space): {
+            player->jump();
+            break;
+        }
     }
 }
 
@@ -42,6 +47,10 @@ void World::keyReleaseEvent(QKeyEvent *event) {
             player->stopRight();
             if (isKeyPressed[Qt::Key_A])
                 player->goLeft();
+            break;
+        }
+        case (Qt::Key_Space): {
+            player->stopJump();
             break;
         }
     }
