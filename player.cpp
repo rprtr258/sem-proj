@@ -7,6 +7,7 @@ int sign(const int &x) {
 
 Player::Player(Map &worldMap) {
     goingLeft = goingRight = false;
+    jumping = false;
     vspeed = 0;
     x = 170;
     y = 0;
@@ -41,12 +42,11 @@ void Player::stopRight() {
 }
 
 void Player::jump() {
-    if (map->isFilled(boundingBox.left, boundingBox.bottom + 1))
-        vspeed = 30;
+    jumping = true;
 }
 
 void Player::stopJump() {
-
+    jumping = false;
 }
 
 void Player::update() {
@@ -54,6 +54,8 @@ void Player::update() {
         moveHorizontal(-5);
     if (goingRight)
         moveHorizontal(5);
+    if (jumping and map->isFilled(boundingBox.left, boundingBox.bottom + 1))
+        vspeed = 30;
     moveVertical(10 - vspeed);
     vspeed = std::max(vspeed - 1, 0);
 }

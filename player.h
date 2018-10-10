@@ -33,6 +33,7 @@ class Player {
         Map *map;
         bool goingLeft;
         bool goingRight;
+        bool jumping;
         bool spriteFlipped;
 };
 
