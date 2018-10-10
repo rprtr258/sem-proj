@@ -12,6 +12,7 @@ class World {
         ~World();
 
         void keyPressEvent(QKeyEvent *event);
+        void keyReleaseEvent(QKeyEvent *event);
         void update();
 
         void draw(QPainter *painter);

@@ -21,7 +21,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-    Q_UNUSED(event)
+    world->keyReleaseEvent(event);
 }
 
 void MainWindow::animate() {

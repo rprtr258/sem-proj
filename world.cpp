@@ -12,10 +12,28 @@ World::~World() {
 }
 
 void World::keyPressEvent(QKeyEvent *event) {
-    if (event->key() == Qt::Key_A) {
-        player->goLeft();
-    } else if (event->key() == Qt::Key_D) {
-        player->goRight();
+    switch (event->key()) {
+        case (Qt::Key_A): {
+            player->goLeft();
+            break;
+        }
+        case (Qt::Key_D): {
+            player->goRight();
+            break;
+        }
+    }
+}
+
+void World::keyReleaseEvent(QKeyEvent *event) {
+    switch (event->key()) {
+        case (Qt::Key_A): {
+            player->stopLeft();
+            break;
+        }
+        case (Qt::Key_D): {
+            player->stopRight();
+            break;
+        }
     }
 }
 
