@@ -1,6 +1,10 @@
 #include "player.h"
 #include <QBitmap>
 
+int sign(const int &x) {
+    return (x > 0) - (x < 0);
+}
+
 Player::Player(Map &worldMap) {
     goingLeft = goingRight = false;
     vspeed = 0;
@@ -14,10 +18,6 @@ Player::Player(Map &worldMap) {
     sprite.load(":/img/hero.png");
     sprite.setMask(sprite.createHeuristicMask());
     spriteFlipped = false;
-}
-
-bool doesIntersectWall(const Map &map, const Rectangle &rect) {
-    return map.isFilled(rect);
 }
 
 void Player::goLeft() {
@@ -54,18 +54,8 @@ void Player::update() {
         moveHorizontal(-5);
     if (goingRight)
         moveHorizontal(5);
-    int dy = 10 - vspeed;
+    moveVertical(10 - vspeed);
     vspeed = std::max(vspeed - 1, 0);
-    Rectangle newRect = boundingBox;
-    newRect.moveVertical(dy);
-    while (doesIntersectWall(*map, newRect) and dy > 0) {
-        dy--;
-        newRect.moveVertical(-1);
-    }
-    if (dy == 0)
-        return;
-    y += dy;
-    boundingBox.moveVertical(dy);
 }
 
 void Player::draw(QPainter *painter) {
@@ -78,21 +68,33 @@ void Player::flipSprite() {
     sprite = sprite.transformed(QMatrix(-1, 0, 0, 1, 0, 0));
 }
 
-int sign(const int &x) {
-    return (x > 0) - (x < 0);
-}
-
 void Player::moveHorizontal(int speed) {
     int dx = speed;
     int delta = sign(speed);
     Rectangle newRect = boundingBox;
     newRect.moveHorizontal(dx);
-    while (doesIntersectWall(*map, newRect) and dx * delta > 0) {
+    while (map->isFilled(newRect) and dx * delta > 0) {
         dx -= delta;
-        newRect.moveHorizontal(1);
+        newRect.moveHorizontal(-delta);
     }
     if (dx == 0)
         return;
     x += dx;
     boundingBox.moveHorizontal(dx);
+}
+
+void Player::moveVertical(int speed) {
+    int dy = speed;
+    int delta = sign(speed);
+    Rectangle newRect = boundingBox;
+    newRect.moveVertical(dy);
+    while (map->isFilled(newRect) and dy * delta > 0) {
+        dy -= delta;
+        newRect.moveVertical(-delta);
+        vspeed = 0;
+    }
+    if (dy == 0)
+        return;
+    y += dy;
+    boundingBox.moveVertical(dy);
 }

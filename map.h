@@ -15,10 +15,7 @@ class Map {
         void draw(QPainter *painter);
     private:
         QBrush brush;
-        std::vector<int> x1s;
-        std::vector<int> y1s;
-        std::vector<int> x2s;
-        std::vector<int> y2s;
+        std::vector<Rectangle> rects;
 };
 
 #endif // MAP_H

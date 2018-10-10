@@ -23,6 +23,7 @@ class Player {
     private:
         void flipSprite();
         void moveHorizontal(int speed);
+        void moveVertical(int speed);
     private:
         int x;
         int y;
