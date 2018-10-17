@@ -1,8 +1,6 @@
 #include "map.h"
 
-Map::Map() {
-    brush.setColor(QColor(247, 247, 247));
-}
+Map::Map() {}
 
 bool Map::isFilled(const int &x, const int &y) const {
     for (const MyRectangle &r : rects)
@@ -27,10 +25,4 @@ void Map::fillRectangle(int x1, int y1, int x2, int y2) {
     if (y1 > y2)
         std::swap(y1, y2);
     rects.push_back(MyRectangle(x1, y1, x2, y2));
-}
-
-void Map::draw(QPainter *painter) {
-    painter->setBrush(brush);
-    for (const MyRectangle &r : rects)
-        painter->drawRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
 }

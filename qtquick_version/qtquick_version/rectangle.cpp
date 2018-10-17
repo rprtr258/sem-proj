@@ -20,4 +20,3 @@ void MyRectangle::moveVertical(const int &dy) {
     top += dy;
     bottom += dy;
 }
-

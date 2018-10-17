@@ -2,8 +2,7 @@
 #define MAP_H
 
 #include "rectangle.h"
-
-#include <QPainter>
+#include <vector>
 
 class Map {
     public:
@@ -11,10 +10,7 @@ class Map {
         bool isFilled(const int &x, const int &y) const;
         bool isFilled(const MyRectangle &r) const;
         void fillRectangle(int x1, int y1, int x2, int y2);
-
-        void draw(QPainter *painter);
     private:
-        QBrush brush;
         std::vector<MyRectangle> rects;
 };
 

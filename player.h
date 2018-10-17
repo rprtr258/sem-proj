@@ -1,40 +1,11 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "map.h"
-#include "rectangle.h"
 
-#include <QPainter>
-
-class Player {
-    public:
-        Player(Map &map);
-
-        void goLeft();
-        void stopLeft();
-        void goRight();
-        void stopRight();
-        void jump();
-        void stopJump();
-
-        void update();
-
-        void draw(QPainter *painter);
-    private:
-        void flipSprite();
-        void moveHorizontal(int speed);
-        void moveVertical(int speed);
-    private:
-        int x;
-        int y;
-        int vspeed;
-        Rectangle boundingBox;
-        QPixmap sprite;
-        Map *map;
-        bool goingLeft;
-        bool goingRight;
-        bool jumping;
-        bool spriteFlipped;
+class Player
+{
+public:
+    Player();
 };
 
 #endif // PLAYER_H
