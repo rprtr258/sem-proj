@@ -8,6 +8,7 @@ class Player : public QObject {
     Q_OBJECT
     Q_PROPERTY(int x READ getX WRITE setX NOTIFY xChanged)
     Q_PROPERTY(int y READ getY WRITE setY NOTIFY yChanged)
+    Q_DISABLE_COPY(Player)
 
     public:
         Player(Map &map);
