@@ -7,7 +7,6 @@
 #include <QMap>
 
 class World {
-
     public:
         World();
         ~World();

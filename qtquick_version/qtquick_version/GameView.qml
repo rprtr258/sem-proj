@@ -6,6 +6,34 @@ Item {
     anchors.fill: parent
     signal keyPressed(int key, int modifier)
     signal keyReleased(int key, int modifier)
+    Rectangle {
+        x: 0
+        y: 0
+        width: 20
+        height: 480
+        color: "brown"
+    }
+    Rectangle {
+        x: 0
+        y: 300
+        width: 100
+        height: 20
+        color: "brown"
+    }
+    Rectangle {
+        x: 620
+        y: 0
+        width: 20
+        height: 480
+        color: "brown"
+    }
+    Rectangle {
+        x: 0
+        y: 460
+        width: 640
+        height: 20
+        color: "brown"
+    }
     Item {
         x: player.x
         y: player.y
