@@ -7,20 +7,21 @@
 #include <QMap>
 
 class World {
+
     public:
         World();
         ~World();
         void update();
-        void keyPressEvent(int key);
-        void keyReleaseEvent(int key);
+        void keyPressEvent(qint32 key);
+        void keyReleaseEvent(qint32 key);
         Player* getPlayer() {
-            return player;
+            return m_player;
         }
 
     private:
-        Player *player;
-        Map map;
-        QMap<int, bool> isKeyPressed;
+        Player *m_player;
+        Map m_map;
+        QMap<int, bool> m_keyPressMap;
 };
 
 #endif // WORLD_H

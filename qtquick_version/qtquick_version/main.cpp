@@ -1,7 +1,7 @@
 #include <QApplication>
 #include "mainwidget.h"
 
-int main(int argc, char *argv[]) {
+qint32 main(qint32 argc, char *argv[]) {
     QApplication app(argc, argv);
 
     MainWidget mainWidget;

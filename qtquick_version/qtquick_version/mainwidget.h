@@ -12,11 +12,11 @@ class MainWidget : public QQuickView {
         ~MainWidget() override;
     public slots:
         void update();
-        void keyPressedEvent(int key, int modifier);
-        void keyReleasedEvent(int key, int modifier);
+        void keyPressedEvent(qint32 key, qint32 modifier);
+        void keyReleasedEvent(qint32 key, qint32 modifier);
     private:
-        QTimer gameTimer;
-        World *world;
+        QTimer m_gameTimer;
+        World *m_world;
 };
 
 #endif // MAINWIDGET_H

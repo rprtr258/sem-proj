@@ -6,12 +6,12 @@
 
 class Player : public QObject {
     Q_OBJECT
-    Q_PROPERTY(int x READ getX WRITE setX NOTIFY xChanged)
-    Q_PROPERTY(int y READ getY WRITE setY NOTIFY yChanged)
+    Q_PROPERTY(qint32 x READ x WRITE setX NOTIFY xChanged)
+    Q_PROPERTY(qint32 y READ y WRITE setY NOTIFY yChanged)
     Q_DISABLE_COPY(Player)
 
     public:
-        Player(Map &map);
+        Player(Map &m_map);
         void goLeft();
         void stopLeft();
         void goRight();
@@ -21,22 +21,22 @@ class Player : public QObject {
 
         void update();
 
-        int getX() const {
-            return x;
+        qint32 x() const {
+            return m_xCoord;
         }
-        void setX(int _x) {
-            if (x == _x)
+        void setX(qint32 _x) {
+            if (m_xCoord == _x)
                 return;
-            x = _x;
+            m_xCoord = _x;
             emit xChanged();
         }
-        int getY() const {
-            return y;
+        qint32 y() const {
+            return m_yCoord;
         }
-        void setY(int _y) {
-            if (y == _y)
+        void setY(qint32 _y) {
+            if (m_yCoord == _y)
                 return;
-            y = _y;
+            m_yCoord = _y;
             emit yChanged();
         }
 signals:
@@ -45,18 +45,18 @@ signals:
 
 private:
         void flipSprite();
-        void moveHorizontal(int speed);
-        void moveVertical(int speed);
+        void moveHorizontal(qint32 speed);
+        void moveVertical(qint32 speed);
     private:
-        int x;
-        int y;
-        int vspeed;
-        MyRectangle boundingBox;
-        Map *map;
-        bool goingLeft;
-        bool goingRight;
-        bool jumping;
-        bool spriteFlipped;
+        qint32 m_xCoord;
+        qint32 m_yCoord;
+        qint32 m_vspeed;
+        MyRectangle m_boundingBox;
+        Map *m_map;
+        bool m_goingLeft;
+        bool m_goingRight;
+        bool m_jumping;
+        bool m_spriteFlipped;
 };
 
 #endif // PLAYER_H

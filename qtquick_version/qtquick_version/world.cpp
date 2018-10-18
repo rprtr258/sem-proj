@@ -1,61 +1,61 @@
 #include "world.h"
 
 World::World() {
-    player = new Player(map);
-    map.fillRectangle(0, 0, 20, 480);
-    map.fillRectangle(0, 300, 100, 320);
-    map.fillRectangle(620, 0, 640, 480);
-    map.fillRectangle(0, 460, 640, 480);
+    m_player = new Player(m_map);
+    m_map.fillRectangle(0, 0, 20, 480);
+    m_map.fillRectangle(0, 300, 100, 320);
+    m_map.fillRectangle(620, 0, 640, 480);
+    m_map.fillRectangle(0, 460, 640, 480);
 }
 
 World::~World() {
-    delete player;
+    delete m_player;
 }
 
-void World::keyPressEvent(int key) {
-    if (isKeyPressed[key])
+void World::keyPressEvent(qint32 key) {
+    if (m_keyPressMap[key])
         return;
-    isKeyPressed[key] = true;
+    m_keyPressMap[key] = true;
     switch (key) {
         case (Qt::Key_A): {
-            if (not isKeyPressed[Qt::Key_D])
-                player->goLeft();
+            if (not m_keyPressMap[Qt::Key_D])
+                m_player->goLeft();
             break;
         }
         case (Qt::Key_D): {
-            if (not isKeyPressed[Qt::Key_A])
-                player->goRight();
+            if (not m_keyPressMap[Qt::Key_A])
+                m_player->goRight();
             break;
         }
         case (Qt::Key_Space): {
-            player->jump();
+            m_player->jump();
             break;
         }
     }
 }
 
-void World::keyReleaseEvent(int key) {
-    isKeyPressed[key] = false;
+void World::keyReleaseEvent(qint32 key) {
+    m_keyPressMap[key] = false;
     switch (key) {
         case (Qt::Key_A): {
-            player->stopLeft();
-            if (isKeyPressed[Qt::Key_D])
-                player->goRight();
+            m_player->stopLeft();
+            if (m_keyPressMap[Qt::Key_D])
+                m_player->goRight();
             break;
         }
         case (Qt::Key_D): {
-            player->stopRight();
-            if (isKeyPressed[Qt::Key_A])
-                player->goLeft();
+            m_player->stopRight();
+            if (m_keyPressMap[Qt::Key_A])
+                m_player->goLeft();
             break;
         }
         case (Qt::Key_Space): {
-            player->stopJump();
+            m_player->stopJump();
             break;
         }
     }
 }
 
 void World::update() {
-    player->update();
+    m_player->update();
 }

@@ -2,17 +2,17 @@
 #include <QQmlContext>
 
 MainWidget::MainWidget() : QQuickView() {
-    world = new World();
+    m_world = new World();
 
     setResizeMode(QQuickView::SizeRootObjectToView);
     setSource(QUrl("qrc:/main.qml"));
 
-    connect(&gameTimer, &QTimer::timeout, this, &MainWidget::update);
-    gameTimer.setInterval(20);
-    connect(findChild<QObject*>("gameView"), SIGNAL(keyPressed(int, int)), this, SLOT(keyPressedEvent(int, int)));
-    connect(findChild<QObject*>("gameView"), SIGNAL(keyReleased(int, int)), this, SLOT(keyReleasedEvent(int, int)));
+    connect(&m_gameTimer, &QTimer::timeout, this, &MainWidget::update);
+    m_gameTimer.setInterval(20);
+    connect(findChild<QObject*>("gameView"), SIGNAL(keyPressed(qint32, qint32)), this, SLOT(keyPressedEvent(qint32, qint32)));
+    connect(findChild<QObject*>("gameView"), SIGNAL(keyReleased(qint32, qint32)), this, SLOT(keyReleasedEvent(qint32, qint32)));
 
-    rootContext()->setContextProperty("player", world->getPlayer());
+    rootContext()->setContextProperty("player", m_world->getPlayer());
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWidget::update);
@@ -20,20 +20,20 @@ MainWidget::MainWidget() : QQuickView() {
 }
 
 MainWidget::~MainWidget() {
-    delete world;
+    delete m_world;
 }
 
 void MainWidget::update() {
-    world->update();
+    m_world->update();
 }
 
-void MainWidget::keyPressedEvent(int key, int modifier) {
+void MainWidget::keyPressedEvent(qint32 key, qint32 modifier) {
     Q_UNUSED(modifier)
-    world->keyPressEvent(key);
+    m_world->keyPressEvent(key);
     //qDebug() << key;
 }
 
-void MainWidget::keyReleasedEvent(int key, int modifier) {
+void MainWidget::keyReleasedEvent(qint32 key, qint32 modifier) {
     Q_UNUSED(modifier)
-    world->keyReleaseEvent(key);
+    m_world->keyReleaseEvent(key);
 }

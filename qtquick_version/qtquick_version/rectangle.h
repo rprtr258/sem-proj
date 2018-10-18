@@ -1,16 +1,21 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
+#include <QtMath>
+
 class MyRectangle {
     public:
         MyRectangle();
-        MyRectangle(const int &_left, const int &_top, const int &_right, const int &_bottom);
+        MyRectangle(const qint32&, const qint32&, const qint32&, const qint32&);
 
-        void moveHorizontal(const int &dx);
-        void moveVertical(const int &dy);
+        void moveHorizontal(const qint32&);
+        void moveVertical(const qint32&);
 
     public:
-        int left, right, top, bottom;
+        qint32 m_left;
+        qint32 m_right;
+        qint32 m_top;
+        qint32 m_bottom;
 };
 
 #endif // RECTANGLE_H
