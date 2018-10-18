@@ -6,6 +6,8 @@
 
 class Player : public QObject {
     Q_OBJECT
+    Q_PROPERTY(int x READ getX WRITE setX NOTIFY xChanged)
+    Q_PROPERTY(int y READ getY WRITE setY NOTIFY yChanged)
 
     public:
         Player(Map &map);
@@ -18,7 +20,6 @@ class Player : public QObject {
 
         void update();
 
-        Q_PROPERTY(int x READ getX WRITE setX NOTIFY xChanged)
         int getX() const {
             return x;
         }
@@ -28,7 +29,6 @@ class Player : public QObject {
             x = _x;
             emit xChanged();
         }
-        Q_PROPERTY(int y READ getY WRITE setY NOTIFY yChanged)
         int getY() const {
             return y;
         }
@@ -56,7 +56,6 @@ private:
         bool goingRight;
         bool jumping;
         bool spriteFlipped;
-        int m_moves;
 };
 
 #endif // PLAYER_H
