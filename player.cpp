@@ -18,7 +18,7 @@ bool doesIntersectWall(const Map &map, const Rectangle &rect) {
 }
 
 void Player::goLeft() {
-    int dx = -5;
+    qint32 dx = -5;
     Rectangle newRect = boundingBox;
     newRect.moveHorizontal(dx);
     while (doesIntersectWall(*map, newRect) and dx < 0) {
@@ -32,7 +32,7 @@ void Player::goLeft() {
 }
 
 void Player::goRight() {
-    int dx = 5;
+    qint32 dx = 5;
     Rectangle newRect = boundingBox;
     newRect.moveHorizontal(dx);
     while (doesIntersectWall(*map, newRect) and dx > 0) {
@@ -46,7 +46,7 @@ void Player::goRight() {
 }
 
 void Player::update() {
-    int dy = 10;
+    qint32 dy = 10;
     Rectangle newRect = boundingBox;
     newRect.moveVertical(dy);
     while (doesIntersectWall(*map, newRect) and dy > 0) {

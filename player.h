@@ -17,8 +17,8 @@ class Player {
 
         void draw(QPainter *painter);
     private:
-        int x;
-        int y;
+        qint32 x;
+        qint32 y;
         Rectangle boundingBox;
         QPixmap sprite;
         Map *map;
