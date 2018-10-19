@@ -53,7 +53,7 @@ void Player::update() {
         moveHorizontal(-5);
     if (m_goingRight)
         moveHorizontal(5);
-    if (m_jumping and m_map->isFilled(m_boundingBox.left(), m_boundingBox.bottom() + 1))
+    if (m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1)))
         m_vspeed = 30;
     moveVertical(10 - m_vspeed);
     m_vspeed = std::max(m_vspeed - 1, 0);
