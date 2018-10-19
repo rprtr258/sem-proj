@@ -50,8 +50,8 @@ Item {
     }
     focus: true
     Keys.onPressed: {
-        if (event.key == Qt.Key_D || event.key == Qt.Key_A)
-            mirrored = (event.key == Qt.Key_D)
+        if (event.key === Qt.Key_D || event.key === Qt.Key_A)
+            mirrored = (event.key === Qt.Key_D)
         keyPressed(event.key, event.modifier);
     }
     Keys.onReleased: {
