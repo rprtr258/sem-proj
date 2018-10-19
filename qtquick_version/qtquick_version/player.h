@@ -7,8 +7,8 @@
 
 class Player : public QObject {
     Q_OBJECT
-    Q_PROPERTY(qint32 x READ x WRITE setX NOTIFY xChanged)
-    Q_PROPERTY(qint32 y READ y WRITE setY NOTIFY yChanged)
+    Q_PROPERTY(qint32 x READ x NOTIFY xChanged)
+    Q_PROPERTY(qint32 y READ y NOTIFY yChanged)
     Q_DISABLE_COPY(Player)
 
     public:

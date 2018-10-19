@@ -1,5 +1,5 @@
 #include "player.h"
-#include <QtMath>
+#include <QVariant>
 
 qint32 sign(const qint32 &x) {
     return (x > 0) - (x < 0);
@@ -58,7 +58,7 @@ void Player::update() {
     moveVertical(10 - m_vspeed);
     m_vspeed = std::max(m_vspeed - 1, 0);
 }
-#include <QVariant>
+
 void Player::flipSprite() {
     m_spriteFlipped = not m_spriteFlipped;
     m_item->setProperty("mirror", m_spriteFlipped);
