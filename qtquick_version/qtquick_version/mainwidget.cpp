@@ -4,7 +4,8 @@
 MainWidget::MainWidget() : QQuickView() {
     m_world = new World();
 
-    setResizeMode(QQuickView::SizeRootObjectToView);
+    setMinimumSize(QSize(640, 480));
+    setMaximumSize(QSize(640, 480));
     setSource(QUrl("qrc:/main.qml"));
 
     connect(&m_gameTimer, &QTimer::timeout, this, &MainWidget::update);
