@@ -34,6 +34,7 @@ Item {
         height: 20
         color: "brown"
     }
+    property bool mirrored : false
     Item {
         x: player.x
         y: player.y
@@ -41,6 +42,7 @@ Item {
         height: 95
         clip: true
         Image {
+            mirror: mirrored
             x: 0
             y: -28
             source: "qrc:/../../img/hero.png"
@@ -48,6 +50,8 @@ Item {
     }
     focus: true
     Keys.onPressed: {
+        if (event.key == Qt.Key_D || event.key == Qt.Key_A)
+            mirrored = (event.key == Qt.Key_D)
         keyPressed(event.key, event.modifier);
     }
     Keys.onReleased: {
