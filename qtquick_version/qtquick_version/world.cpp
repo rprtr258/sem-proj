@@ -56,6 +56,10 @@ void World::keyReleaseEvent(qint32 key) {
     }
 }
 
+void World::setPlayerItem(QObject *playerItem) {
+    m_player->setItem(playerItem);
+}
+
 void World::update() {
     m_player->update();
 }

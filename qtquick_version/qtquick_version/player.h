@@ -20,6 +20,7 @@ class Player : public QObject {
         void jump();
         void stopJump();
 
+        void setItem(QObject *item);
         void update();
 
         qint32 x() const {
@@ -58,6 +59,7 @@ private:
         bool m_goingRight;
         bool m_jumping;
         bool m_spriteFlipped;
+        QObject *m_item = nullptr;
 };
 
 #endif // PLAYER_H

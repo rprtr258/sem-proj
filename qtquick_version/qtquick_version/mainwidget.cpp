@@ -19,6 +19,8 @@ MainWidget::MainWidget() : QQuickView() {
 
     connect(findChild<QObject*>("gameView"), SIGNAL(keyPressed(qint32, qint32)), this, SLOT(keyPressedEvent(qint32, qint32)));
     connect(findChild<QObject*>("gameView"), SIGNAL(keyReleased(qint32, qint32)), this, SLOT(keyReleasedEvent(qint32, qint32)));
+
+    m_world->setPlayerItem(findChild<QObject*>("gameView")->findChild<QObject*>("playerItem"));
 }
 
 MainWidget::~MainWidget() {
