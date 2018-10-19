@@ -25,9 +25,9 @@ class Player {
         void moveHorizontal(int speed);
         void moveVertical(int speed);
     private:
-        int x;
-        int y;
         int vspeed;
+        qint32 x;
+        qint32 y;
         Rectangle boundingBox;
         QPixmap sprite;
         Map *map;
