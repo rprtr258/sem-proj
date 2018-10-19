@@ -34,6 +34,13 @@ Item {
         height: 20
         color: "brown"
     }
+    Rectangle {
+        x: 200
+        y: 200
+        width: 100
+        height: 20
+        color: "brown"
+    }
     property bool mirrored : false
     Item {
         x: player.x

@@ -6,6 +6,7 @@ World::World() {
     m_map.fillRectangle(0, 300, 100, 20);
     m_map.fillRectangle(620, 0, 20, 480);
     m_map.fillRectangle(0, 460, 640, 20);
+    m_map.fillRectangle(200, 200, 100, 20);
 }
 
 World::~World() {
