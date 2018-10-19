@@ -4,17 +4,14 @@ Map::Map() {}
 
 bool Map::isFilled(const qint32 &x, const qint32 &y) const {
     for (const QRect &r : m_rects)
-        if (r.left() < x and x < r.right() and r.top() < y and y < r.bottom())
+        if (r.contains(x, y))
             return true;
     return false;
 }
 #include <QDebug>
 bool Map::isFilled(const QRect &r) const {
     for (const QRect &wall : m_rects) {
-        if (r.left()   < wall.right() and
-            r.right()  > wall.left() and
-            r.top()    < wall.bottom() and
-            r.bottom() > wall.top())
+        if (r.intersects(wall))
             return true;
     }
     return false;
