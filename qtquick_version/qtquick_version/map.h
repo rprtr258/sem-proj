@@ -9,7 +9,7 @@ class Map {
         Map();
         bool isFilled(const qint32 &x, const qint32 &y) const;
         bool isFilled(const QRect &r) const;
-        void fillRectangle(qint32 x1, qint32 y1, qint32 x2, qint32 y2);
+        void fillRectangle(qint32 x1, qint32 y1, qint32 width, qint32 height);
     private:
         QVector<QRect> m_rects;
 };
