@@ -7,6 +7,7 @@
 #include <QMap>
 
 class World {
+    Q_DISABLE_COPY(World)
     public:
         World();
         ~World();
