@@ -4,20 +4,21 @@
 MainWidget::MainWidget() : QQuickView() {
     m_world = new World();
 
-    setMinimumSize(QSize(640, 480));
-    setMaximumSize(QSize(640, 480));
-    setSource(QUrl("qrc:/main.qml"));
-
     connect(&m_gameTimer, &QTimer::timeout, this, &MainWidget::update);
     m_gameTimer.setInterval(20);
-    connect(findChild<QObject*>("gameView"), SIGNAL(keyPressed(qint32, qint32)), this, SLOT(keyPressedEvent(qint32, qint32)));
-    connect(findChild<QObject*>("gameView"), SIGNAL(keyReleased(qint32, qint32)), this, SLOT(keyReleasedEvent(qint32, qint32)));
 
     rootContext()->setContextProperty("player", m_world->getPlayer());
 
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWidget::update);
     timer->start(20);
+
+    setMinimumSize(QSize(640, 480));
+    setMaximumSize(QSize(640, 480));
+    setSource(QUrl("qrc:/main.qml"));
+
+    connect(findChild<QObject*>("gameView"), SIGNAL(keyPressed(qint32, qint32)), this, SLOT(keyPressedEvent(qint32, qint32)));
+    connect(findChild<QObject*>("gameView"), SIGNAL(keyReleased(qint32, qint32)), this, SLOT(keyReleasedEvent(qint32, qint32)));
 }
 
 MainWidget::~MainWidget() {
