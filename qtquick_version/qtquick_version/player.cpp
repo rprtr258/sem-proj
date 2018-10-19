@@ -12,10 +12,7 @@ Player::Player(Map &worldMap) {
     m_xCoord = 170;
     m_yCoord = 0;
     m_map = &worldMap;
-    m_boundingBox.m_left = m_xCoord;
-    m_boundingBox.m_right = m_xCoord + 55;
-    m_boundingBox.m_top = m_yCoord;
-    m_boundingBox.m_bottom = m_yCoord + 95;
+    m_boundingBox = QRect(m_xCoord, m_yCoord, 55, 95);
     m_spriteFlipped = false;
 }
 
@@ -52,7 +49,7 @@ void Player::update() {
         moveHorizontal(-5);
     if (m_goingRight)
         moveHorizontal(5);
-    if (m_jumping and m_map->isFilled(m_boundingBox.m_left, m_boundingBox.m_bottom + 1))
+    if (m_jumping and m_map->isFilled(m_boundingBox.left(), m_boundingBox.bottom() + 1))
         m_vspeed = 30;
     moveVertical(10 - m_vspeed);
     m_vspeed = std::max(m_vspeed - 1, 0);
@@ -60,36 +57,35 @@ void Player::update() {
 
 void Player::flipSprite() {
     m_spriteFlipped = not m_spriteFlipped;
-    //sprite = sprite.transformed(QMatrix(-1, 0, 0, 1, 0, 0));
 }
 
 void Player::moveHorizontal(qint32 speed) {
     qint32 dx = speed;
     qint32 delta = sign(speed);
-    MyRectangle newRect = m_boundingBox;
-    newRect.moveHorizontal(dx);
-    while (m_map->isFilled(newRect) and dx * delta > 0) {
+    QRect newRect = m_boundingBox;
+    newRect.adjust(dx, 0, dx, 0);
+    while (m_map->isFilled(newRect) and dx != 0) {
         dx -= delta;
-        newRect.moveHorizontal(-delta);
+        newRect.adjust(-delta, 0, -delta, 0);
     }
     if (dx == 0)
         return;
     setX(m_xCoord + dx);
-    m_boundingBox.moveHorizontal(dx);
+    m_boundingBox.adjust(dx, 0, dx, 0);
 }
 
 void Player::moveVertical(qint32 speed) {
     qint32 dy = speed;
     qint32 delta = sign(speed);
-    MyRectangle newRect = m_boundingBox;
-    newRect.moveVertical(dy);
-    while (m_map->isFilled(newRect) and dy * delta > 0) {
+    QRect newRect = m_boundingBox;
+    newRect.adjust(0, dy, 0, dy);
+    while (m_map->isFilled(newRect) and dy != 0) {
         dy -= delta;
-        newRect.moveVertical(-delta);
+        newRect.adjust(0, -delta, 0, -delta);
         m_vspeed = 0;
     }
     if (dy == 0)
         return;
     setY(m_yCoord + dy);
-    m_boundingBox.moveVertical(dy);
+    m_boundingBox.adjust(0, dy, 0, dy);
 }

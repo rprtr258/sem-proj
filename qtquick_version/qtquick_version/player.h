@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <QObject>
+#include <QRect>
 #include "map.h"
 
 class Player : public QObject {
@@ -51,7 +52,7 @@ private:
         qint32 m_xCoord;
         qint32 m_yCoord;
         qint32 m_vspeed;
-        MyRectangle m_boundingBox;
+        QRect m_boundingBox;
         Map *m_map;
         bool m_goingLeft;
         bool m_goingRight;
