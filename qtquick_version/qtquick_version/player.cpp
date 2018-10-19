@@ -67,30 +67,28 @@ void Player::flipSprite() {
 void Player::moveHorizontal(qint32 speed) {
     qint32 dx = speed;
     qint32 delta = sign(speed);
-    QRect newRect = m_boundingBox;
-    newRect.adjust(dx, 0, dx, 0);
+    QRect newRect = m_boundingBox.translated(dx, 0);
     while (m_map->isFilled(newRect) and dx != 0) {
         dx -= delta;
-        newRect.adjust(-delta, 0, -delta, 0);
+        newRect.translate(-delta, 0);
     }
     if (dx == 0)
         return;
     setX(m_xCoord + dx);
-    m_boundingBox.adjust(dx, 0, dx, 0);
+    m_boundingBox.translate(dx, 0);
 }
 
 void Player::moveVertical(qint32 speed) {
     qint32 dy = speed;
     qint32 delta = sign(speed);
-    QRect newRect = m_boundingBox;
-    newRect.adjust(0, dy, 0, dy);
+    QRect newRect = m_boundingBox.translated(0, dy);
     while (m_map->isFilled(newRect) and dy != 0) {
         dy -= delta;
-        newRect.adjust(0, -delta, 0, -delta);
+        newRect.translate(0, -delta);
         m_vspeed = 0;
     }
     if (dy == 0)
         return;
     setY(m_yCoord + dy);
-    m_boundingBox.adjust(0, dy, 0, dy);
+    m_boundingBox.translate(0, dy);
 }
