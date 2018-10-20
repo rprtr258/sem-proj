@@ -14,9 +14,6 @@ World::~World() {
 }
 
 void World::keyPressEvent(qint32 key) {
-    if (m_keyPressMap[key])
-        return;
-    m_keyPressMap[key] = true;
     switch (key) {
         case (Qt::Key_A): {
             m_player->goLeft();
@@ -34,18 +31,13 @@ void World::keyPressEvent(qint32 key) {
 }
 
 void World::keyReleaseEvent(qint32 key) {
-    m_keyPressMap[key] = false;
     switch (key) {
         case (Qt::Key_A): {
             m_player->stopLeft();
-            if (m_keyPressMap[Qt::Key_D])
-                m_player->goRight();
             break;
         }
         case (Qt::Key_D): {
             m_player->stopRight();
-            if (m_keyPressMap[Qt::Key_A])
-                m_player->goLeft();
             break;
         }
         case (Qt::Key_Space): {
