@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>GameView.qml</file>
+        <file>Player.qml</file>
+        <file>img/hero.png</file>
+    </qresource>
+</RCC>

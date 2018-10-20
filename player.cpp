@@ -1,102 +1,89 @@
 #include "player.h"
-#include <QBitmap>
+#include <QVariant>
 
-int sign(const int &x) {
+qint32 sign(const qint32 &x) {
     return (x > 0) - (x < 0);
 }
 
 Player::Player(Map &worldMap) {
-    goingLeft = goingRight = false;
-    jumping = false;
-    vspeed = 0;
-    x = 170;
-    y = 0;
-    map = &worldMap;
-    boundingBox.left = x;
-    boundingBox.right = x + 55;
-    boundingBox.top = y;
-    boundingBox.bottom = y + 95;
-    sprite.load(":/img/hero.png");
-    sprite.setMask(sprite.createHeuristicMask());
-    spriteFlipped = false;
+    m_goingLeft = m_goingRight = false;
+    m_jumping = false;
+    m_vspeed = 0;
+    m_xCoord = 170;
+    m_yCoord = 0;
+    m_map = &worldMap;
+    m_boundingBox = QRect(m_xCoord, m_yCoord, 55, 95);
+    m_spriteFlipped = false;
 }
 
 void Player::goLeft() {
-    goingLeft = true;
-    if (spriteFlipped)
-        flipSprite();
+    m_goingLeft = true;
 }
 
 void Player::stopLeft() {
-    goingLeft = false;
+    m_goingLeft = false;
 }
 
 void Player::goRight() {
-    goingRight = true;
-    if (not spriteFlipped)
-        flipSprite();
+    m_goingRight = true;
 }
 
 void Player::stopRight() {
-    goingRight = false;
+    m_goingRight = false;
 }
 
 void Player::jump() {
-    jumping = true;
+    m_jumping = true;
 }
 
 void Player::stopJump() {
-    jumping = false;
+    m_jumping = false;
 }
 
 void Player::update() {
-    if (goingLeft)
-        moveHorizontal(-5);
-    if (goingRight)
-        moveHorizontal(5);
-    if (jumping and map->isFilled(boundingBox.left, boundingBox.bottom + 1))
-        vspeed = 30;
-    moveVertical(10 - vspeed);
-    vspeed = std::max(vspeed - 1, 0);
+    if (m_goingLeft != m_goingRight) {
+        if (m_goingLeft) {
+            if (flipped())
+                flipSprite();
+            moveHorizontal(-5);
+        }
+        if (m_goingRight) {
+            if (not flipped())
+                flipSprite();
+            moveHorizontal(5);
+        }
+    }
+    if (m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1)))
+        m_vspeed = 30;
+    moveVertical(10 - m_vspeed);
+    m_vspeed = std::max(m_vspeed - 1, 0);
 }
 
-void Player::draw(QPainter *painter) {
-    painter->drawPixmap(x, y, sprite.copy(0, 28, 55, 95));
-    painter->drawRect(boundingBox.left, boundingBox.top, boundingBox.right - boundingBox.left, boundingBox.bottom - boundingBox.top);
-}
-
-void Player::flipSprite() {
-    spriteFlipped = not spriteFlipped;
-    sprite = sprite.transformed(QMatrix(-1, 0, 0, 1, 0, 0));
-}
-
-void Player::moveHorizontal(int speed) {
-    int dx = speed;
-    int delta = sign(speed);
-    Rectangle newRect = boundingBox;
-    newRect.moveHorizontal(dx);
-    while (map->isFilled(newRect) and dx * delta > 0) {
+void Player::moveHorizontal(qint32 speed) {
+    qint32 dx = speed;
+    qint32 delta = sign(speed);
+    QRect newRect = m_boundingBox.translated(dx, 0);
+    while (m_map->isFilled(newRect) and dx != 0) {
         dx -= delta;
-        newRect.moveHorizontal(-delta);
+        newRect.translate(-delta, 0);
     }
     if (dx == 0)
         return;
-    x += dx;
-    boundingBox.moveHorizontal(dx);
+    setX(m_xCoord + dx);
+    m_boundingBox.translate(dx, 0);
 }
 
-void Player::moveVertical(int speed) {
-    int dy = speed;
-    int delta = sign(speed);
-    Rectangle newRect = boundingBox;
-    newRect.moveVertical(dy);
-    while (map->isFilled(newRect) and dy * delta > 0) {
+void Player::moveVertical(qint32 speed) {
+    qint32 dy = speed;
+    qint32 delta = sign(speed);
+    QRect newRect = m_boundingBox.translated(0, dy);
+    while (m_map->isFilled(newRect) and dy != 0) {
         dy -= delta;
-        newRect.moveVertical(-delta);
-        vspeed = 0;
+        newRect.translate(0, -delta);
+        m_vspeed = 0;
     }
     if (dy == 0)
         return;
-    y += dy;
-    boundingBox.moveVertical(dy);
+    setY(m_yCoord + dy);
+    m_boundingBox.translate(0, dy);
 }

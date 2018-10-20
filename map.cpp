@@ -1,36 +1,21 @@
 #include "map.h"
 
-Map::Map() {
-    brush.setColor(QColor(247, 247, 247));
-}
+Map::Map() {}
 
-bool Map::isFilled(const int &x, const int &y) const {
-    for (const Rectangle &r : rects)
-        if (r.left < x and x < r.right and r.top < y and y < r.bottom)
+bool Map::isFilled(const qint32 &x, const qint32 &y) const {
+    for (const QRect &r : m_rects)
+        if (r.contains(x, y))
+            return true;
+    return false;
+}
+#include <QDebug>
+bool Map::isFilled(const QRect &r) const {
+    for (const QRect &wall : m_rects)
+        if (r.intersects(wall))
             return true;
     return false;
 }
 
-bool Map::isFilled(const Rectangle &r) const {
-    for (const Rectangle &wall : rects)
-        if (r.left   < wall.right and
-            r.right  > wall.left and
-            r.top    < wall.bottom and
-            r.bottom > wall.top)
-            return true;
-    return false;
-}
-
-void Map::fillRectangle(int x1, int y1, int x2, int y2) {
-    if (x1 > x2)
-        std::swap(x1, x2);
-    if (y1 > y2)
-        std::swap(y1, y2);
-    rects.push_back(Rectangle(x1, y1, x2, y2));
-}
-
-void Map::draw(QPainter *painter) {
-    painter->setBrush(brush);
-    for (const Rectangle &r : rects)
-        painter->drawRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+void Map::fillRectangle(qint32 x1, qint32 y1, qint32 width, qint32 height) {
+    m_rects.push_back(QRect(x1, y1, width, height));
 }

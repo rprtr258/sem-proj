@@ -4,23 +4,23 @@
 #include "map.h"
 #include "player.h"
 
-#include <QKeyEvent>
 #include <QMap>
 
 class World {
+    Q_DISABLE_COPY(World)
     public:
         World();
         ~World();
-
-        void keyPressEvent(QKeyEvent *event);
-        void keyReleaseEvent(QKeyEvent *event);
         void update();
+        void keyPressEvent(qint32 key);
+        void keyReleaseEvent(qint32 key);
+        Player* getPlayer() {
+            return m_player;
+        }
 
-        void draw(QPainter *painter);
     private:
-        Player *player;
-        Map map;
-        QMap<int, bool> isKeyPressed;
+        Player *m_player;
+        Map m_map;
 };
 
 #endif // WORLD_H

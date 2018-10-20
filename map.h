@@ -1,21 +1,17 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "rectangle.h"
-
-#include <QPainter>
+#include <QRect>
+#include <QVector>
 
 class Map {
     public:
         Map();
-        bool isFilled(const int &x, const int &y) const;
-        bool isFilled(const Rectangle &r) const;
-        void fillRectangle(int x1, int y1, int x2, int y2);
-
-        void draw(QPainter *painter);
+        bool isFilled(const qint32 &x, const qint32 &y) const;
+        bool isFilled(const QRect &r) const;
+        void fillRectangle(qint32 x1, qint32 y1, qint32 width, qint32 height);
     private:
-        QBrush brush;
-        std::vector<Rectangle> rects;
+        QVector<QRect> m_rects;
 };
 
 #endif // MAP_H
