@@ -3,6 +3,7 @@ import QtQuick 2.0
 Item {
     property bool mirrored : false
     AnimatedSprite {
+        id: walkSprite
         source: "qrc:/../../img/hero.png"
         frameCount: 10
         frameX: 0
@@ -14,7 +15,7 @@ Item {
                 xScale: mirrored ? 1 : -1
             },
             Translate {
-                x: mirrored ? 0 : 54
+                x: mirrored ? 0 : walkSprite.frameWidth
             }
         ]
     }
