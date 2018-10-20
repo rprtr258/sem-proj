@@ -9,6 +9,7 @@ class Player : public QObject {
     Q_OBJECT
     Q_PROPERTY(qint32 x READ x NOTIFY xChanged)
     Q_PROPERTY(qint32 y READ y NOTIFY yChanged)
+    Q_PROPERTY(bool flipped READ flipped NOTIFY spriteFlipped)
     Q_DISABLE_COPY(Player)
 
     public:
@@ -20,7 +21,6 @@ class Player : public QObject {
         void jump();
         void stopJump();
 
-        void setItem(QObject *item);
         void update();
 
         qint32 x() const {
@@ -41,9 +41,19 @@ class Player : public QObject {
             m_yCoord = _y;
             emit yChanged();
         }
+        bool flipped() {
+            return m_spriteFlipped;
+        }
+        void setFlipped(bool _flipped) {
+            if (m_spriteFlipped == _flipped)
+                return;
+            m_spriteFlipped = _flipped;
+            emit spriteFlipped();
+        }
 signals:
         void xChanged();
         void yChanged();
+        void spriteFlipped();
 
 private:
         void flipSprite();
@@ -59,7 +69,6 @@ private:
         bool m_goingRight;
         bool m_jumping;
         bool m_spriteFlipped;
-        QObject *m_item = nullptr;
 };
 
 #endif // PLAYER_H

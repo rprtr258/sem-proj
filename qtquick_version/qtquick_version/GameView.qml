@@ -41,18 +41,10 @@ Item {
         height: 20
         color: "brown"
     }
-    Item {
+    Player {
         x: player.x
         y: player.y
-        width: 55
-        height: 95
-        clip: true
-        Image {
-            objectName: "playerItem"
-            x: 0
-            y: -28
-            source: "qrc:/../../img/hero.png"
-        }
+        mirrored: player.flipped
     }
     focus: true
     Keys.onPressed: {

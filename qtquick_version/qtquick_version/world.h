@@ -17,7 +17,6 @@ class World {
         Player* getPlayer() {
             return m_player;
         }
-        void setPlayerItem(QObject *playerItem);
 
     private:
         Player *m_player;

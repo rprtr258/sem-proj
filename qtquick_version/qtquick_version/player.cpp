@@ -44,10 +44,6 @@ void Player::stopJump() {
     m_jumping = false;
 }
 
-void Player::setItem(QObject *item) {
-    m_item = item;
-}
-
 void Player::update() {
     if (m_goingLeft)
         moveHorizontal(-5);
@@ -60,8 +56,7 @@ void Player::update() {
 }
 
 void Player::flipSprite() {
-    m_spriteFlipped = not m_spriteFlipped;
-    m_item->setProperty("mirror", m_spriteFlipped);
+    setFlipped(not m_spriteFlipped);
 }
 
 void Player::moveHorizontal(qint32 speed) {

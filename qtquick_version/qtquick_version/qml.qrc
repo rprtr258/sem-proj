@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>GameView.qml</file>
         <file>../../img/hero.png</file>
+        <file>Player.qml</file>
     </qresource>
 </RCC>
