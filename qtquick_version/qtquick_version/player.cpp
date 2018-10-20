@@ -18,8 +18,6 @@ Player::Player(Map &worldMap) {
 
 void Player::goLeft() {
     m_goingLeft = true;
-    if (m_spriteFlipped)
-        flipSprite();
 }
 
 void Player::stopLeft() {
@@ -28,8 +26,6 @@ void Player::stopLeft() {
 
 void Player::goRight() {
     m_goingRight = true;
-    if (not m_spriteFlipped)
-        flipSprite();
 }
 
 void Player::stopRight() {
@@ -45,10 +41,18 @@ void Player::stopJump() {
 }
 
 void Player::update() {
-    if (m_goingLeft)
-        moveHorizontal(-5);
-    if (m_goingRight)
-        moveHorizontal(5);
+    if (m_goingLeft != m_goingRight) {
+        if (m_goingLeft) {
+            if (flipped())
+                flipSprite();
+            moveHorizontal(-5);
+        }
+        if (m_goingRight) {
+            if (not flipped())
+                flipSprite();
+            moveHorizontal(5);
+        }
+    }
     if (m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1)))
         m_vspeed = 30;
     moveVertical(10 - m_vspeed);
