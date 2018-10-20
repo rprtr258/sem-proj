@@ -6,6 +6,7 @@ Item {
     anchors.fill: parent
     signal keyPressed(int key, int modifier)
     signal keyReleased(int key, int modifier)
+    signal worldUpdate()
     Rectangle {
         x: 0
         y: 0
@@ -52,5 +53,22 @@ Item {
     }
     Keys.onReleased: {
         keyReleased(event.key, event.modifier);
+    }
+//    Component {
+//        id: projectileGenerator
+//        Projectile {}
+//    }
+    Timer {
+        id: worldTimer
+        interval: 20
+        repeat: true
+        running: true
+        onTriggered: {
+            worldUpdate();
+//            projectileGenerator.createObject(item, {
+//                x: cx,
+//                y: cy
+//            });
+        }
     }
 }
