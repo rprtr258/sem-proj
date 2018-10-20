@@ -2,6 +2,7 @@ import QtQuick 2.0
 
 Item {
     property bool mirrored : false
+
     AnimatedSprite {
         id: walkSprite
         source: "qrc:/../../img/hero.png"
