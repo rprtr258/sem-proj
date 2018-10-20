@@ -44,12 +44,12 @@ class Player : public QObject {
         bool flipped() {
             return m_spriteFlipped;
         }
-signals:
+    signals:
         void xChanged();
         void yChanged();
         void spriteFlipped();
 
-private:
+    private:
         void flipSprite() {
             m_spriteFlipped = not m_spriteFlipped;
             emit spriteFlipped();
