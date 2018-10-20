@@ -15,7 +15,6 @@ class MainWidget : public QQuickView {
         void keyPressedEvent(qint32 key, qint32 modifier);
         void keyReleasedEvent(qint32 key, qint32 modifier);
     private:
-        QTimer m_gameTimer;
         World *m_world;
 };
 
