@@ -1,66 +1,52 @@
 #include "world.h"
 
 World::World() {
-    player = new Player(map);
-    map.fillRectangle(0, 0, 20, 480);
-    map.fillRectangle(0, 300, 100, 320);
-    map.fillRectangle(620, 0, 640, 480);
-    map.fillRectangle(0, 460, 640, 480);
+    m_player = new Player(m_map);
+    m_map.fillRectangle(0, 0, 20, 480);
+    m_map.fillRectangle(0, 300, 100, 20);
+    m_map.fillRectangle(620, 0, 20, 480);
+    m_map.fillRectangle(0, 460, 640, 20);
+    m_map.fillRectangle(200, 200, 100, 20);
 }
 
 World::~World() {
-    delete player;
+    delete m_player;
 }
 
-void World::keyPressEvent(QKeyEvent *event) {
-    if (isKeyPressed[event->key()])
-        return;
-    isKeyPressed[event->key()] = true;
-    switch (event->key()) {
+void World::keyPressEvent(qint32 key) {
+    switch (key) {
         case (Qt::Key_A): {
-            if (not isKeyPressed[Qt::Key_D])
-                player->goLeft();
+            m_player->goLeft();
             break;
         }
         case (Qt::Key_D): {
-            if (not isKeyPressed[Qt::Key_A])
-                player->goRight();
+            m_player->goRight();
             break;
         }
         case (Qt::Key_Space): {
-            player->jump();
+            m_player->jump();
             break;
         }
     }
 }
 
-void World::keyReleaseEvent(QKeyEvent *event) {
-    isKeyPressed[event->key()] = false;
-    switch (event->key()) {
+void World::keyReleaseEvent(qint32 key) {
+    switch (key) {
         case (Qt::Key_A): {
-            player->stopLeft();
-            if (isKeyPressed[Qt::Key_D])
-                player->goRight();
+            m_player->stopLeft();
             break;
         }
         case (Qt::Key_D): {
-            player->stopRight();
-            if (isKeyPressed[Qt::Key_A])
-                player->goLeft();
+            m_player->stopRight();
             break;
         }
         case (Qt::Key_Space): {
-            player->stopJump();
+            m_player->stopJump();
             break;
         }
     }
 }
 
 void World::update() {
-    player->update();
-}
-
-void World::draw(QPainter *painter) {
-    map.draw(painter);
-    player->draw(painter);
+    m_player->update();
 }
