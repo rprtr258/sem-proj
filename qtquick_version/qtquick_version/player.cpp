@@ -59,10 +59,6 @@ void Player::update() {
     m_vspeed = std::max(m_vspeed - 1, 0);
 }
 
-void Player::flipSprite() {
-    setFlipped(not m_spriteFlipped);
-}
-
 void Player::moveHorizontal(qint32 speed) {
     qint32 dx = speed;
     qint32 delta = sign(speed);

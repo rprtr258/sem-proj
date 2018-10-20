@@ -44,19 +44,16 @@ class Player : public QObject {
         bool flipped() {
             return m_spriteFlipped;
         }
-        void setFlipped(bool _flipped) {
-            if (m_spriteFlipped == _flipped)
-                return;
-            m_spriteFlipped = _flipped;
-            emit spriteFlipped();
-        }
 signals:
         void xChanged();
         void yChanged();
         void spriteFlipped();
 
 private:
-        void flipSprite();
+        void flipSprite() {
+            m_spriteFlipped = not m_spriteFlipped;
+            emit spriteFlipped();
+        }
         void moveHorizontal(qint32 speed);
         void moveVertical(qint32 speed);
     private:
