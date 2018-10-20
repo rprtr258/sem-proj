@@ -41,7 +41,6 @@ Item {
         height: 20
         color: "brown"
     }
-    property bool mirrored : false
     Item {
         x: player.x
         y: player.y
