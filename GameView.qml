@@ -43,9 +43,11 @@ Item {
         color: "brown"
     }
     Player {
+        id: playerItem
         x: player.x
         y: player.y
         mirrored: player.flipped
+        going: player.going
     }
     focus: true
     Keys.onPressed: {
@@ -54,6 +56,22 @@ Item {
     Keys.onReleased: {
         keyReleased(event.key, event.modifier);
     }
+//    Connections {
+//        target: item
+//        onKeyPressed: {
+//            if (key == Qt.Key_A || key == Qt.Key_D) {
+//                playerItem.run()
+//            }
+//        }
+//    }
+//    Connections {
+//        target: item
+//        onKeyReleased: {
+//            if (key == Qt.Key_A || key == Qt.Key_D) {
+//                playerItem.stop()
+//            }
+//        }
+//    }
 //    Component {
 //        id: projectileGenerator
 //        Projectile {}

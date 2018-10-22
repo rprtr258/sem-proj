@@ -14,6 +14,9 @@ World::~World() {
 }
 
 void World::keyPressEvent(qint32 key) {
+    if (isKeyPressed[key])
+        return;
+    isKeyPressed[key] = true;
     switch (key) {
         case (Qt::Key_A): {
             m_player->goLeft();
@@ -31,6 +34,7 @@ void World::keyPressEvent(qint32 key) {
 }
 
 void World::keyReleaseEvent(qint32 key) {
+    isKeyPressed[key] = false;
     switch (key) {
         case (Qt::Key_A): {
             m_player->stopLeft();

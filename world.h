@@ -21,6 +21,7 @@ class World {
     private:
         Player *m_player;
         Map m_map;
+        QMap<int, bool> isKeyPressed;
 };
 
 #endif // WORLD_H

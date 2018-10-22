@@ -1,6 +1,6 @@
 #include "player.h"
 #include <QVariant>
-
+bool goingChangingNotified = true;
 qint32 sign(const qint32 &x) {
     return (x > 0) - (x < 0);
 }
@@ -17,19 +17,27 @@ Player::Player(Map &worldMap) {
 }
 
 void Player::goLeft() {
-    m_goingLeft = true;
+    if (not m_goingLeft) {
+        m_goingLeft = true;
+        goingChangingNotified = false;
+    }
 }
 
 void Player::stopLeft() {
     m_goingLeft = false;
+    goingChangingNotified = false;
 }
 
 void Player::goRight() {
-    m_goingRight = true;
+    if (not m_goingRight) {
+        m_goingRight = true;
+        goingChangingNotified = false;
+    }
 }
 
 void Player::stopRight() {
     m_goingRight = false;
+    goingChangingNotified = false;
 }
 
 void Player::jump() {
@@ -41,6 +49,10 @@ void Player::stopJump() {
 }
 
 void Player::update() {
+    if (not goingChangingNotified) {
+        emit goingChanged();
+        goingChangingNotified = true;
+    }
     if (m_goingLeft != m_goingRight) {
         if (m_goingLeft) {
             if (flipped())

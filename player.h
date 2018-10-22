@@ -10,6 +10,7 @@ class Player : public QObject {
     Q_PROPERTY(qint32 x READ x NOTIFY xChanged)
     Q_PROPERTY(qint32 y READ y NOTIFY yChanged)
     Q_PROPERTY(bool flipped READ flipped NOTIFY spriteFlipped)
+    Q_PROPERTY(bool going READ going NOTIFY goingChanged)
     Q_DISABLE_COPY(Player)
 
     public:
@@ -44,10 +45,14 @@ class Player : public QObject {
         bool flipped() {
             return m_spriteFlipped;
         }
+        bool going() {
+            return m_goingLeft xor m_goingRight;
+        }
     signals:
         void xChanged();
         void yChanged();
         void spriteFlipped();
+        void goingChanged();
 
     private:
         void flipSprite() {
