@@ -7,6 +7,8 @@ Item {
     signal keyPressed(int key, int modifier)
     signal keyReleased(int key, int modifier)
     signal worldUpdate()
+    signal mouseMoved(int mouseX, int mouseY)
+    signal pressed(int mouseX, int mouseY)
     Rectangle {
         x: 0
         y: 0
@@ -57,6 +59,35 @@ Item {
     Keys.onReleased: {
         keyReleased(event.key, event.modifier);
     }
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        onPositionChanged: {
+            mouseMoved(mouseX, mouseY)
+            aim.x = mouseX - aim.width / 2
+            aim.y = mouseY - aim.height / 2
+        }
+        onPressed: {
+            //pressed(mouse.x, mouse.y)
+        }
+    }
+    Image {
+        id: aim
+        source: "qrc:/img/aim.png"
+    }
+    Timer {
+        id: worldTimer
+        interval: 20
+        repeat: true
+        running: true
+        onTriggered: {
+            worldUpdate();
+//            projectileGenerator.createObject(item, {
+//                x: cx,
+//                y: cy
+//            });
+        }
+    }
 //    Connections {
 //        target: item
 //        onKeyPressed: {
@@ -77,17 +108,4 @@ Item {
 //        id: projectileGenerator
 //        Projectile {}
 //    }
-    Timer {
-        id: worldTimer
-        interval: 20
-        repeat: true
-        running: true
-        onTriggered: {
-            worldUpdate();
-//            projectileGenerator.createObject(item, {
-//                x: cx,
-//                y: cy
-//            });
-        }
-    }
 }

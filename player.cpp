@@ -100,6 +100,8 @@ void Player::moveVertical(qint32 speed) {
     }
     if (dy == 0)
         return;
+    if (not inAir())
+        setInAir(true);
     setY(m_yCoord + dy);
     m_boundingBox.translate(0, dy);
 }
