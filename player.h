@@ -11,6 +11,7 @@ class Player : public QObject {
     Q_PROPERTY(qint32 y READ y NOTIFY yChanged)
     Q_PROPERTY(bool flipped READ flipped NOTIFY spriteFlipped)
     Q_PROPERTY(bool going READ going NOTIFY goingChanged)
+    Q_PROPERTY(bool inAir READ inAir NOTIFY inAirChanged)
     Q_DISABLE_COPY(Player)
 
     public:
@@ -48,11 +49,21 @@ class Player : public QObject {
         bool going() {
             return m_goingLeft xor m_goingRight;
         }
+        bool inAir() {
+            return m_inAir;
+        }
+        void setInAir(bool value) {
+            if (m_inAir == value)
+                return;
+            m_inAir = value;
+            emit inAirChanged();
+        }
     signals:
         void xChanged();
         void yChanged();
         void spriteFlipped();
         void goingChanged();
+        void inAirChanged();
 
     private:
         void flipSprite() {
@@ -71,6 +82,8 @@ class Player : public QObject {
         bool m_goingRight;
         bool m_jumping;
         bool m_spriteFlipped;
+        bool goingChangingNotified = true;
+        bool m_inAir = true;
 };
 
 #endif // PLAYER_H

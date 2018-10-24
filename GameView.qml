@@ -48,6 +48,7 @@ Item {
         y: player.y
         mirrored: player.flipped
         going: player.going
+        inAir: player.inAir
     }
     focus: true
     Keys.onPressed: {

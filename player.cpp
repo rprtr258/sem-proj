@@ -1,6 +1,6 @@
 #include "player.h"
 #include <QVariant>
-bool goingChangingNotified = true;
+
 qint32 sign(const qint32 &x) {
     return (x > 0) - (x < 0);
 }
@@ -65,8 +65,12 @@ void Player::update() {
             moveHorizontal(5);
         }
     }
-    if (m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1)))
+    if (m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1))) {
+        setInAir(true);
         m_vspeed = 30;
+    } else if (!m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1))) {
+        setInAir(false);
+    }
     moveVertical(10 - m_vspeed);
     m_vspeed = std::max(m_vspeed - 1, 0);
 }
