@@ -8,7 +8,7 @@ Item {
     signal keyReleased(int key, int modifier)
     signal worldUpdate()
     signal mouseMoved(int mouseX, int mouseY)
-    signal pressed(int mouseX, int mouseY)
+    signal mousePressed(int mouseX, int mouseY)
     Rectangle {
         x: 0
         y: 0
@@ -68,7 +68,7 @@ Item {
             aim.y = mouseY - aim.height / 2
         }
         onPressed: {
-            //pressed(mouse.x, mouse.y)
+            mousePressed(mouseX, mouseY)
         }
     }
     Image {
