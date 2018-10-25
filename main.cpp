@@ -1,4 +1,5 @@
 #include <QApplication>
+#include "bullet.h"
 #include "mainwidget.h"
 
 qint32 main(qint32 argc, char *argv[]) {
@@ -6,6 +7,7 @@ qint32 main(qint32 argc, char *argv[]) {
 
     MainWidget mainWidget;
     mainWidget.show();
+    qmlRegisterType<Bullet>("org.examples", 1, 0, "Bullet");
 
     return app.exec();
 }
