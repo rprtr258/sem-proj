@@ -6,5 +6,6 @@
         <file>img/hero.png</file>
         <file>img/hero1.png</file>
         <file>img/aim.png</file>
+        <file>Bullet.qml</file>
     </qresource>
 </RCC>

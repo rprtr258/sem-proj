@@ -79,4 +79,16 @@ Item {
             }
         }
     ]
+    Behavior on x {
+        NumberAnimation {
+            duration: 20
+            easing.type: Easing.Linear
+        }
+    }
+    Behavior on y {
+        NumberAnimation {
+            duration: 20
+            easing.type: Easing.Linear
+        }
+    }
 }
