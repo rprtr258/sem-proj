@@ -64,16 +64,17 @@ Item {
         hoverEnabled: true
         onPositionChanged: {
             mouseMoved(mouseX, mouseY)
-            aim.x = mouseX - aim.width / 2
-            aim.y = mouseY - aim.height / 2
         }
         onPressed: {
             mousePressed(mouseX, mouseY)
         }
+        id: ma
     }
     Image {
         id: aim
         source: "qrc:/img/aim.png"
+        x: ma.mouseX - width / 2
+        y: ma.mouseY - height / 2
     }
     Timer {
         id: worldTimer
@@ -82,30 +83,6 @@ Item {
         running: true
         onTriggered: {
             worldUpdate();
-//            projectileGenerator.createObject(item, {
-//                x: cx,
-//                y: cy
-//            });
         }
     }
-//    Connections {
-//        target: item
-//        onKeyPressed: {
-//            if (key == Qt.Key_A || key == Qt.Key_D) {
-//                playerItem.run()
-//            }
-//        }
-//    }
-//    Connections {
-//        target: item
-//        onKeyReleased: {
-//            if (key == Qt.Key_A || key == Qt.Key_D) {
-//                playerItem.stop()
-//            }
-//        }
-//    }
-//    Component {
-//        id: projectileGenerator
-//        Projectile {}
-//    }
 }
