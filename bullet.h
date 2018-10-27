@@ -1,16 +1,23 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-#include <QObject>
+#include <QQmlListProperty>
+#include <QQuickItem>
 
-class Bullet : public QObject {
+class Bullet : public QQuickItem {
     Q_OBJECT
-    Q_PROPERTY(qint32 x READ x NOTIFY xChanged)
+    Q_PROPERTY(qint32 x READ x WRITE setX NOTIFY xChanged)
     public:
         Bullet();
         qint32 x() {
             emit xChanged();
             return m_x;
+        }
+        void setX(qint32 value) {
+            if (m_x == value)
+                return;
+            m_x = value;
+            emit xChanged();
         }
     signals:
         void xChanged();

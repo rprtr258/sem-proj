@@ -1,8 +1,9 @@
-#include "mainwidget.h"
 #include <QQmlComponent>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQmlEngine>
+#include "bullet.h"
+#include "mainwidget.h"
 
 MainWidget::MainWidget() : QQuickView() {
     m_world = new World();
@@ -41,9 +42,11 @@ void MainWidget::keyReleasedEvent(qint32 key, qint32 modifier) {
 void MainWidget::click(int mouseX, int mouseY) {
     QQmlComponent component(engine(), QUrl("qrc:/Bullet.qml"));
     QQuickItem *object = qobject_cast<QQuickItem*>(component.create());
+    if (object == nullptr)
+        qDebug() << component.errorString();
     QQmlEngine::setObjectOwnership(object, QQmlEngine::CppOwnership);
     object->setParentItem(findChild<QQuickItem*>("gameView"));
-    object->setParent(findChild<QQuickItem*>("gameView"));
+    object->setParent(findChild<QObject*>("gameView"));
     object->setProperty("x", QVariant(mouseX));
     object->setProperty("y", QVariant(mouseY));
 }
