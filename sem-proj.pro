@@ -18,7 +18,8 @@ SOURCES += \
         world.cpp \
         player.cpp \
         map.cpp \
-    bullet.cpp
+    bullet.cpp \
+    bulletgenerator.cpp
 
 RESOURCES += qml.qrc
 
@@ -32,4 +33,5 @@ HEADERS += \
         world.h \
         player.h \
         map.h \
-    bullet.h
+    bullet.h \
+    bulletgenerator.h

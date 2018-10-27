@@ -85,4 +85,11 @@ Item {
             worldUpdate();
         }
     }
+    function createBullet(xxx) {
+        var comp = Qt.createComponent("Bullet.qml")
+        var sprite = comp.createObject(item) //myParent should be whatever you want to add the component to
+        console.log(xxx)
+        sprite.y = xxx
+        return sprite
+    }
 }

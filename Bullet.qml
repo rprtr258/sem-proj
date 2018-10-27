@@ -1,7 +1,7 @@
 import QtQuick 2.0
-import org.examples 1.0
 
 Item {
+    id: item
     Rectangle {
         id: r
         anchors.centerIn: parent

@@ -23,9 +23,14 @@ MainWidget::MainWidget() : QQuickView() {
 MainWidget::~MainWidget() {
     delete m_world;
 }
-
+QQuickItem *i = nullptr;
+int xx = 0;
 void MainWidget::update() {
     m_world->update();
+    if (i != nullptr) {
+        i->setProperty("x", xx);
+        xx = (xx + 1) % 640;
+    }
 }
 
 void MainWidget::keyPressedEvent(qint32 key, qint32 modifier) {
@@ -40,13 +45,10 @@ void MainWidget::keyReleasedEvent(qint32 key, qint32 modifier) {
 }
 
 void MainWidget::click(int mouseX, int mouseY) {
-    QQmlComponent component(engine(), QUrl("qrc:/Bullet.qml"));
-    QQuickItem *object = qobject_cast<QQuickItem*>(component.create());
-    if (object == nullptr)
-        qDebug() << component.errorString();
-    QQmlEngine::setObjectOwnership(object, QQmlEngine::CppOwnership);
-    object->setParentItem(findChild<QQuickItem*>("gameView"));
-    object->setParent(findChild<QObject*>("gameView"));
-    object->setProperty("x", QVariant(mouseX));
-    object->setProperty("y", QVariant(mouseY));
+    QVariant retVal;
+    QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createBullet", Qt::DirectConnection,
+                              Q_RETURN_ARG(QVariant, retVal),
+                              Q_ARG(QVariant, mouseY));
+    i = qvariant_cast<QQuickItem*>(retVal);
+    xx = 0;
 }

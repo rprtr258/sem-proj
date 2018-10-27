@@ -6,7 +6,7 @@
 
 class Bullet : public QQuickItem {
     Q_OBJECT
-    Q_PROPERTY(qint32 x READ x WRITE setX NOTIFY xChanged)
+    Q_PROPERTY(qint32 xCoord READ x WRITE setX NOTIFY xChanged)
     public:
         Bullet();
         qint32 x() {
