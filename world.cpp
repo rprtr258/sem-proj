@@ -1,12 +1,14 @@
+#include "bullet.h"
 #include "world.h"
 
-World::World() {
+World::World(Observer *view) : m_view(view) {
     m_player = new Player(m_map);
     m_map.fillRectangle(0, 0, 20, 480);
     m_map.fillRectangle(0, 300, 100, 20);
     m_map.fillRectangle(620, 0, 20, 480);
     m_map.fillRectangle(0, 460, 640, 20);
     m_map.fillRectangle(200, 200, 100, 20);
+    updateList.push_back(m_player);
 }
 
 World::~World() {
@@ -51,6 +53,13 @@ void World::keyReleaseEvent(qint32 key) {
     }
 }
 
+void World::click(qint32 mouseX, qint32 mouseY) {
+    QQuickItem *bulletItem = m_view->createBullet(mouseX, mouseY);
+    Bullet *bullet = new Bullet(bulletItem);
+    updateList.push_back(bullet);
+}
+
 void World::update() {
-    m_player->update();
+    for (Creature *creature : updateList)
+        creature->update();
 }

@@ -5,7 +5,7 @@
 #include "mainwidget.h"
 
 MainWidget::MainWidget() : QQuickView() {
-    m_world = new World();
+    m_world = new World(this);
 
     rootContext()->setContextProperty("player", m_world->getPlayer());
 
@@ -22,14 +22,9 @@ MainWidget::MainWidget() : QQuickView() {
 MainWidget::~MainWidget() {
     delete m_world;
 }
-QQuickItem *i = nullptr;
-int xx = 0;
+
 void MainWidget::update() {
     m_world->update();
-    if (i != nullptr) {
-        i->setProperty("x", xx);
-        xx = (xx + 10) % 640;
-    }
 }
 
 void MainWidget::keyPressedEvent(qint32 key, qint32 modifier) {
@@ -43,16 +38,15 @@ void MainWidget::keyReleasedEvent(qint32 key, qint32 modifier) {
     m_world->keyReleaseEvent(key);
 }
 
-void MainWidget::click(int mouseX, int mouseY) {
-    i = createBullet(mouseX, mouseY);
+void MainWidget::click(qint32 mouseX, qint32 mouseY) {
+    m_world->click(mouseX, mouseY);
 }
 
-QQuickItem* MainWidget::createBullet(int x, int y) {
+QQuickItem* MainWidget::createBullet(qint32 x, qint32 y) {
     QVariant retVal;
     QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createBullet", Qt::DirectConnection,
                               Q_RETURN_ARG(QVariant, retVal),
                               Q_ARG(QVariant, x),
                               Q_ARG(QVariant, y));
-    xx = x;
     return qvariant_cast<QQuickItem*>(retVal);
 }

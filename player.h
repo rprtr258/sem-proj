@@ -3,9 +3,10 @@
 
 #include <QObject>
 #include <QRect>
+#include "creature.h"
 #include "map.h"
 
-class Player : public QObject {
+class Player : public QObject, public Creature {
     Q_OBJECT
     Q_PROPERTY(qint32 x READ x NOTIFY xChanged)
     Q_PROPERTY(qint32 y READ y NOTIFY yChanged)
@@ -23,7 +24,7 @@ class Player : public QObject {
         void jump();
         void stopJump();
 
-        void update();
+        virtual void update() override;
 
         qint32 x() const {
             return m_xCoord;
