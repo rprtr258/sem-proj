@@ -10,7 +10,7 @@ class Bullet : public Creature {
         Bullet(QQuickItem *item);
         virtual ~Bullet();
 
-        void update();
+        virtual bool update() override;
     private:
         QQuickItem *m_item = nullptr;
         QVector2D m_direction;

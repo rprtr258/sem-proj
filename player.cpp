@@ -48,7 +48,7 @@ void Player::stopJump() {
     m_jumping = false;
 }
 
-void Player::update() {
+bool Player::update() {
     if (not goingChangingNotified) {
         emit goingChanged();
         goingChangingNotified = true;
@@ -73,6 +73,7 @@ void Player::update() {
     }
     moveVertical(10 - m_vspeed);
     m_vspeed = std::max(m_vspeed - 1, 0);
+    return false;
 }
 
 void Player::moveHorizontal(qint32 speed) {

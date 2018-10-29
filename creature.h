@@ -3,7 +3,11 @@
 
 class Creature {
     public:
-        virtual void update() = 0;
+        virtual ~Creature();
+        /*
+         * Returns true if creature should be deleted.
+         */
+        virtual bool update() = 0;
 };
 
 #endif // CREATURE_H

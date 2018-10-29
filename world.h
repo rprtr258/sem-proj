@@ -24,7 +24,7 @@ class World {
         Player *m_player;
         Map m_map;
         QMap<int, bool> isKeyPressed;
-        QVector<Creature*> updateList;
+        QVector<Creature*> m_updateList;
 };
 
 #endif // WORLD_H

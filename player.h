@@ -24,7 +24,7 @@ class Player : public QObject, public Creature {
         void jump();
         void stopJump();
 
-        virtual void update() override;
+        virtual bool update() override;
 
         qint32 x() const {
             return m_xCoord;
