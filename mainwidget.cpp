@@ -2,7 +2,6 @@
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QQmlEngine>
-#include "bullet.h"
 #include "mainwidget.h"
 
 MainWidget::MainWidget() : QQuickView() {
@@ -29,7 +28,7 @@ void MainWidget::update() {
     m_world->update();
     if (i != nullptr) {
         i->setProperty("x", xx);
-        xx = (xx + 1) % 640;
+        xx = (xx + 10) % 640;
     }
 }
 
