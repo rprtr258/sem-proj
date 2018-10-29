@@ -7,7 +7,7 @@
 
 class Bullet : public Creature {
     public:
-        Bullet(QQuickItem *item);
+        Bullet(QQuickItem *item, QVector2D direction);
         virtual ~Bullet();
 
         virtual bool update() override;

@@ -54,8 +54,8 @@ void World::keyReleaseEvent(qint32 key) {
 }
 
 void World::click(qint32 mouseX, qint32 mouseY) {
-    QQuickItem *bulletItem = m_view->createBullet(mouseX, mouseY);
-    Bullet *bullet = new Bullet(bulletItem);
+    QQuickItem *bulletItem = m_view->createBullet(m_player->x(), m_player->y());
+    Bullet *bullet = new Bullet(bulletItem, QVector2D(mouseX, mouseY) - QVector2D(m_player->x(), m_player->y()));
     m_updateList.push_back(bullet);
 }
 

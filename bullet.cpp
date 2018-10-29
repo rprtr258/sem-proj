@@ -1,9 +1,9 @@
 #include "bullet.h"
 
-Bullet::Bullet(QQuickItem *item) : m_item(item) {
+Bullet::Bullet(QQuickItem *item, QVector2D direction) : m_item(item) {
+    m_direction = direction / direction.length() * 10;
     m_position.setX(m_item->property("x").toInt());
     m_position.setY(m_item->property("y").toInt());
-    m_direction.setX(10);
 }
 
 Bullet::~Bullet() {
