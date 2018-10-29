@@ -44,11 +44,15 @@ void MainWidget::keyReleasedEvent(qint32 key, qint32 modifier) {
 }
 
 void MainWidget::click(int mouseX, int mouseY) {
+    i = createBullet(mouseX, mouseY);
+}
+
+QQuickItem* MainWidget::createBullet(int x, int y) {
     QVariant retVal;
     QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createBullet", Qt::DirectConnection,
                               Q_RETURN_ARG(QVariant, retVal),
-                              Q_ARG(QVariant, mouseX),
-                              Q_ARG(QVariant, mouseY));
-    i = qvariant_cast<QQuickItem*>(retVal);
-    xx = mouseX;
+                              Q_ARG(QVariant, x),
+                              Q_ARG(QVariant, y));
+    xx = x;
+    return qvariant_cast<QQuickItem*>(retVal);
 }
