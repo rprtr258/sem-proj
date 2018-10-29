@@ -85,10 +85,11 @@ Item {
             worldUpdate();
         }
     }
-    function createBullet(xxx) {
+    function createBullet(xxx, yyy) {
         var comp = Qt.createComponent("Bullet.qml")
         var sprite = comp.createObject(item)
-        sprite.y = xxx
+        sprite.x = xxx
+        sprite.y = yyy
         return sprite
     }
 }

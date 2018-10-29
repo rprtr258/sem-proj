@@ -47,7 +47,8 @@ void MainWidget::click(int mouseX, int mouseY) {
     QVariant retVal;
     QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createBullet", Qt::DirectConnection,
                               Q_RETURN_ARG(QVariant, retVal),
+                              Q_ARG(QVariant, mouseX),
                               Q_ARG(QVariant, mouseY));
     i = qvariant_cast<QQuickItem*>(retVal);
-    xx = 0;
+    xx = mouseX;
 }
