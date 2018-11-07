@@ -13,6 +13,7 @@ class MainWidget : public QQuickView, public Observer {
         ~MainWidget() override;
 
         QQuickItem* createBullet(qint32 x, qint32 y) override;
+        QQuickItem* createLaser(qint32 x, qint32 y) override;
     public slots:
         void update();
         void keyPressedEvent(qint32 key, qint32 modifier);

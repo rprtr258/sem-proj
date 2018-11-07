@@ -50,3 +50,12 @@ QQuickItem* MainWidget::createBullet(qint32 x, qint32 y) {
                               Q_ARG(QVariant, y));
     return qvariant_cast<QQuickItem*>(retVal);
 }
+
+QQuickItem* MainWidget::createLaser(qint32 x, qint32 y) {
+    QVariant retVal;
+    QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createLaser", Qt::DirectConnection,
+                              Q_RETURN_ARG(QVariant, retVal),
+                              Q_ARG(QVariant, x),
+                              Q_ARG(QVariant, y));
+    return qvariant_cast<QQuickItem*>(retVal);
+}

@@ -20,7 +20,12 @@ SOURCES += \
         map.cpp \
     observer.cpp \
     bullet.cpp \
-    creature.cpp
+    creature.cpp \
+    projectile.cpp \
+    weapon.cpp \
+    gun.cpp \
+    laser.cpp \
+    lasergun.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,4 +41,11 @@ HEADERS += \
         map.h \
     observer.h \
     bullet.h \
-    creature.h
+    creature.h \
+    weapon.h \
+    gun.h \
+    projectile.h \
+    laser.h \
+    lasergun.h
+
+DISTFILES +=

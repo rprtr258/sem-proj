@@ -92,4 +92,12 @@ Item {
         sprite.y = yyy
         return sprite
     }
+
+    function createLaser(xxx, yyy) {
+        var comp = Qt.createComponent("Laser.qml")
+        var sprite = comp.createObject(item)
+        sprite.x = xxx
+        sprite.y = yyy
+        return sprite
+    }
 }

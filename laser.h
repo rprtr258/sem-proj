@@ -1,14 +1,15 @@
-#ifndef BULLET_H
-#define BULLET_H
+#ifndef LASER_H
+#define LASER_H
 
 #include <QQuickItem>
 
 #include "projectile.h"
 
-class Bullet : public Projectile {
+
+class Laser : public Projectile {
     public:
-        Bullet(QQuickItem *item, QVector2D direction, Map &m_map);
-        virtual ~Bullet() override;
+        Laser(QQuickItem *item, QVector2D direction);
+        virtual ~Laser() override;
         virtual bool update() override;
         virtual qint32 getDamage() override;
         virtual qint32 getMana() override;
@@ -16,9 +17,8 @@ class Bullet : public Projectile {
         QQuickItem* m_item = nullptr;
         QVector2D m_direction;
         QVector2D m_position;
-        qint32 const damage = 1;
-        qint32 const mana = 1;
-        Map *m_map;
+        qint32 const damage = 10;
+        qint32 const mana = 10;
 };
 
-#endif // BULLET_H
+#endif // LASER_H
