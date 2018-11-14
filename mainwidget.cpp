@@ -29,13 +29,36 @@ void MainWidget::update() {
 
 void MainWidget::keyPressedEvent(qint32 key, qint32 modifier) {
     Q_UNUSED(modifier)
-    m_world->keyPressEvent(key);
-    //qDebug() << key;
+    switch (key) {
+        case 1060: {
+            m_world->keyPressEvent(Qt::Key_A);
+            break;
+        }
+        case 1042: {
+            m_world->keyPressEvent(Qt::Key_D);
+            break;
+        }
+        default: {
+            m_world->keyPressEvent(key);
+        }
+    }
 }
 
 void MainWidget::keyReleasedEvent(qint32 key, qint32 modifier) {
     Q_UNUSED(modifier)
-    m_world->keyReleaseEvent(key);
+    switch (key) {
+        case 1060: {
+            m_world->keyReleaseEvent(Qt::Key_A);
+            break;
+        }
+        case 1042: {
+            m_world->keyReleaseEvent(Qt::Key_D);
+            break;
+        }
+        default: {
+            m_world->keyReleaseEvent(key);
+        }
+    }
 }
 
 void MainWidget::click(qint32 mouseX, qint32 mouseY) {
