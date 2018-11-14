@@ -52,9 +52,12 @@ void World::keyReleaseEvent(qint32 key) {
         }
     }
 }
+#include <QtMath>
 
 void World::click(qint32 mouseX, qint32 mouseY) {
     QQuickItem *bulletItem = m_view->createBullet(m_player->x(), m_player->y());
+    QVector2D dir = QVector2D(mouseX, mouseY) - QVector2D(m_player->x(), m_player->y());
+    bulletItem->setProperty("dir", qRadiansToDegrees(qAtan2(-dir.y(), -dir.x())));
     Bullet *bullet = new Bullet(bulletItem, QVector2D(mouseX, mouseY) - QVector2D(m_player->x(), m_player->y()));
     m_updateList.push_back(bullet);
 }

@@ -14,6 +14,6 @@ Bullet::~Bullet() {
 bool Bullet::update() {
     m_position += m_direction;
     m_item->setPosition(m_position.toPointF());
-    return not (m_position.x() >= 0 and m_position.x() < 640 and
-                m_position.y() >= 0 and m_position.y() < 480);
+    return not (m_position.x() >= -100 and m_position.x() <= 740 and
+                m_position.y() >= -100 and m_position.y() <= 580);
 }

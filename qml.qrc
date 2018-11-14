@@ -7,5 +7,6 @@
         <file>img/hero1.png</file>
         <file>img/aim.png</file>
         <file>Bullet.qml</file>
+        <file>img/star.png</file>
     </qresource>
 </RCC>
