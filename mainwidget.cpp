@@ -4,6 +4,9 @@
 #include <QQmlEngine>
 #include "mainwidget.h"
 
+const int KEY_RUSSIAN_LEFT = 1060;
+const int KEY_RUSSIAN_RIGHT = 1042;
+
 MainWidget::MainWidget() : QQuickView() {
     m_world = new World(this);
 
@@ -30,11 +33,11 @@ void MainWidget::update() {
 void MainWidget::keyPressedEvent(qint32 key, qint32 modifier) {
     Q_UNUSED(modifier)
     switch (key) {
-        case 1060: {
+        case KEY_RUSSIAN_LEFT: {
             m_world->keyPressEvent(Qt::Key_A);
             break;
         }
-        case 1042: {
+        case KEY_RUSSIAN_RIGHT: {
             m_world->keyPressEvent(Qt::Key_D);
             break;
         }
@@ -47,11 +50,11 @@ void MainWidget::keyPressedEvent(qint32 key, qint32 modifier) {
 void MainWidget::keyReleasedEvent(qint32 key, qint32 modifier) {
     Q_UNUSED(modifier)
     switch (key) {
-        case 1060: {
+        case KEY_RUSSIAN_LEFT: {
             m_world->keyReleaseEvent(Qt::Key_A);
             break;
         }
-        case 1042: {
+        case KEY_RUSSIAN_RIGHT: {
             m_world->keyReleaseEvent(Qt::Key_D);
             break;
         }
