@@ -5,6 +5,7 @@
 
 class Observer {
     public:
+    virtual ~Observer() {};
         virtual QQuickItem* createBullet(qint32 x, qint32 y) = 0;
 };
 

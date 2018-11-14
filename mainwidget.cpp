@@ -65,6 +65,16 @@ void MainWidget::click(qint32 mouseX, qint32 mouseY) {
     m_world->click(mouseX, mouseY);
 }
 
+bool MainWidget::event(QEvent *event) {
+    if (event->type() == QEvent::FocusOut) {
+        m_world->keyReleaseEvent(Qt::Key_A);
+        m_world->keyReleaseEvent(Qt::Key_D);
+        m_world->keyReleaseEvent(Qt::Key_Space);
+        return true;
+    }
+    return QQuickView::event(event);
+}
+
 QQuickItem* MainWidget::createBullet(qint32 x, qint32 y) {
     QVariant retVal;
     QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createBullet", Qt::DirectConnection,

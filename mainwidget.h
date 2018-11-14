@@ -18,6 +18,7 @@ class MainWidget : public QQuickView, public Observer {
         void keyPressedEvent(qint32 key, qint32 modifier);
         void keyReleasedEvent(qint32 key, qint32 modifier);
         void click(qint32 mouseX, qint32 mouseY);
+        bool event(QEvent *event) override;
     private:
         World *m_world;
 };
