@@ -9,6 +9,7 @@ Item {
     signal worldUpdate()
     signal mouseMoved(int mouseX, int mouseY)
     signal mousePressed(int mouseX, int mouseY)
+
     Rectangle {
         x: 0
         y: 0
@@ -23,6 +24,7 @@ Item {
         height: 20
         color: "brown"
     }
+
     Rectangle {
         x: 620
         y: 0
@@ -30,6 +32,7 @@ Item {
         height: 480
         color: "brown"
     }
+
     Rectangle {
         x: 0
         y: 460
@@ -37,6 +40,7 @@ Item {
         height: 20
         color: "brown"
     }
+
     Rectangle {
         x: 200
         y: 200
@@ -44,6 +48,7 @@ Item {
         height: 20
         color: "brown"
     }
+
     Player {
         id: playerItem
         x: player.x
@@ -85,19 +90,25 @@ Item {
             worldUpdate();
         }
     }
-    function createBullet(xxx, yyy) {
+
+    function createBullet(bulletX, bulletY) {
         var comp = Qt.createComponent("Bullet.qml")
         var sprite = comp.createObject(item)
-        sprite.x = xxx
-        sprite.y = yyy
+        sprite.x = bulletX
+        sprite.y = bulletY
         return sprite
     }
 
-    function createLaser(xxx, yyy) {
+
+    function createLaser(finishX, finishY, playerX, playerY) {
         var comp = Qt.createComponent("Laser.qml")
         var sprite = comp.createObject(item)
-        sprite.x = xxx
-        sprite.y = yyy
+        sprite.finishX = finishX
+        sprite.finishY = finishY
+
+        sprite.playerX = playerX
+        sprite.playerY = playerY
+
         return sprite
     }
 }

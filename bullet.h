@@ -7,7 +7,7 @@
 
 class Bullet : public Projectile {
     public:
-        Bullet(QQuickItem *item, QVector2D direction, Map &m_map);
+        Bullet(QQuickItem *item, QVector2D direction, Map &map);
         virtual ~Bullet() override;
         virtual bool update() override;
         virtual qint32 getDamage() override;

@@ -2,31 +2,27 @@ import QtQuick 2.0
 
 Item {
     id: item
+    property int finishX
+    property int finishY
 
-    Path {
-        id: p
-        startX: 0;
-        startY: 0;
+    property int playerX
+    property int playerY
+    height: 700
+    width: 700
+
+    Canvas {
+        id: drawingCanvas
+        anchors.fill: parent
+        onPaint: {
+            var ctx = getContext("2d")
+
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = "red"
+            ctx.beginPath()
+            ctx.moveTo(finishX, finishY)
+            ctx.lineTo(playerX, playerY)
+            //ctx.closePath()
+            ctx.stroke()
+        }
     }
-/*
-    Rectangle {
-        id: r
-        property alias rotationAngle: rRotation.angle
-
-        anchors.centerIn: parent
-        height: 10
-        width: 1000
-        color: "black"
-
-
-        transform: Rotation {
-                id: rRotation
-
-                origin { x: r; y: hand }
-                Behavior on angle {
-                    SpringAnimation { spring: 2; damping: 0.3; modulus: 360 }
-                }
-            }
-    }
-*/
 }

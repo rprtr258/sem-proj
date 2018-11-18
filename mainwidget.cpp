@@ -3,6 +3,8 @@
 #include <QQuickItem>
 #include <QQmlEngine>
 #include "mainwidget.h"
+#include <iostream>
+#include "map.h"
 
 MainWidget::MainWidget() : QQuickView() {
     m_world = new World(this);
@@ -51,11 +53,15 @@ QQuickItem* MainWidget::createBullet(qint32 x, qint32 y) {
     return qvariant_cast<QQuickItem*>(retVal);
 }
 
-QQuickItem* MainWidget::createLaser(qint32 x, qint32 y) {
+QQuickItem* MainWidget::createLaser(QVector2D position, QVector2D playerCoord) {
     QVariant retVal;
     QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createLaser", Qt::DirectConnection,
                               Q_RETURN_ARG(QVariant, retVal),
-                              Q_ARG(QVariant, x),
-                              Q_ARG(QVariant, y));
+                              Q_ARG(QVariant, position.x()),
+                              Q_ARG(QVariant, position.y()),
+                              Q_ARG(QVariant, playerCoord.x()),
+                              Q_ARG(QVariant, playerCoord.y()));
     return qvariant_cast<QQuickItem*>(retVal);
 }
+
+
