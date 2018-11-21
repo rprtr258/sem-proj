@@ -25,7 +25,9 @@ SOURCES += \
     weapon.cpp \
     gun.cpp \
     laser.cpp \
-    lasergun.cpp
+    lasergun.cpp \
+    grenadegun.cpp \
+    grenade.cpp
 
 RESOURCES += qml.qrc
 
@@ -46,6 +48,8 @@ HEADERS += \
     gun.h \
     projectile.h \
     laser.h \
-    lasergun.h
+    lasergun.h \
+    grenadegun.h \
+    grenade.h
 
 DISTFILES +=

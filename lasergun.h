@@ -11,7 +11,7 @@ class LaserGun : public Weapon {
         virtual Laser* shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map &map) {
 
             QQuickItem *laserItem = view->createLaser(getTail(mouseCoord, playerCoord, map), playerCoord);
-            Laser *laser = new Laser(laserItem, mouseCoord - playerCoord);
+            Laser *laser = new Laser(laserItem, getTail(mouseCoord, playerCoord, map) - playerCoord);
             return laser;
         }
     private:

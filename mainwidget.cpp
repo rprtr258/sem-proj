@@ -64,4 +64,12 @@ QQuickItem* MainWidget::createLaser(QVector2D position, QVector2D playerCoord) {
     return qvariant_cast<QQuickItem*>(retVal);
 }
 
+QQuickItem* MainWidget::createGrenade(qint32 x, qint32 y) {
+    QVariant retVal;
+    QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createGrenade", Qt::DirectConnection,
+                              Q_RETURN_ARG(QVariant, retVal),
+                              Q_ARG(QVariant, x),
+                              Q_ARG(QVariant, y));
+    return qvariant_cast<QQuickItem*>(retVal);
+}
 

@@ -111,4 +111,12 @@ Item {
 
         return sprite
     }
+
+    function createGrenade(bulletX, bulletY) {
+        var comp = Qt.createComponent("Grenade.qml")
+        var sprite = comp.createObject(item)
+        sprite.x = bulletX
+        sprite.y = bulletY
+        return sprite
+    }
 }
