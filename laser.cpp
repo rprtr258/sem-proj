@@ -13,7 +13,9 @@ Laser::~Laser() {
 
 bool Laser::update() {
     m_lifetime--;
-    return (m_lifetime == 0);
+    if (m_lifetime == 0)
+        return true;
+    return false;//(m_lifetime == 0);
 }
 
 qint32 Laser::getDamage() {
