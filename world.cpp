@@ -1,5 +1,9 @@
 #include "bullet.h"
 #include "world.h"
+#include "projectile.h"
+#include "gun.h"
+#include "lasergun.h"
+#include "grenadegun.h"
 
 World::World(Observer *view) : m_view(view) {
     m_map.fillRectangle(0, 0, 20, 480);
@@ -52,9 +56,12 @@ void World::keyReleaseEvent(qint32 key) {
 }
 
 void World::click(qint32 mouseX, qint32 mouseY) {
-    QQuickItem *bulletItem = m_view->createBullet(m_player->x(), m_player->y());
-    Bullet *bullet = new Bullet(bulletItem, QVector2D(mouseX, mouseY) - QVector2D(m_player->x(), m_player->y()));
-    m_updateList.push_back(bullet);
+    //Weapon *weapon = new Gun();
+    Weapon *weapon = new LaserGun();
+    //Weapon *weapon = new GrenadeGun();
+    QVector2D startCoord = weapon->getStartCoord(m_player->getWidthBoundingBox(), m_player->flipped(), m_player->getVector2D());
+    Projectile *projectile = weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, &m_map);
+    m_updateList.push_back(projectile);
 }
 
 void World::update() {
