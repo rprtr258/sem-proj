@@ -1,9 +1,7 @@
 #ifndef GRENADE_H
 #define GRENADE_H
 
-
 #include <QQuickItem>
-
 #include "projectile.h"
 
 class Grenade : public Projectile {
