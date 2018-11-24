@@ -68,6 +68,9 @@ Item {
         onPressed: {
             mousePressed(mouseX, mouseY)
         }
+        onDoubleClicked: {
+            mousePressed(mouseX, mouseY)
+        }
         id: ma
     }
     Image {
