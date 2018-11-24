@@ -21,7 +21,7 @@ class World {
         }
     private:
         Observer *m_view = nullptr;
-        Player *m_player;
+        Player *m_player = nullptr;
         Map m_map;
         QMap<int, bool> isKeyPressed;
         QVector<Creature*> m_updateList;

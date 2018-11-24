@@ -5,7 +5,9 @@
 
 class Observer {
     public:
-        virtual QQuickItem* createBullet(qint32 x, qint32 y) = 0;
+        virtual ~Observer() {}
+        virtual QQuickItem* createBullet(qint32 x, qint32 y);
+        virtual QQuickItem* createPlayer(qint32 x, qint32 y);
 };
 
 #endif // OBSERVER_H

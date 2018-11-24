@@ -18,9 +18,9 @@ SOURCES += \
         world.cpp \
         player.cpp \
         map.cpp \
-    observer.cpp \
-    bullet.cpp \
-    creature.cpp
+        observer.cpp \
+        bullet.cpp \
+        creature.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,6 +34,6 @@ HEADERS += \
         world.h \
         player.h \
         map.h \
-    observer.h \
-    bullet.h \
-    creature.h
+        observer.h \
+        bullet.h \
+        creature.h

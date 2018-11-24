@@ -12,6 +12,13 @@ Item {
     Rectangle {
         x: 0
         y: 0
+        width: 640
+        height: 480
+        color: "violet"
+    }
+    Rectangle {
+        x: 0
+        y: 0
         width: 20
         height: 480
         color: "brown"
@@ -44,14 +51,6 @@ Item {
         height: 20
         color: "brown"
     }
-    Player {
-        id: playerItem
-        x: player.x
-        y: player.y
-        mirrored: player.flipped
-        going: player.going
-        inAir: player.inAir
-    }
     focus: true
     Keys.onPressed: {
         keyPressed(event.key, event.modifier);
@@ -62,6 +61,7 @@ Item {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
+        cursorShape: Qt.BlankCursor
         onPositionChanged: {
             mouseMoved(mouseX, mouseY)
         }
@@ -85,11 +85,18 @@ Item {
             worldUpdate();
         }
     }
-    function createBullet(xxx, yyy) {
+    function createPlayer(playerX, playerY) {
+        var comp = Qt.createComponent("Player.qml")
+        var player = comp.createObject(item)
+        player.x = playerX
+        player.y = playerY
+        return player
+    }
+    function createBullet(projectileX, projectileY) {
         var comp = Qt.createComponent("Bullet.qml")
         var sprite = comp.createObject(item)
-        sprite.x = xxx
-        sprite.y = yyy
+        sprite.x = projectileX
+        sprite.y = projectileY
         return sprite
     }
 }

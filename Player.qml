@@ -5,7 +5,27 @@ Item {
     property bool going : false
     property bool gg: false
     property bool inAir: true
+    property int health: 100
+    property int mana: 100
     id: player
+    Rectangle {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: -30
+        anchors.leftMargin: -(100 - sprite.width) / 2
+        height: 10
+        width: health
+        color: "red"
+    }
+    Rectangle {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: -20
+        anchors.leftMargin: -(100 - sprite.width) / 2
+        height: 10
+        width: mana
+        color: "blue"
+    }
     SpriteSequence {
         id: sprite
         height: 95
@@ -13,30 +33,30 @@ Item {
         running: true
         Sprite {
             name: "standing"
-            source: "qrc:/img/hero1.png"
+            source: "qrc:/img/transparent_sheet.png"
             frameX: 0
             frameY: 0
-            frameHeight: 95
-            frameWidth: 54
+            frameHeight: 96
+            frameWidth: 55
             frameCount: 16
             frameRate: 10
         }
         Sprite {
             name: "running"
-            source: "qrc:/img/hero1.png"
+            source: "qrc:/img/transparent_sheet.png"
             frameX: 0
-            frameY: 95
-            frameHeight: 92
-            frameWidth: 53
+            frameY: 96
+            frameHeight: 93
+            frameWidth: 54
             frameCount: 10
         }
         Sprite {
             name: "jumping"
-            source: "qrc:/img/hero1.png"
+            source: "qrc:/img/transparent_sheet.png"
             frameX: 0
-            frameY: 187
-            frameHeight: 103
-            frameWidth: 60
+            frameY: 188
+            frameHeight: 104
+            frameWidth: 61
             frameCount: 9
         }
         transform: [
