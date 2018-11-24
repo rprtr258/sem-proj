@@ -1,5 +1,6 @@
-#include "grenade.h"
 #include <QRect>
+#include <QtMath>
+#include "grenade.h"
 
 Grenade::Grenade(QQuickItem *item, QVector2D mouseCoord, QVector2D playerCoord, Map &worldMap) : m_item(item) {
     m_position.setX(m_item->property("x").toInt());

@@ -41,15 +41,13 @@ HEADERS += \
         world.h \
         player.h \
         map.h \
-    observer.h \
-    bullet.h \
-    creature.h \
-    weapon.h \
-    gun.h \
-    projectile.h \
-    laser.h \
-    lasergun.h \
-    grenadegun.h \
-    grenade.h
-
-DISTFILES +=
+        observer.h \
+        bullet.h \
+        creature.h \
+        weapon.h \
+        gun.h \
+        projectile.h \
+        laser.h \
+        lasergun.h \
+        grenadegun.h \
+        grenade.h
