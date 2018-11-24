@@ -1,8 +1,6 @@
 #include <algorithm>
 #include "map.h"
 
-Map::Map() {}
-
 bool Map::isFilled(const qint32 &x, const qint32 &y) const {
     return std::any_of(m_rects.begin(), m_rects.end(), [&](const QRect &wall) {return wall.contains(x, y);});
 }

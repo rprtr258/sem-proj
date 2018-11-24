@@ -18,11 +18,7 @@ SOURCES += \
         world.cpp \
         player.cpp \
         map.cpp \
-        observer.cpp \
         bullet.cpp \
-        creature.cpp \
-        projectile.cpp \
-        weapon.cpp \
         gun.cpp \
         laser.cpp \
         lasergun.cpp \

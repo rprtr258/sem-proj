@@ -8,9 +8,8 @@
 class Grenade : public Projectile {
     public:
         Grenade(QQuickItem *item, QVector2D mouseCoord, QVector2D playerCoord, Map *map);
-        virtual ~Grenade() override;
-        virtual bool update() override;
-        void setSpeed(QVector2D speed);
+        ~Grenade() override;
+        bool update() override;
     private:
         QQuickItem *m_item;
         QVector2D m_position;

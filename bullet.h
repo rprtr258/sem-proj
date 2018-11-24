@@ -8,8 +8,8 @@
 class Bullet : public Projectile {
     public:
         Bullet(QQuickItem *item, QVector2D direction, Map *map);
-        virtual ~Bullet() override;
-        virtual bool update() override;
+        ~Bullet() override;
+        bool update() override;
     private:
         QQuickItem* m_item = nullptr;
         QVector2D m_direction;

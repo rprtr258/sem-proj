@@ -3,7 +3,7 @@
 
 class Creature {
     public:
-        virtual ~Creature();
+        virtual ~Creature() {}
         /*
          * Returns true if creature should be deleted.
          */

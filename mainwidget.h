@@ -3,7 +3,6 @@
 
 #include <QQuickView>
 #include <QTimer>
-
 #include "world.h"
 
 class MainWidget : public QQuickView, public Observer {

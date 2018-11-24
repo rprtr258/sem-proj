@@ -11,8 +11,8 @@ class LaserGun : public Weapon {
         QVector2D calcEndPoint(QVector2D mouseCoord, QVector2D playerCoord, Map *map);
         bool isInScreen(QVector2D point);
     private:
-        qint32 const damage = 10;
-        qint32 const mana = 10;
+        qint32 const m_damage = 10;
+        qint32 const m_mana = 10;
 };
 
 #endif // LASERGUN_H

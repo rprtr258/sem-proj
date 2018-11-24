@@ -2,7 +2,6 @@
 #define WORLD_H
 
 #include <QMap>
-
 #include "map.h"
 #include "observer.h"
 #include "player.h"
@@ -20,7 +19,7 @@ class World {
             return m_player;
         }
     private:
-        Observer *m_view = nullptr;
+        Observer *m_view;
         Player *m_player = nullptr;
         Map m_map;
         QMap<int, bool> isKeyPressed;

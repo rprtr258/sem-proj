@@ -8,8 +8,8 @@ class GrenadeGun : public Weapon {
     public:
         Grenade* shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map) override;
     private:
-        qint32 const damage = 1;
-        qint32 const mana = 1;
+        const qint32 m_damage = 1;
+        const qint32 m_mana = 1;
 };
 
 #endif // GRENADEGUN_H
