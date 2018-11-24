@@ -1,64 +1,120 @@
 #include "player.h"
-#include <QBitmap>
+#include <QVariant>
 
-Player::Player(Map &worldMap) {
-    x = 170;
-    y = 0;
-    map = &worldMap;
-    boundingBox.left = x;
-    boundingBox.right = x + 55;
-    boundingBox.top = y;
-    boundingBox.bottom = y + 95;
-    sprite.load(":/img/hero.png");
-    sprite.setMask(sprite.createHeuristicMask());
+qint32 sign(const qint32 &x) {
+    return (x > 0) - (x < 0);
 }
 
-bool doesIntersectWall(const Map &map, const Rectangle &rect) {
-    return map.isFilled(rect);
+Player::Player(Map &worldMap, QQuickItem *item) {
+    m_item = item;
+    m_health = 100;
+    m_goingLeft = m_goingRight = false;
+    m_jumping = false;
+    m_vspeed = 0;
+    m_xCoord = 170;
+    m_yCoord = 0;
+    m_map = &worldMap;
+    m_boundingBox = QRect(m_xCoord, m_yCoord, 55, 95);
+    m_spriteFlipped = false;
 }
 
 void Player::goLeft() {
-    qint32 dx = -5;
-    Rectangle newRect = boundingBox;
-    newRect.moveHorizontal(dx);
-    while (doesIntersectWall(*map, newRect) and dx < 0) {
-        dx++;
-        newRect.moveHorizontal(1);
+    if (not m_goingLeft) {
+        m_goingLeft = true;
+        goingChangingNotified = false;
     }
-    if (dx == 0)
-        return;
-    x += dx;
-    boundingBox.moveHorizontal(dx);
+}
+
+void Player::stopLeft() {
+    m_goingLeft = false;
+    goingChangingNotified = false;
 }
 
 void Player::goRight() {
-    qint32 dx = 5;
-    Rectangle newRect = boundingBox;
-    newRect.moveHorizontal(dx);
-    while (doesIntersectWall(*map, newRect) and dx > 0) {
-        dx--;
-        newRect.moveHorizontal(-1);
+    if (not m_goingRight) {
+        m_goingRight = true;
+        goingChangingNotified = false;
+    }
+}
+
+void Player::stopRight() {
+    m_goingRight = false;
+    goingChangingNotified = false;
+}
+
+void Player::jump() {
+    m_jumping = true;
+}
+
+void Player::stopJump() {
+    m_jumping = false;
+}
+
+bool Player::update() {
+    setHealth((health() + 1) % 101);
+    setMana(((mana() - 1) % 101 + 101) % 101);
+    if (not goingChangingNotified) {
+        emit goingChanged();
+        goingChangingNotified = true;
+    }
+    if (m_goingLeft != m_goingRight) {
+        if (m_goingLeft) {
+            if (flipped())
+                flipSprite();
+            moveHorizontal(-5);
+        }
+        if (m_goingRight) {
+            if (not flipped())
+                flipSprite();
+            moveHorizontal(5);
+        }
+    }
+    if (m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1))) {
+        setInAir(true);
+        m_vspeed = 30;
+    } else if (!m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1))) {
+        setInAir(false);
+    }
+    moveVertical(10 - m_vspeed);
+    m_vspeed = std::max(m_vspeed - 1, 0);
+
+    m_item->setX(m_xCoord);
+    m_item->setY(m_yCoord);
+    m_item->setProperty("mirrored", flipped());
+    m_item->setProperty("going", going());
+    m_item->setProperty("inAir", inAir());
+    m_item->setProperty("health", health());
+    m_item->setProperty("mana", mana());
+    return false;
+}
+
+void Player::moveHorizontal(qint32 speed) {
+    qint32 dx = speed;
+    qint32 delta = sign(speed);
+    QRect newRect = m_boundingBox.translated(dx, 0);
+    while (m_map->isFilled(newRect) and dx != 0) {
+        dx -= delta;
+        newRect.translate(-delta, 0);
     }
     if (dx == 0)
         return;
-    x += dx;
-    boundingBox.moveHorizontal(dx);
+    setX(m_xCoord + dx);
+    m_boundingBox.translate(dx, 0);
 }
 
-void Player::update() {
-    qint32 dy = 10;
-    Rectangle newRect = boundingBox;
-    newRect.moveVertical(dy);
-    while (doesIntersectWall(*map, newRect) and dy > 0) {
-        dy--;
-        newRect.moveVertical(-1);
+void Player::moveVertical(qint32 speed) {
+    qint32 dy = speed;
+    qint32 delta = sign(speed);
+    QRect newRect = m_boundingBox.translated(0, dy);
+    while (m_map->isFilled(newRect) and dy != 0) {
+        dy -= delta;
+        newRect.translate(0, -delta);
+        m_vspeed = 0;
     }
     if (dy == 0)
         return;
-    y += dy;
-    boundingBox.moveVertical(dy);
-}
-
-void Player::draw(QPainter *painter) {
-    painter->drawPixmap(x, y, sprite.copy(0, 28, 55, 95));
+    if (not inAir())
+        setInAir(true);
+    setY(m_yCoord + dy);
+    m_boundingBox.translate(0, dy);
 }

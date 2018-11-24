@@ -1,29 +1,76 @@
+#include "bullet.h"
 #include "world.h"
 
-World::World() {
-    player = new Player(map);
-    map.fillRectangle(0, 0, 20, 480);
-    map.fillRectangle(620, 0, 640, 480);
-    map.fillRectangle(0, 460, 640, 480);
+World::World(Observer *view) : m_view(view) {
+    m_map.fillRectangle(0, 0, 20, 480);
+    m_map.fillRectangle(0, 300, 100, 20);
+    m_map.fillRectangle(620, 0, 20, 480);
+    m_map.fillRectangle(0, 460, 640, 20);
+    m_map.fillRectangle(200, 200, 100, 20);
 }
 
 World::~World() {
-    delete player;
+    delete m_player;
 }
 
-void World::keyPressEvent(QKeyEvent *event) {
-    if (event->key() == Qt::Key_A) {
-        player->goLeft();
-    } else if (event->key() == Qt::Key_D) {
-        player->goRight();
+void World::keyPressEvent(qint32 key) {
+    if (isKeyPressed[key])
+        return;
+    isKeyPressed[key] = true;
+    switch (key) {
+        case (Qt::Key_A): {
+            m_player->goLeft();
+            break;
+        }
+        case (Qt::Key_D): {
+            m_player->goRight();
+            break;
+        }
+        case (Qt::Key_Space): {
+            m_player->jump();
+            break;
+        }
     }
 }
 
-void World::update() {
-    player->update();
+void World::keyReleaseEvent(qint32 key) {
+    isKeyPressed[key] = false;
+    switch (key) {
+        case (Qt::Key_A): {
+            m_player->stopLeft();
+            break;
+        }
+        case (Qt::Key_D): {
+            m_player->stopRight();
+            break;
+        }
+        case (Qt::Key_Space): {
+            m_player->stopJump();
+            break;
+        }
+    }
 }
 
-void World::draw(QPainter *painter) {
-    map.draw(painter);
-    player->draw(painter);
+void World::click(qint32 mouseX, qint32 mouseY) {
+    QQuickItem *bulletItem = m_view->createBullet(m_player->x(), m_player->y());
+    Bullet *bullet = new Bullet(bulletItem, QVector2D(mouseX, mouseY) - QVector2D(m_player->x(), m_player->y()));
+    m_updateList.push_back(bullet);
+}
+
+void World::update() {
+    if (m_player == nullptr) {
+        QQuickItem *playerItem = m_view->createPlayer(170, 0);
+        m_player = new Player(m_map, playerItem);
+        m_updateList.push_back(m_player);
+    }
+    QVector<qint32> deleteList;
+    for (qint32 i = 0; i < m_updateList.size(); i++) {
+        Creature *creature = m_updateList[i];
+        if (creature->update())
+            deleteList.push_back(i);
+    }
+    for (auto it = deleteList.rbegin(); it != deleteList.rend(); it++) {
+        delete m_updateList[*it];
+        m_updateList.remove(*it);
+    }
 }
