@@ -13,6 +13,8 @@ Laser::~Laser() {
 
 bool Laser::update() {
     m_lifetime--;
+    if (m_lifetime == 0)
+        return true;
     return false;//(m_lifetime == 0);
 }
 
