@@ -74,11 +74,17 @@ class Player : public QObject, public Creature {
         qint32 mana() {
             return m_mana;
         }
+        qint32 getWidthBoundingBox() {
+            return m_boundingBox.width();
+        }
         void setMana(qint32 value) {
             if (m_mana == value)
                 return;
             m_mana = value;
             emit manaChanged();
+        }
+        QVector2D getVector2D() {
+            return QVector2D(m_xCoord, m_yCoord);
         }
     signals:
         void xChanged();
