@@ -6,13 +6,11 @@
 #include "grenadegun.h"
 #include <iostream>
 World::World(Observer *view) : m_view(view) {
-    m_player = new Player(m_map);
     m_map.fillRectangle(0, 0, 20, 480);
     m_map.fillRectangle(0, 300, 100, 20);
     m_map.fillRectangle(620, 0, 20, 480);
     m_map.fillRectangle(0, 460, 640, 20);
     m_map.fillRectangle(200, 200, 100, 20);
-    m_updateList.push_back(m_player);
 }
 
 World::~World() {
@@ -67,6 +65,11 @@ void World::click(qint32 mouseX, qint32 mouseY) {
 }
 
 void World::update() {
+    if (m_player == nullptr) {
+        QQuickItem *playerItem = m_view->createPlayer(170, 0);
+        m_player = new Player(m_map, playerItem);
+        m_updateList.push_back(m_player);
+    }
     QVector<qint32> deleteList;
     for (qint32 i = 0; i < m_updateList.size(); i++) {
         Creature *creature = m_updateList[i];

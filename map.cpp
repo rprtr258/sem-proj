@@ -1,19 +1,13 @@
+#include <algorithm>
 #include "map.h"
 
 Map::Map() {}
 
 bool Map::isFilled(const qint32 &x, const qint32 &y) const {
-    for (const QRect &r : m_rects)
-        if (r.contains(x, y))
-            return true;
-    return false;
+    return std::any_of(m_rects.begin(), m_rects.end(), [&](const QRect &wall) {return wall.contains(x, y);});
 }
-#include <QDebug>
 bool Map::isFilled(const QRect &r) const {
-    for (const QRect &wall : m_rects)
-        if (r.intersects(wall))
-            return true;
-    return false;
+    return std::any_of(m_rects.begin(), m_rects.end(), [&](const QRect &wall) {return r.intersects(wall);});
 }
 
 void Map::fillRectangle(qint32 x1, qint32 y1, qint32 width, qint32 height) {

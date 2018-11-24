@@ -5,7 +5,9 @@ qint32 sign(const qint32 &x) {
     return (x > 0) - (x < 0);
 }
 
-Player::Player(Map &worldMap) {
+Player::Player(Map &worldMap, QQuickItem *item) {
+    m_item = item;
+    m_health = 100;
     m_goingLeft = m_goingRight = false;
     m_jumping = false;
     m_vspeed = 0;
@@ -49,6 +51,8 @@ void Player::stopJump() {
 }
 
 bool Player::update() {
+    setHealth((health() + 1) % 101);
+    setMana(((mana() - 1) % 101 + 101) % 101);
     if (not goingChangingNotified) {
         emit goingChanged();
         goingChangingNotified = true;
@@ -73,6 +77,14 @@ bool Player::update() {
     }
     moveVertical(10 - m_vspeed);
     m_vspeed = std::max(m_vspeed - 1, 0);
+
+    m_item->setX(m_xCoord);
+    m_item->setY(m_yCoord);
+    m_item->setProperty("mirrored", flipped());
+    m_item->setProperty("going", going());
+    m_item->setProperty("inAir", inAir());
+    m_item->setProperty("health", health());
+    m_item->setProperty("mana", mana());
     return false;
 }
 
