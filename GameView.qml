@@ -12,6 +12,13 @@ Item {
     Rectangle {
         x: 0
         y: 0
+        width: 640
+        height: 480
+        color: "violet"
+    }
+    Rectangle {
+        x: 0
+        y: 0
         width: 20
         height: 480
         color: "brown"
@@ -54,6 +61,7 @@ Item {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
+        cursorShape: Qt.BlankCursor
         onPositionChanged: {
             mouseMoved(mouseX, mouseY)
         }
