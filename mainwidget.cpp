@@ -10,7 +10,7 @@ const int KEY_RUSSIAN_RIGHT = 1042;
 MainWidget::MainWidget() : QQuickView() {
     m_world = new World(this);
 
-    rootContext()->setContextProperty("player", m_world->getPlayer());
+    //rootContext()->setContextProperty("player", m_world->getPlayer());
 
     setMinimumSize(QSize(640, 480));
     setMaximumSize(QSize(640, 480));
@@ -76,6 +76,15 @@ bool MainWidget::event(QEvent *event) {
         return true;
     }
     return QQuickView::event(event);
+}
+
+QQuickItem* MainWidget::createPlayer(qint32 x, qint32 y) {
+    QVariant retVal;
+    QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createPlayer", Qt::DirectConnection,
+                              Q_RETURN_ARG(QVariant, retVal),
+                              Q_ARG(QVariant, x),
+                              Q_ARG(QVariant, y));
+    return qvariant_cast<QQuickItem*>(retVal);
 }
 
 QQuickItem* MainWidget::createBullet(qint32 x, qint32 y) {

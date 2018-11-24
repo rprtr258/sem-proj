@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <QObject>
+#include <QQuickItem>
 #include <QRect>
 #include "creature.h"
 #include "map.h"
@@ -18,7 +19,7 @@ class Player : public QObject, public Creature {
     Q_DISABLE_COPY(Player)
 
     public:
-        Player(Map &m_map);
+        Player(Map &m_map, QQuickItem *item);
         void goLeft();
         void stopLeft();
         void goRight();
@@ -101,6 +102,7 @@ class Player : public QObject, public Creature {
         qint32 m_health;
         qint32 m_mana;
         QRect m_boundingBox;
+        QQuickItem *m_item;
         Map *m_map;
         bool m_goingLeft;
         bool m_goingRight;

@@ -44,16 +44,6 @@ Item {
         height: 20
         color: "brown"
     }
-    Player {
-        id: playerItem
-        x: player.x
-        y: player.y
-        mirrored: player.flipped
-        going: player.going
-        inAir: player.inAir
-        health: player.health
-        mana: player.mana
-    }
     focus: true
     Keys.onPressed: {
         keyPressed(event.key, event.modifier);
@@ -86,6 +76,13 @@ Item {
         onTriggered: {
             worldUpdate();
         }
+    }
+    function createPlayer(playerX, playerY) {
+        var comp = Qt.createComponent("Player.qml")
+        var player = comp.createObject(item)
+        player.x = playerX
+        player.y = playerY
+        return player
     }
     function createBullet(projectileX, projectileY) {
         var comp = Qt.createComponent("Bullet.qml")

@@ -11,7 +11,7 @@ class MainWidget : public QQuickView, public Observer {
     public:
         MainWidget();
         ~MainWidget() override;
-
+        QQuickItem* createPlayer(qint32 x, qint32 y) override;
         QQuickItem* createBullet(qint32 x, qint32 y) override;
     public slots:
         void update();
