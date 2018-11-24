@@ -31,7 +31,6 @@ Item {
         height: 20
         color: "brown"
     }
-
     Rectangle {
         x: 620
         y: 0
@@ -39,7 +38,6 @@ Item {
         height: 480
         color: "brown"
     }
-
     Rectangle {
         x: 0
         y: 460
@@ -47,7 +45,6 @@ Item {
         height: 20
         color: "brown"
     }
-
     Rectangle {
         x: 200
         y: 200
@@ -100,7 +97,6 @@ Item {
 
         return sprite
     }
-
     function createGrenade(bulletX, bulletY) {
         var comp = Qt.createComponent("Grenade.qml")
         var sprite = comp.createObject(item)
