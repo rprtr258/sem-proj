@@ -9,12 +9,11 @@ Laser::Laser(QQuickItem *item, QVector2D direction) : m_item(item) {
 
 Laser::~Laser() {
     m_item->deleteLater();
-    delete m_item;
 }
 
 bool Laser::update() {
     m_lifetime--;
-    return (m_lifetime == 0);
+    return false;//(m_lifetime == 0);
 }
 
 qint32 Laser::getDamage() {

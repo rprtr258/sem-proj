@@ -6,6 +6,11 @@ Map::Map() {}
 bool Map::isFilled(const qint32 &x, const qint32 &y) const {
     return std::any_of(m_rects.begin(), m_rects.end(), [&](const QRect &wall) {return wall.contains(x, y);});
 }
+
+bool Map::isFilled(const QPoint &p) const {
+    return isFilled(p.x(), p.y());
+}
+
 bool Map::isFilled(const QRect &r) const {
     return std::any_of(m_rects.begin(), m_rects.end(), [&](const QRect &wall) {return r.intersects(wall);});
 }

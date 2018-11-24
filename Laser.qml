@@ -18,7 +18,6 @@ Item {
             ctx.beginPath()
             ctx.moveTo(playerX, playerY)
             ctx.lineTo(finishX, finishY)
-            ctx.closePath()
             ctx.stroke()
         }
     }
