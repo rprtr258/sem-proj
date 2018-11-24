@@ -50,6 +50,8 @@ void Player::stopJump() {
 }
 
 bool Player::update() {
+    setHealth((health() + 1) % 101);
+    setMana(((mana() - 1) % 101 + 101) % 101);
     if (not goingChangingNotified) {
         emit goingChanged();
         goingChangingNotified = true;

@@ -51,6 +51,8 @@ Item {
         mirrored: player.flipped
         going: player.going
         inAir: player.inAir
+        health: player.health
+        mana: player.mana
     }
     focus: true
     Keys.onPressed: {
