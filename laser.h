@@ -19,6 +19,7 @@ class Laser : public Projectile {
         QVector2D m_position;
         qint32 const damage = 10;
         qint32 const mana = 10;
+        qint32 m_lifetime;
 };
 
 #endif // LASER_H
