@@ -17,7 +17,7 @@ class LaserGun : public Weapon {
     private:
         QVector2D getTail(QVector2D mouseCoord, QVector2D playerCoord, Map &map) {
             QVector2D diection = mouseCoord - playerCoord;
-            diection = diection / diection.length() * 10;
+            diection = diection / diection.length();// * 10;
             QVector2D position = playerCoord;
             QRect rect = QRect(position.x(), position.y(), 1, 1);
 

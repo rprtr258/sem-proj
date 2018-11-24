@@ -14,10 +14,7 @@ Laser::~Laser() {
 
 bool Laser::update() {
     m_lifetime--;
-    if (m_lifetime == 0)
-        return true;
-    return not (m_position.x() >= 0 and m_position.x() < 640 and
-                m_position.y() >= 0 and m_position.y() < 480);
+    return (m_lifetime == 0);
 }
 
 qint32 Laser::getDamage() {

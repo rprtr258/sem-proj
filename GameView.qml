@@ -31,7 +31,6 @@ Item {
         height: 20
         color: "brown"
     }
-
     Rectangle {
         x: 620
         y: 0
@@ -39,7 +38,6 @@ Item {
         height: 480
         color: "brown"
     }
-
     Rectangle {
         x: 0
         y: 460
@@ -47,7 +45,6 @@ Item {
         height: 20
         color: "brown"
     }
-
     Rectangle {
         x: 200
         y: 200
@@ -89,31 +86,28 @@ Item {
             worldUpdate();
         }
     }
-    function createLaser(finishX, finishY, playerX, playerY) {
-        var comp = Qt.createComponent("Laser.qml")
-        var sprite = comp.createObject(item)
-        sprite.finishX = finishX
-        sprite.finishY = finishY
-
-        sprite.playerX = playerX
-        sprite.playerY = playerY
-
-        return sprite
-    }
-
-    function createGrenade(bulletX, bulletY) {
-        var comp = Qt.createComponent("Grenade.qml")
-        var sprite = comp.createObject(item)
-        sprite.x = bulletX
-        sprite.y = bulletY
-        return sprite
-    }
     function createPlayer(playerX, playerY) {
         var comp = Qt.createComponent("Player.qml")
         var player = comp.createObject(item)
         player.x = playerX
         player.y = playerY
         return player
+    }
+    function createLaser(finishX, finishY, playerX, playerY) {
+        var comp = Qt.createComponent("Laser.qml")
+        var sprite = comp.createObject(item)
+        sprite.finishX = finishX
+        sprite.finishY = finishY
+        sprite.playerX = playerX
+        sprite.playerY = playerY
+        return sprite
+    }
+    function createGrenade(bulletX, bulletY) {
+        var comp = Qt.createComponent("Grenade.qml")
+        var sprite = comp.createObject(item)
+        sprite.x = bulletX
+        sprite.y = bulletY
+        return sprite
     }
     function createBullet(bulletX, bulletY) {
         var comp = Qt.createComponent("Bullet.qml")
