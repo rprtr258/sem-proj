@@ -13,6 +13,8 @@ class Player : public QObject, public Creature {
     Q_PROPERTY(bool flipped READ flipped NOTIFY spriteFlipped)
     Q_PROPERTY(bool going READ going NOTIFY goingChanged)
     Q_PROPERTY(bool inAir READ inAir NOTIFY inAirChanged)
+    Q_PROPERTY(qint32 health READ health NOTIFY healthChanged)
+    Q_PROPERTY(qint32 mana READ mana NOTIFY manaChanged)
     Q_DISABLE_COPY(Player)
 
     public:
@@ -59,13 +61,32 @@ class Player : public QObject, public Creature {
             m_inAir = value;
             emit inAirChanged();
         }
+        qint32 health() {
+            return m_health;
+        }
+        void setHealth(qint32 value) {
+            if (m_health == value)
+                return;
+            m_health = value;
+            emit healthChanged();
+        }
+        qint32 mana() {
+            return m_mana;
+        }
+        void setMana(qint32 value) {
+            if (m_mana == value)
+                return;
+            m_mana = value;
+            emit manaChanged();
+        }
     signals:
         void xChanged();
         void yChanged();
         void spriteFlipped();
         void goingChanged();
         void inAirChanged();
-
+        void healthChanged();
+        void manaChanged();
     private:
         void flipSprite() {
             m_spriteFlipped = not m_spriteFlipped;
@@ -77,6 +98,8 @@ class Player : public QObject, public Creature {
         qint32 m_xCoord;
         qint32 m_yCoord;
         qint32 m_vspeed;
+        qint32 m_health;
+        qint32 m_mana;
         QRect m_boundingBox;
         Map *m_map;
         bool m_goingLeft;

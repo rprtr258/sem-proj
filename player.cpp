@@ -6,6 +6,7 @@ qint32 sign(const qint32 &x) {
 }
 
 Player::Player(Map &worldMap) {
+    m_health = 100;
     m_goingLeft = m_goingRight = false;
     m_jumping = false;
     m_vspeed = 0;

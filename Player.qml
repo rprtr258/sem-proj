@@ -5,7 +5,27 @@ Item {
     property bool going : false
     property bool gg: false
     property bool inAir: true
+    property int health: 100
+    property int mana: 100
     id: player
+    Rectangle {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: -30
+        anchors.leftMargin: -(100 - sprite.width) / 2
+        height: 10
+        width: health
+        color: "red"
+    }
+    Rectangle {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: -20
+        anchors.leftMargin: -(100 - sprite.width) / 2
+        height: 10
+        width: mana
+        color: "blue"
+    }
     SpriteSequence {
         id: sprite
         height: 95
