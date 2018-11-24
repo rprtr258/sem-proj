@@ -13,15 +13,5 @@ Laser::~Laser() {
 
 bool Laser::update() {
     m_lifetime--;
-    if (m_lifetime == 0)
-        return true;
-    return false;//(m_lifetime == 0);
-}
-
-qint32 Laser::getDamage() {
-    return damage;
-}
-
-qint32 Laser::getMana() {
-    return mana;
+    return (m_lifetime == 0);
 }

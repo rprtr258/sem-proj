@@ -23,11 +23,3 @@ bool Grenade::update() {
             m_position.y() < 0 or m_position.y() > 480 or
             m_map->isFilled(m_boundingBox));
 }
-
-qint32 Grenade::getDamage() {
-    return damage;
-}
-
-qint32 Grenade::getMana() {
-    return mana;
-}

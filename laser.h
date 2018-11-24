@@ -11,14 +11,10 @@ class Laser : public Projectile {
         Laser(QQuickItem *item, QVector2D direction);
         virtual ~Laser() override;
         virtual bool update() override;
-        virtual qint32 getDamage() override;
-        virtual qint32 getMana() override;
     private:
         QQuickItem* m_item = nullptr;
         QVector2D m_direction;
         QVector2D m_position;
-        qint32 const damage = 10;
-        qint32 const mana = 10;
         qint32 m_lifetime;
 };
 

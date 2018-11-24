@@ -1,15 +1,15 @@
 #include "lasergun.h"
 
-Laser* LaserGun::shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map &map) {
-    QVector2D endPoint = getTail(mouseCoord, playerCoord, map);
+Laser* LaserGun::shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map) {
+    QVector2D endPoint = calcEndPoint(mouseCoord, playerCoord, map);
     QQuickItem *laserItem = view->createLaser(endPoint, playerCoord);
     return new Laser(laserItem, endPoint - playerCoord);
 }
 
-QVector2D LaserGun::getTail(QVector2D mouseCoord, QVector2D playerCoord, Map &map) {
+QVector2D LaserGun::calcEndPoint(QVector2D mouseCoord, QVector2D playerCoord, Map *map) {
     QVector2D direction = (mouseCoord - playerCoord).normalized();
     QVector2D position = playerCoord;
-    while (!map.isFilled(position.toPoint()) and isInScreen(position))
+    while (!map->isFilled(position.toPoint()) and isInScreen(position))
         position += direction;
     return position;
 }
