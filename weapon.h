@@ -7,7 +7,7 @@
 
 class Weapon {
     public:
-        virtual ~Weapon() {}
+        virtual ~Weapon();
         virtual Projectile* shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *m_map) = 0;
 };
 

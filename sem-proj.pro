@@ -22,8 +22,12 @@ SOURCES += \
         gun.cpp \
         laser.cpp \
         lasergun.cpp \
+        grenade.cpp \
         grenadegun.cpp \
-        grenade.cpp
+        creature.cpp \
+        observer.cpp \
+        projectile.cpp \
+        weapon.cpp
 
 RESOURCES += qml.qrc
 
@@ -47,3 +51,6 @@ HEADERS += \
         lasergun.h \
         grenadegun.h \
         grenade.h
+
+SUBDIRS += \
+    sem-proj.pro

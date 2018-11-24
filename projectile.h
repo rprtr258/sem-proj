@@ -6,7 +6,7 @@
 
 class Projectile : public Creature {
     public:
-        virtual ~Projectile() {}
+        virtual ~Projectile();
         //virtual qint32 getDamage() = 0;
         //virtual bool doesHit(QRect hitBox) = 0;
 };
