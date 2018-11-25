@@ -54,7 +54,7 @@ Item {
             name: "jumping"
             source: "qrc:/img/transparent_sheet.png"
             frameX: 0
-            frameY: 188
+            frameY: 189
             frameHeight: 104
             frameWidth: 61
             frameCount: 9

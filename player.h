@@ -64,8 +64,8 @@ class Player : public QObject, public Creature {
         QRect getBoundingBox() {
             return m_boundingBox;
         }
-        QVector2D getVector2D() {
-            return QVector2D(m_xCoord, m_yCoord);
+        QVector2D getPosition() {
+            return QVector2D(x(), y());
         }
     signals:
         void xChanged();
