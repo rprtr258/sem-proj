@@ -18,7 +18,7 @@ Player::Player(Map *map, Observer *view, QQuickItem *item) : m_map(map), m_view(
     m_reload = 0;
     m_weapon = new Gun();
     m_weaponType = 0;
-    m_boundingBox = QRect(m_xCoord, m_yCoord, 55, 95);
+    m_boundingBox = QRect(m_xCoord + 17, m_yCoord + 4, 24, 85);
     m_spriteFlipped = false;
 }
 
