@@ -59,25 +59,21 @@ Item {
             frameWidth: 61
             frameCount: 9
         }
+        Sprite {
+            name: "attack"
+            source: "qrc:/img/transparent_sheet.png"
+            frameX: 0
+            frameY: 293
+            frameHeight: 96
+            frameWidth: 55
+            frameCount: 11
+        }
         transform: [
             Scale {
                 origin.x: sprite.width / 2
                 xScale: mirrored ? 1 : -1
             }
         ]
-    }
-    function run() {
-        if (!gg) {
-            sprite.jumpTo("running");
-            console.log(gg)
-            gg = true;
-        }
-    }
-    function stop() {
-        if (gg) {
-            sprite.jumpTo("standing");
-            gg = false;
-        }
     }
     states: [
         State {
