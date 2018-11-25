@@ -58,6 +58,7 @@ Item {
             frameHeight: 104
             frameWidth: 61
             frameCount: 9
+            frameRate: 10
         }
         Sprite {
             name: "attack"
@@ -72,7 +73,7 @@ Item {
         transform: [
             Scale {
                 origin.x: sprite.width / 2
-                xScale: mirrored ? 1 : -1
+                xScale: mirrored ? -1 : 1
             }
         ]
     }

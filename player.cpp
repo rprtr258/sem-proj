@@ -23,27 +23,19 @@ Player::Player(Map *map, Observer *view, QQuickItem *item) : m_map(map), m_view(
 }
 
 void Player::goLeft() {
-    if (not m_goingLeft) {
-        m_goingLeft = true;
-        goingChangingNotified = false;
-    }
+    m_goingLeft = true;
 }
 
 void Player::stopLeft() {
     m_goingLeft = false;
-    goingChangingNotified = false;
 }
 
 void Player::goRight() {
-    if (not m_goingRight) {
-        m_goingRight = true;
-        goingChangingNotified = false;
-    }
+    m_goingRight = true;
 }
 
 void Player::stopRight() {
     m_goingRight = false;
-    goingChangingNotified = false;
 }
 
 void Player::jump() {
@@ -76,7 +68,7 @@ void Player::changeWeapon() {
 Projectile* Player::attack(qint32 mouseX, qint32 mouseY) {
     if (m_reload == 0) {
         m_reload = 25;
-        QVector2D startCoord = m_weapon->getStartCoord(m_boundingBox.width(), m_spriteFlipped, QVector2D(m_xCoord, m_yCoord));
+        QVector2D startCoord = getHandPosition();
         return m_weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map);
     }
     return nullptr;
@@ -85,18 +77,14 @@ Projectile* Player::attack(qint32 mouseX, qint32 mouseY) {
 bool Player::update() {
     setHealth((health() + 1) % 101);
     setMana(((mana() - 1) % 101 + 101) % 101);
-    if (not goingChangingNotified) {
-        emit goingChanged();
-        goingChangingNotified = true;
-    }
     if (m_goingLeft != m_goingRight) {
         if (m_goingLeft) {
-            if (m_spriteFlipped)
+            if (not m_spriteFlipped)
                 flipSprite();
             moveHorizontal(-5);
         }
         if (m_goingRight) {
-            if (not m_spriteFlipped)
+            if (m_spriteFlipped)
                 flipSprite();
             moveHorizontal(5);
         }
@@ -150,4 +138,15 @@ void Player::moveVertical(qint32 speed) {
     m_inAir = true;
     setY(m_yCoord + dy);
     m_boundingBox.translate(0, dy);
+}
+
+QVector2D Player::getHandPosition() {
+    const int ofsetX = 47;
+    const int ofsetY = 25;
+
+    if (m_spriteFlipped) {
+        return QVector2D(m_xCoord - ofsetX, m_yCoord + ofsetY);
+    } else {
+        return QVector2D(m_xCoord + ofsetX, m_yCoord + ofsetY);
+    }
 }
