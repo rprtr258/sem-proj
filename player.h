@@ -1,4 +1,4 @@
-#ifndef PLAYER_H
+﻿#ifndef PLAYER_H
 #define PLAYER_H
 
 #include <QObject>
@@ -9,13 +9,6 @@
 
 class Player : public QObject, public Creature {
     Q_OBJECT
-    Q_PROPERTY(qint32 x READ x NOTIFY xChanged)
-    Q_PROPERTY(qint32 y READ y NOTIFY yChanged)
-    Q_PROPERTY(bool flipped READ flipped NOTIFY spriteFlipped)
-    Q_PROPERTY(bool going READ going NOTIFY goingChanged)
-    Q_PROPERTY(bool inAir READ inAir NOTIFY inAirChanged)
-    Q_PROPERTY(qint32 health READ health NOTIFY healthChanged)
-    Q_PROPERTY(qint32 mana READ mana NOTIFY manaChanged)
     Q_DISABLE_COPY(Player)
 
     public:
@@ -32,35 +25,20 @@ class Player : public QObject, public Creature {
         qint32 x() const {
             return m_xCoord;
         }
-        void setX(qint32 _x) {
-            if (m_xCoord == _x)
+        void setX(qint32 value) {
+            if (m_xCoord == value)
                 return;
-            m_xCoord = _x;
+            m_xCoord = value;
             emit xChanged();
         }
         qint32 y() const {
             return m_yCoord;
         }
-        void setY(qint32 _y) {
-            if (m_yCoord == _y)
+        void setY(qint32 value) {
+            if (m_yCoord == value)
                 return;
-            m_yCoord = _y;
+            m_yCoord = value;
             emit yChanged();
-        }
-        bool flipped() {
-            return m_spriteFlipped;
-        }
-        bool going() {
-            return m_goingLeft xor m_goingRight;
-        }
-        bool inAir() {
-            return m_inAir;
-        }
-        void setInAir(bool value) {
-            if (m_inAir == value)
-                return;
-            m_inAir = value;
-            emit inAirChanged();
         }
         qint32 health() {
             return m_health;
@@ -74,14 +52,17 @@ class Player : public QObject, public Creature {
         qint32 mana() {
             return m_mana;
         }
-        qint32 getWidthBoundingBox() {
-            return m_boundingBox.width();
-        }
         void setMana(qint32 value) {
             if (m_mana == value)
                 return;
             m_mana = value;
             emit manaChanged();
+        }
+        bool flipped() {
+            return m_spriteFlipped;
+        }
+        QRect getBoundingBox() {
+            return m_boundingBox;
         }
         QVector2D getVector2D() {
             return QVector2D(m_xCoord, m_yCoord);

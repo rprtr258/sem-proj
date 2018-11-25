@@ -59,32 +59,32 @@ bool Player::update() {
     }
     if (m_goingLeft != m_goingRight) {
         if (m_goingLeft) {
-            if (flipped())
+            if (m_spriteFlipped)
                 flipSprite();
             moveHorizontal(-5);
         }
         if (m_goingRight) {
-            if (not flipped())
+            if (not m_spriteFlipped)
                 flipSprite();
             moveHorizontal(5);
         }
     }
     if (m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1))) {
-        setInAir(true);
+        m_inAir = true;
         m_vspeed = 30;
     } else if (!m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1))) {
-        setInAir(false);
+        m_inAir = false;
     }
     moveVertical(10 - m_vspeed);
     m_vspeed = std::max(m_vspeed - 1, 0);
 
     m_item->setX(m_xCoord);
     m_item->setY(m_yCoord);
-    m_item->setProperty("mirrored", flipped());
-    m_item->setProperty("going", going());
-    m_item->setProperty("inAir", inAir());
-    m_item->setProperty("health", health());
-    m_item->setProperty("mana", mana());
+    m_item->setProperty("mirrored", m_spriteFlipped);
+    m_item->setProperty("going", m_goingLeft xor m_goingRight);
+    m_item->setProperty("inAir", m_inAir);
+    m_item->setProperty("health", m_health);
+    m_item->setProperty("mana", m_mana);
     return false;
 }
 
@@ -113,8 +113,7 @@ void Player::moveVertical(qint32 speed) {
     }
     if (dy == 0)
         return;
-    if (not inAir())
-        setInAir(true);
+    m_inAir = true;
     setY(m_yCoord + dy);
     m_boundingBox.translate(0, dy);
 }
