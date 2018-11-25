@@ -1,10 +1,13 @@
 #include "player.h"
+#include "gun.h"
+#include "lasergun.h"
+#include "grenadegun.h"
 
 qint32 sign(const qint32 &x) {
     return (x > 0) - (x < 0);
 }
 
-Player::Player(Map &worldMap, QQuickItem *item) {
+Player::Player(Map *map, Observer *view, QQuickItem *item) : m_map(map), m_view(view) {
     m_item = item;
     m_health = 100;
     m_goingLeft = m_goingRight = false;
@@ -12,7 +15,6 @@ Player::Player(Map &worldMap, QQuickItem *item) {
     m_vspeed = 0;
     m_xCoord = 170;
     m_yCoord = 0;
-    m_map = &worldMap;
     m_reload = 0;
     m_boundingBox = QRect(m_xCoord, m_yCoord, 55, 95);
     m_spriteFlipped = false;
@@ -50,10 +52,16 @@ void Player::stopJump() {
     m_jumping = false;
 }
 
-void Player::attack() {
+Projectile* Player::attack(qint32 mouseX, qint32 mouseY) {
     if (m_reload == 0) {
         m_reload = 25;
+        Weapon *weapon = new Gun();
+        //Weapon *weapon = new LaserGun();
+        //Weapon *weapon = new GrenadeGun();
+        QVector2D startCoord = weapon->getStartCoord(m_boundingBox.width(), m_spriteFlipped, QVector2D(m_xCoord, m_yCoord));
+        return weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map);
     }
+    return nullptr;
 }
 
 bool Player::update() {

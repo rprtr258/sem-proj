@@ -56,19 +56,15 @@ void World::keyReleaseEvent(qint32 key) {
 }
 
 void World::click(qint32 mouseX, qint32 mouseY) {
-    m_player->attack();
-    //Weapon *weapon = new Gun();
-    Weapon *weapon = new LaserGun();
-    //Weapon *weapon = new GrenadeGun();
-    QVector2D startCoord = weapon->getStartCoord(m_player->getBoundingBox().width(), m_player->flipped(), m_player->getPosition());
-    Projectile *projectile = weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, &m_map);
-    m_updateList.push_back(projectile);
+    Projectile *projectile = m_player->attack(mouseX, mouseY);
+    if (projectile != nullptr)
+        m_updateList.push_back(projectile);
 }
 
 void World::update() {
     if (m_player == nullptr) {
         QQuickItem *playerItem = m_view->createPlayer(170, 0);
-        m_player = new Player(m_map, playerItem);
+        m_player = new Player(&m_map, m_view, playerItem);
         m_updateList.push_back(m_player);
     }
     QVector<qint32> deleteList;

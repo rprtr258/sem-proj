@@ -6,20 +6,22 @@
 #include <QRect>
 #include "creature.h"
 #include "map.h"
+#include "observer.h"
+#include "projectile.h"
 
 class Player : public QObject, public Creature {
     Q_OBJECT
     Q_DISABLE_COPY(Player)
 
     public:
-        Player(Map &m_map, QQuickItem *item);
+        Player(Map *map, Observer *view, QQuickItem *item);
         void goLeft();
         void stopLeft();
         void goRight();
         void stopRight();
         void jump();
         void stopJump();
-        void attack();
+        Projectile* attack(qint32 mouseX, qint32 mouseY);
 
         virtual bool update() override;
 
@@ -93,6 +95,7 @@ class Player : public QObject, public Creature {
         QRect m_boundingBox;
         QQuickItem *m_item;
         Map *m_map;
+        Observer *m_view;
         bool m_goingLeft;
         bool m_goingRight;
         bool m_jumping;
