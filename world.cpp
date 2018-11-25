@@ -67,8 +67,9 @@ void World::click(qint32 mouseX, qint32 mouseY) {
 
 void World::update() {
     if (m_player == nullptr) {
-        QQuickItem *playerItem = m_view->createPlayer(170, 0);
-        m_player = new Player(&m_map, m_view, playerItem);
+        QPoint position(170, 0);
+        QQuickItem *playerItem = m_view->createPlayer(position.x(), position.y());
+        m_player = new Player(&m_map, m_view, playerItem, position);
         m_updateList.push_back(m_player);
     }
     QVector<qint32> deleteList;

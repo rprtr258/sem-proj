@@ -7,14 +7,15 @@ qint32 sign(const qint32 &x) {
     return (x > 0) - (x < 0);
 }
 
-Player::Player(Map *map, Observer *view, QQuickItem *item) : m_map(map), m_view(view) {
+Player::Player(Map *map, Observer *view, QQuickItem *item, QPoint position) : m_map(map), m_view(view) {
     m_item = item;
     m_health = 100;
+    m_mana = 100;
     m_goingLeft = m_goingRight = false;
     m_jumping = false;
     m_vspeed = 0;
-    m_xCoord = 170;
-    m_yCoord = 0;
+    m_xCoord = position.x();
+    m_yCoord = position.y();
     m_reload = 0;
     m_weapon = new Gun();
     m_weaponType = 0;
@@ -75,8 +76,8 @@ Projectile* Player::attack(qint32 mouseX, qint32 mouseY) {
 }
 
 bool Player::update() {
-    setHealth((health() + 1) % 101);
-    setMana(((mana() - 1) % 101 + 101) % 101);
+    setHealth(((m_health + (rand() % 2 ? 1 : -1)) % 101 + 101) % 101);
+    setMana(((m_health + (rand() % 2 ? 1 : -1)) % 101 + 101) % 101);
     if (m_goingLeft != m_goingRight) {
         if (m_goingLeft) {
             if (not m_spriteFlipped)

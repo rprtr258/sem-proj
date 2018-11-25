@@ -15,7 +15,7 @@ class Player : public QObject, public Creature {
     Q_DISABLE_COPY(Player)
 
     public:
-        Player(Map *map, Observer *view, QQuickItem *item);
+        Player(Map *map, Observer *view, QQuickItem *item, QPoint position);
         void goLeft();
         void stopLeft();
         void goRight();
@@ -27,26 +27,14 @@ class Player : public QObject, public Creature {
 
         virtual bool update() override;
 
-        qint32 x() const {
-            return m_xCoord;
-        }
         void setX(qint32 value) {
             m_xCoord = value;
-        }
-        qint32 y() const {
-            return m_yCoord;
         }
         void setY(qint32 value) {
             m_yCoord = value;
         }
-        qint32 health() {
-            return m_health;
-        }
         void setHealth(qint32 value) {
             m_health = value;
-        }
-        qint32 mana() {
-            return m_mana;
         }
         void setMana(qint32 value) {
             m_mana = value;
