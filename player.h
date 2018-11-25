@@ -8,6 +8,7 @@
 #include "map.h"
 #include "observer.h"
 #include "projectile.h"
+#include "weapon.h"
 
 class Player : public QObject, public Creature {
     Q_OBJECT
@@ -21,6 +22,7 @@ class Player : public QObject, public Creature {
         void stopRight();
         void jump();
         void stopJump();
+        void changeWeapon();
         Projectile* attack(qint32 mouseX, qint32 mouseY);
 
         virtual bool update() override;
@@ -96,6 +98,8 @@ class Player : public QObject, public Creature {
         QQuickItem *m_item;
         Map *m_map;
         Observer *m_view;
+        Weapon *m_weapon;
+        qint32 m_weaponType;
         bool m_goingLeft;
         bool m_goingRight;
         bool m_jumping;

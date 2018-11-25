@@ -16,6 +16,8 @@ Player::Player(Map *map, Observer *view, QQuickItem *item) : m_map(map), m_view(
     m_xCoord = 170;
     m_yCoord = 0;
     m_reload = 0;
+    m_weapon = new Gun();
+    m_weaponType = 0;
     m_boundingBox = QRect(m_xCoord, m_yCoord, 55, 95);
     m_spriteFlipped = false;
 }
@@ -52,14 +54,30 @@ void Player::stopJump() {
     m_jumping = false;
 }
 
+void Player::changeWeapon() {
+    delete m_weapon;
+    m_weaponType = (m_weaponType + 1) % 3;
+    switch (m_weaponType) {
+        case 0: {
+            m_weapon = new Gun();
+            break;
+        }
+        case 1: {
+            m_weapon = new LaserGun();
+            break;
+        }
+        case 2: {
+            m_weapon = new GrenadeGun();
+            break;
+        }
+    }
+}
+
 Projectile* Player::attack(qint32 mouseX, qint32 mouseY) {
     if (m_reload == 0) {
         m_reload = 25;
-        Weapon *weapon = new Gun();
-        //Weapon *weapon = new LaserGun();
-        //Weapon *weapon = new GrenadeGun();
-        QVector2D startCoord = weapon->getStartCoord(m_boundingBox.width(), m_spriteFlipped, QVector2D(m_xCoord, m_yCoord));
-        return weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map);
+        QVector2D startCoord = m_weapon->getStartCoord(m_boundingBox.width(), m_spriteFlipped, QVector2D(m_xCoord, m_yCoord));
+        return m_weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map);
     }
     return nullptr;
 }

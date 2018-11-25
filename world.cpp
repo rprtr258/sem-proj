@@ -34,6 +34,10 @@ void World::keyPressEvent(qint32 key) {
             m_player->jump();
             break;
         }
+        case (Qt::Key_Tab): {
+            m_player->changeWeapon();
+            break;
+        }
     }
 }
 
