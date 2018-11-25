@@ -23,6 +23,10 @@ Player::Player(Map *map, Observer *view, QQuickItem *item, QPoint position) : m_
     m_spriteFlipped = false;
 }
 
+Player::~Player() {
+    delete m_weapon;
+}
+
 void Player::goLeft() {
     m_goingLeft = true;
 }

@@ -16,6 +16,8 @@ class Player : public QObject, public Creature {
 
     public:
         Player(Map *map, Observer *view, QQuickItem *item, QPoint position);
+        ~Player();
+
         void goLeft();
         void stopLeft();
         void goRight();
