@@ -56,6 +56,7 @@ void World::keyReleaseEvent(qint32 key) {
 }
 
 void World::click(qint32 mouseX, qint32 mouseY) {
+    m_player->attack();
     //Weapon *weapon = new Gun();
     Weapon *weapon = new LaserGun();
     //Weapon *weapon = new GrenadeGun();

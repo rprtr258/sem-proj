@@ -1,5 +1,4 @@
 #include "player.h"
-#include <QVariant>
 
 qint32 sign(const qint32 &x) {
     return (x > 0) - (x < 0);
@@ -14,6 +13,7 @@ Player::Player(Map &worldMap, QQuickItem *item) {
     m_xCoord = 170;
     m_yCoord = 0;
     m_map = &worldMap;
+    m_reload = 0;
     m_boundingBox = QRect(m_xCoord, m_yCoord, 55, 95);
     m_spriteFlipped = false;
 }
@@ -50,6 +50,12 @@ void Player::stopJump() {
     m_jumping = false;
 }
 
+void Player::attack() {
+    if (m_reload == 0) {
+        m_reload = 25;
+    }
+}
+
 bool Player::update() {
     setHealth((health() + 1) % 101);
     setMana(((mana() - 1) % 101 + 101) % 101);
@@ -77,6 +83,7 @@ bool Player::update() {
     }
     moveVertical(10 - m_vspeed);
     m_vspeed = std::max(m_vspeed - 1, 0);
+    m_reload = std::max(m_reload - 1, 0);
 
     m_item->setX(m_xCoord);
     m_item->setY(m_yCoord);
@@ -85,6 +92,7 @@ bool Player::update() {
     m_item->setProperty("inAir", m_inAir);
     m_item->setProperty("health", m_health);
     m_item->setProperty("mana", m_mana);
+    m_item->setProperty("attack", m_reload != 0);
     return false;
 }
 

@@ -3,8 +3,8 @@ import QtQuick 2.0
 Item {
     property bool mirrored : false
     property bool going : false
-    property bool gg: false
     property bool inAir: true
+    property bool attack: false
     property int health: 100
     property int mana: 100
     id: player
@@ -33,7 +33,7 @@ Item {
         running: true
         Sprite {
             name: "standing"
-            source: "qrc:/img/transparent_sheet.png"
+            source: "qrc:/img/player_sheet.png"
             frameX: 0
             frameY: 0
             frameHeight: 96
@@ -43,7 +43,7 @@ Item {
         }
         Sprite {
             name: "running"
-            source: "qrc:/img/transparent_sheet.png"
+            source: "qrc:/img/player_sheet.png"
             frameX: 0
             frameY: 96
             frameHeight: 93
@@ -52,7 +52,7 @@ Item {
         }
         Sprite {
             name: "jumping"
-            source: "qrc:/img/transparent_sheet.png"
+            source: "qrc:/img/player_sheet.png"
             frameX: 0
             frameY: 189
             frameHeight: 104
@@ -61,12 +61,13 @@ Item {
         }
         Sprite {
             name: "attack"
-            source: "qrc:/img/transparent_sheet.png"
+            source: "qrc:/img/player_sheet.png"
             frameX: 0
             frameY: 293
             frameHeight: 96
             frameWidth: 55
-            frameCount: 11
+            frameCount: 10
+            frameRate: 20
         }
         transform: [
             Scale {
@@ -83,15 +84,21 @@ Item {
             }
         },
         State {
-            when: !inAir && !going
+            when: !inAir && going
+            StateChangeScript {
+                script: sprite.jumpTo("running");
+            }
+        },
+        State {
+            when: !inAir && !going && !attack
             StateChangeScript {
                 script: sprite.jumpTo("standing");
             }
         },
         State {
-            when: !inAir && going
+            when: !inAir && !going && attack
             StateChangeScript {
-                script: sprite.jumpTo("running");
+                script: sprite.jumpTo("attack");
             }
         }
     ]

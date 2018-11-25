@@ -19,6 +19,7 @@ class Player : public QObject, public Creature {
         void stopRight();
         void jump();
         void stopJump();
+        void attack();
 
         virtual bool update() override;
 
@@ -88,6 +89,7 @@ class Player : public QObject, public Creature {
         qint32 m_vspeed;
         qint32 m_health;
         qint32 m_mana;
+        qint32 m_reload;
         QRect m_boundingBox;
         QQuickItem *m_item;
         Map *m_map;
