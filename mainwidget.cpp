@@ -3,7 +3,6 @@
 #include <QQuickItem>
 #include <QQmlEngine>
 #include "mainwidget.h"
-#include <iostream>
 #include "map.h"
 
 const int KEY_RUSSIAN_LEFT = 1060;
@@ -11,8 +10,6 @@ const int KEY_RUSSIAN_RIGHT = 1042;
 
 MainWidget::MainWidget() : QQuickView() {
     m_world = new World(this);
-
-    //rootContext()->setContextProperty("player", m_world->getPlayer());
 
     setMinimumSize(QSize(640, 480));
     setMaximumSize(QSize(640, 480));
