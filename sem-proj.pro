@@ -1,4 +1,5 @@
 QT += quick qml opengl
+QT += qml quick scxml
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -27,7 +28,8 @@ SOURCES += \
         creature.cpp \
         observer.cpp \
         projectile.cpp \
-        weapon.cpp
+        weapon.cpp \
+    statemachine.cpp
 
 RESOURCES += qml.qrc
 
@@ -50,7 +52,11 @@ HEADERS += \
         laser.h \
         lasergun.h \
         grenadegun.h \
-        grenade.h
+        grenade.h \
+    statemachine.h
 
 SUBDIRS += \
     sem-proj.pro
+
+STATECHARTS += \
+    statemachine.scxml

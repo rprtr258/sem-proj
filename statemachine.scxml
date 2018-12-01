@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" name="botStateMachine" qt:editorversion="4.7.2" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" initial="Respawn">
+    <state id="Active">
+        <qt:editorinfo geometry="159;344;-127;-298.49;582.27;503.67" scenegeometry="159;344;32;45.51;582.27;503.67"/>
+        <transition type="external" event="death" target="Respawn">
+            <qt:editorinfo endTargetFactors="48.90;9.53" startTargetFactors="49.98;97.27" movePoint="-34;4"/>
+            <send event="death"/>
+        </transition>
+        <state id="Going" initial="LeftGoing">
+            <qt:editorinfo geometry="-24;-47;-63;-72.28;347.14;171.28" scenegeometry="135;297;72;224.72;347.14;171.28"/>
+            <transition type="external" target="Stand" event="manaIsNotFull">
+                <qt:editorinfo endTargetFactors="40.98;86.44" localGeometry="110.52;0" startTargetFactors="98.21;64.04" movePoint="5;1"/>
+                <send event="manaIsNotFull"/>
+            </transition>
+            <transition type="external" event="isHeroVisible" target="Attack">
+                <qt:editorinfo endTargetFactors="51.47;11.05" localGeometry="107.66;0" startTargetFactors="96.82;81.30" movePoint="2;37"/>
+                <send event="isHeroVisiable"/>
+            </transition>
+            <state id="LeftGoing">
+                <qt:editorinfo geometry="-25;29;-18;-50;120;100" scenegeometry="110;326;92;276;120;100"/>
+                <transition type="external" event="isWall" target="RightGoing">
+                    <qt:editorinfo endTargetFactors="14.60;51.72" movePoint="7;37"/>
+                    <send event="isWall"/>
+                </transition>
+            </state>
+            <state id="RightGoing">
+                <qt:editorinfo geometry="211.14;28;-67;-50;120;100" scenegeometry="346.14;325;279.14;275;120;100"/>
+                <transition type="external" event="isWall" target="LeftGoing">
+                    <qt:editorinfo endTargetFactors="90.44;36.21" startTargetFactors="10.93;37.80" movePoint="11;-19"/>
+                    <send event="isWall"/>
+                </transition>
+            </state>
+        </state>
+        <state id="Stand">
+            <qt:editorinfo geometry="375.27;-178.27;-60;-50;120;100" scenegeometry="533.27;182.73;473.27;132.73;120;100"/>
+            <transition type="external" target="LeftGoing" event="safePlaceToTheLeft ">
+                <qt:editorinfo endTargetFactors="48.26;16.30" localGeometry="-337.15;0" startTargetFactors="10.66;37.14" movePoint="-49.55;-23"/>
+                <send event="safePlaceToLeft"/>
+            </transition>
+            <transition type="external" event="safePlaceToTheRight" target="RightGoing">
+                <qt:editorinfo endTargetFactors="51.48;13.52" localGeometry="-148.56;0" startTargetFactors="12.67;64.65" movePoint="9.73;10.45"/>
+                <send event="safePlaceToRight"/>
+            </transition>
+            <transition type="external" event="canAttack" target="Attack">
+                <qt:editorinfo endTargetFactors="69.12;11.05" startTargetFactors="53.48;86.44" movePoint="28;-11"/>
+                <send event="canAttack"/>
+            </transition>
+        </state>
+        <state id="Attack">
+            <qt:editorinfo geometry="355;135.18;-60;-50;120;100" scenegeometry="514;479.18;454;429.18;120;100"/>
+            <transition type="external" event="notHeroVisible" target="Going">
+                <qt:editorinfo endTargetFactors="48.17;95.19" localGeometry="-274.78;0" movePoint="2;18"/>
+                <send event="notHeroVisiable"/>
+            </transition>
+        </state>
+    </state>
+    <state id="Respawn">
+        <qt:editorinfo geometry="362.14;773;-99;-151.06;120;100" scenegeometry="362.14;773;263.14;621.94;120;100"/>
+        <transition type="external" event="startGoing" target="Going">
+            <qt:editorinfo endTargetFactors="24.83;9.35" localGeometry="-164.95;0" movePoint="6;14"/>
+            <send event="startGoing"/>
+        </transition>
+    </state>
+</scxml>
