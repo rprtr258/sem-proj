@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" name="botStateMachine" qt:editorversion="4.7.2" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" initial="Respawn">
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" name="botStateMachine" qt:editorversion="4.7.2" initial="Respawn">
     <state id="Active">
         <qt:editorinfo geometry="159;344;-127;-298.49;582.27;503.67" scenegeometry="159;344;32;45.51;582.27;503.67"/>
         <transition type="external" event="death" target="Respawn">
@@ -32,7 +32,7 @@
             </state>
         </state>
         <state id="Stand">
-            <qt:editorinfo geometry="375.27;-178.27;-60;-50;120;100" scenegeometry="533.27;182.73;473.27;132.73;120;100"/>
+            <qt:editorinfo geometry="375.27;-178.27;-60;-50;120;100" scenegeometry="534.27;165.73;474.27;115.73;120;100"/>
             <transition type="external" target="LeftGoing" event="safePlaceToTheLeft ">
                 <qt:editorinfo endTargetFactors="48.26;16.30" localGeometry="-337.15;0" startTargetFactors="10.66;37.14" movePoint="-49.55;-23"/>
                 <send event="safePlaceToLeft"/>
