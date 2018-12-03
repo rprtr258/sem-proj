@@ -29,12 +29,16 @@ class Player : public QObject, public Creature {
 
         virtual bool update() override;
 
-        void setX(qint32 value) {
-            m_xCoord = value;
+        QPoint *getCoord() {
+            return &coord;
         }
-        void setY(qint32 value) {
-            m_yCoord = value;
-        }
+
+//        void setX(qint32 value) {
+//            m_xCoord = value;
+//        }
+//        void setY(qint32 value) {
+//            m_yCoord = value;
+//        }
         void setHealth(qint32 value) {
             m_health = value;
         }
@@ -52,8 +56,9 @@ class Player : public QObject, public Creature {
         void moveVertical(qint32 speed);
         QVector2D getHandPosition();
     private:
-        qint32 m_xCoord;
-        qint32 m_yCoord;
+        //qint32 m_xCoord;
+        //qint32 m_yCoord;
+        QPoint coord;
         qint32 m_vspeed;
         qint32 m_health;
         qint32 m_mana;

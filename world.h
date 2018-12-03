@@ -2,6 +2,7 @@
 #define WORLD_H
 
 #include <QMap>
+#include "bot.h"
 #include "map.h"
 #include "observer.h"
 #include "player.h"
@@ -21,6 +22,7 @@ class World {
     private:
         Observer *m_view;
         Player *m_player = nullptr;
+        Bot *m_bot = nullptr;
         Map m_map;
         QMap<int, bool> isKeyPressed;
         QVector<Creature*> m_updateList;

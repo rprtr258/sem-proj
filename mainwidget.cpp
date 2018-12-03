@@ -86,6 +86,15 @@ QQuickItem* MainWidget::createPlayer(qint32 x, qint32 y) {
     return qvariant_cast<QQuickItem*>(retVal);
 }
 
+QQuickItem* MainWidget::createBot(qint32 x, qint32 y) {
+    QVariant retVal;
+    QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createBot", Qt::DirectConnection,
+                              Q_RETURN_ARG(QVariant, retVal),
+                              Q_ARG(QVariant, x),
+                              Q_ARG(QVariant, y));
+    return qvariant_cast<QQuickItem*>(retVal);
+}
+
 QQuickItem* MainWidget::createBullet(qint32 x, qint32 y) {
     QVariant retVal;
     QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createBullet", Qt::DirectConnection,

@@ -101,6 +101,15 @@ Item {
         player.y = playerY
         return player
     }
+
+    function createBot(botX, botY) {
+        var comp = Qt.createComponent("Player.qml")
+        var bot = comp.createObject(item)
+        bot.x = botX
+        bot.y = botY
+        return bot
+    }
+
     function createLaser(finishX, finishY, playerX, playerY) {
         var comp = Qt.createComponent("Laser.qml")
         var sprite = comp.createObject(item)

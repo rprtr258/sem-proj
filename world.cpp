@@ -15,6 +15,7 @@ World::World(Observer *view) : m_view(view) {
 
 World::~World() {
     delete m_player;
+    delete m_bot;
 }
 
 void World::keyPressEvent(qint32 key) {
@@ -72,6 +73,14 @@ void World::update() {
         m_player = new Player(&m_map, m_view, playerItem, position);
         m_updateList.push_back(m_player);
     }
+
+    if (m_bot == nullptr) {
+        QPoint position(500, 0);
+        QQuickItem *botItem = m_view->createBot(position.x(), position.y());
+        m_bot = new Bot(&m_map, m_view, botItem, m_player->getCoord(), position, new Gun, &m_updateList);
+        m_updateList.push_back(m_bot);
+    }
+
     QVector<qint32> deleteList;
     for (qint32 i = 0; i < m_updateList.size(); i++) {
         Creature *creature = m_updateList[i];
