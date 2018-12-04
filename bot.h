@@ -37,21 +37,21 @@ class Bot : public QObject, public Creature {
         virtual bool update() override;
 
         qint32 x() const {
-            return m_xCoord;
+            return m_coord.x();
         }
-        void setX(qint32 _x) {
-            if (m_xCoord == _x)
+        void setX(qint32 newX) {
+            if (m_coord.x() == newX)
                 return;
-            m_xCoord = _x;
+            m_coord.setX(newX);
             emit xChanged();
         }
         qint32 y() const {
-            return m_yCoord;
+            return m_coord.y();
         }
-        void setY(qint32 _y) {
-            if (m_yCoord == _y)
+        void setY(qint32 newY) {
+            if (m_coord.y() == newY)
                 return;
-            m_yCoord = _y;
+            m_coord.setY(newY);
             emit yChanged();
         }
         bool flipped() {
@@ -84,11 +84,15 @@ class Bot : public QObject, public Creature {
         qint32 getWidthBoundingBox() {
             return m_boundingBox.width();
         }
+
+        void changeStandTime(qint32 value) {
+            m_standTime += value;
+        }
         void setMana(qint32 value) {
             if (m_mana == value)
                 return;
-            if (value <= 100) {
-                m_mana = value;
+            else {
+                m_mana = std::min(value, 100);
                 emit manaChanged();
             }
         }
@@ -113,11 +117,13 @@ class Bot : public QObject, public Creature {
         void moveVertical(qint32 speed);
     private:
         QPoint *m_playerCoord;
+        QPoint m_coord;
         QVector<Creature*> *m_updateList;
         Weapon *m_weapon;
         qint32 m_reload;
-        qint32 m_xCoord;
-        qint32 m_yCoord;
+        qint32 m_standTime;
+        //qint32 m_xCoord;
+        //qint32 m_yCoord;
         qint32 m_vspeed;
         qint32 m_health;
         qint32 m_mana;

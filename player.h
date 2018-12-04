@@ -30,7 +30,7 @@ class Player : public QObject, public Creature {
         virtual bool update() override;
 
         QPoint *getCoord() {
-            return &coord;
+            return &m_coord;
         }
 
 //        void setX(qint32 value) {
@@ -58,7 +58,7 @@ class Player : public QObject, public Creature {
     private:
         //qint32 m_xCoord;
         //qint32 m_yCoord;
-        QPoint coord;
+        QPoint m_coord;
         qint32 m_vspeed;
         qint32 m_health;
         qint32 m_mana;

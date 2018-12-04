@@ -16,11 +16,11 @@ Player::Player(Map *map, Observer *view, QQuickItem *item, QPoint position) : m_
     m_vspeed = 0;
     //m_xCoord = position.x();
     //m_yCoord = position.y();
-    coord = position;
+    m_coord = position;
     m_reload = 0;
     m_weapon = new Gun();
     m_weaponType = 0;
-    m_boundingBox = QRect(coord.x() + 17, coord.y() + 4, 24, 85);
+    m_boundingBox = QRect(m_coord.x() + 17, m_coord.y() + 4, 24, 85);
     m_spriteFlipped = false;
 }
 
@@ -107,8 +107,8 @@ bool Player::update() {
 
 //    m_item->setX(m_xCoord);
 //    m_item->setY(m_yCoord);
-    m_item->setX(coord.x());
-    m_item->setY(coord.y());
+    m_item->setX(m_coord.x());
+    m_item->setY(m_coord.y());
     m_item->setProperty("mirrored", m_spriteFlipped);
     m_item->setProperty("going", m_goingLeft xor m_goingRight);
     m_item->setProperty("inAir", m_inAir);
@@ -129,7 +129,7 @@ void Player::moveHorizontal(qint32 speed) {
     if (dx == 0)
         return;
     //setX(m_xCoord + dx);
-    coord.setX(coord.x() + dx);
+    m_coord.setX(m_coord.x() + dx);
 
     m_boundingBox.translate(dx, 0);
 }
@@ -147,7 +147,7 @@ void Player::moveVertical(qint32 speed) {
         return;
     m_inAir = true;
     //setY(m_yCoord + dy);
-    coord.setY(coord.y() + dy);
+    m_coord.setY(m_coord.y() + dy);
     m_boundingBox.translate(0, dy);
 }
 
@@ -157,10 +157,9 @@ QVector2D Player::getHandPosition() {
 
     if (m_spriteFlipped) {
         //return QVector2D(m_xCoord - ofsetX, m_yCoord + ofsetY);
-        return QVector2D(coord.x() - ofsetX, coord.y() + ofsetY);
+        return QVector2D(m_coord.x() - ofsetX, m_coord.y() + ofsetY);
     } else {
         //return QVector2D(m_xCoord + ofsetX, m_yCoord + ofsetY);
-        return QVector2D(coord.x() + ofsetX, coord.y() + ofsetY);
-
+        return QVector2D(m_coord.x() + ofsetX, m_coord.y() + ofsetY);
     }
 }
