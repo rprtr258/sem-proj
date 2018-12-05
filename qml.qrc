@@ -8,5 +8,6 @@
         <file>Laser.qml</file>
         <file>Grenade.qml</file>
         <file>img/player_sheet.png</file>
+        <file>img/star.png</file>
     </qresource>
 </RCC>

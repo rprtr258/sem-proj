@@ -9,8 +9,10 @@ Item {
         anchors.fill: parent
         Emitter {
             anchors.centerIn: parent
-            width: 10; height: 10
+            width: 10;
+            height: 10
             emitRate: 50
+            size: 10
 
             velocity: AngleDirection {
                 angleVariation: 5
@@ -20,7 +22,8 @@ Item {
         }
         ImageParticle {
             source: "qrc:/img/star.png"
-            colorVariation: 1
+            rotationVariation: 10
+            color: Qt.red
         }
     }
 //    Rectangle {

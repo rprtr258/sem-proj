@@ -54,3 +54,5 @@ HEADERS += \
 
 SUBDIRS += \
     sem-proj.pro
+
+DISTFILES +=

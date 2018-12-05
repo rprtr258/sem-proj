@@ -71,17 +71,17 @@ void Player::changeWeapon() {
 }
 
 Projectile* Player::attack(qint32 mouseX, qint32 mouseY) {
-    if (m_reload == 0) {
-        m_reload = 25;
+    if (m_reload == 0 and m_mana >= m_weapon->getMana()) {
+        m_reload = 10;
         QVector2D startCoord = getHandPosition();
+        m_mana -= m_weapon->getMana();
         return m_weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map);
     }
     return nullptr;
 }
 
 bool Player::update() {
-    setHealth(((m_health + (rand() % 2 ? 1 : -1)) % 101 + 101) % 101);
-    setMana(((m_health + (rand() % 2 ? 1 : -1)) % 101 + 101) % 101);
+    m_mana = std::min(m_mana + 1, 100);
     if (m_goingLeft != m_goingRight) {
         if (m_goingLeft) {
             if (not m_spriteFlipped)
