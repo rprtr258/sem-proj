@@ -25,6 +25,7 @@ bool Bullet::update() {
         m_position.y() < 0 or m_position.y() > 480 or
         m_map->isFilled(m_boundingBox)) {
         m_died = true;
+        m_item->setProperty("dir", 0);
     }
     return false;
 }

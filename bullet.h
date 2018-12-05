@@ -15,7 +15,7 @@ class Bullet : public Projectile {
         QVector2D m_direction;
         QVector2D m_position;
         bool m_died = false;
-        qint32 m_ttl = 5;
+        qint32 m_ttl = 50;
         Map *m_map;
 };
 

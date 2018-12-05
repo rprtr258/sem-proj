@@ -11,25 +11,22 @@ Item {
             anchors.centerIn: parent
             width: 10;
             height: 10
-            emitRate: 50
+            emitRate: dir == 0 ? 0 : 70
             size: 10
+            lifeSpan: 700
 
             velocity: AngleDirection {
-                angleVariation: 5
+                angleVariation: 3
                 angle: dir
                 magnitude: 200
+                magnitudeVariation: 20
             }
         }
         ImageParticle {
             source: "qrc:/img/star.png"
             rotationVariation: 10
-            color: Qt.red
+            color: "blue"
+            entryEffect: ImageParticle.Scale
         }
     }
-//    Rectangle {
-//        anchors.centerIn: parent
-//        height: 10
-//        width: 10
-//        color: "black"
-//    }
 }
