@@ -23,4 +23,10 @@ Item {
             colorVariation: 1
         }
     }
+//    Rectangle {
+//        anchors.centerIn: parent
+//        height: 10
+//        width: 10
+//        color: "black"
+//    }
 }

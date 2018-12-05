@@ -3,10 +3,10 @@
         <file>main.qml</file>
         <file>GameView.qml</file>
         <file>Player.qml</file>
-        <file>img/hero.png</file>
-        <file>img/hero1.png</file>
         <file>img/aim.png</file>
         <file>Bullet.qml</file>
-        <file>img/transparent_sheet.png</file>
+        <file>Laser.qml</file>
+        <file>Grenade.qml</file>
+        <file>img/player_sheet.png</file>
     </qresource>
 </RCC>

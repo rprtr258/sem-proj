@@ -18,9 +18,16 @@ SOURCES += \
         world.cpp \
         player.cpp \
         map.cpp \
-        observer.cpp \
         bullet.cpp \
-        creature.cpp
+        gun.cpp \
+        laser.cpp \
+        lasergun.cpp \
+        grenade.cpp \
+        grenadegun.cpp \
+        creature.cpp \
+        observer.cpp \
+        projectile.cpp \
+        weapon.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,4 +43,14 @@ HEADERS += \
         map.h \
         observer.h \
         bullet.h \
-        creature.h
+        creature.h \
+        weapon.h \
+        gun.h \
+        projectile.h \
+        laser.h \
+        lasergun.h \
+        grenadegun.h \
+        grenade.h
+
+SUBDIRS += \
+    sem-proj.pro

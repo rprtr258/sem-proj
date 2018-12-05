@@ -1,5 +1,9 @@
 #include "bullet.h"
 #include "world.h"
+#include "projectile.h"
+#include "gun.h"
+#include "lasergun.h"
+#include "grenadegun.h"
 
 World::World(Observer *view) : m_view(view) {
     m_map.fillRectangle(0, 0, 20, 480);
@@ -30,6 +34,10 @@ void World::keyPressEvent(qint32 key) {
             m_player->jump();
             break;
         }
+        case (Qt::Key_Tab): {
+            m_player->changeWeapon();
+            break;
+        }
     }
 }
 
@@ -53,17 +61,16 @@ void World::keyReleaseEvent(qint32 key) {
 #include <QtMath>
 
 void World::click(qint32 mouseX, qint32 mouseY) {
-    QQuickItem *bulletItem = m_view->createBullet(m_player->x(), m_player->y());
-    QVector2D dir = QVector2D(mouseX, mouseY) - QVector2D(m_player->x(), m_player->y());
-    bulletItem->setProperty("dir", qRadiansToDegrees(qAtan2(-dir.y(), -dir.x())));
-    Bullet *bullet = new Bullet(bulletItem, QVector2D(mouseX, mouseY) - QVector2D(m_player->x(), m_player->y()));
-    m_updateList.push_back(bullet);
+    Projectile *projectile = m_player->attack(mouseX, mouseY);
+    if (projectile != nullptr)
+        m_updateList.push_back(projectile);
 }
 
 void World::update() {
     if (m_player == nullptr) {
-        QQuickItem *playerItem = m_view->createPlayer(170, 0);
-        m_player = new Player(m_map, playerItem);
+        QPoint position(170, 0);
+        QQuickItem *playerItem = m_view->createPlayer(position.x(), position.y());
+        m_player = new Player(&m_map, m_view, playerItem, position);
         m_updateList.push_back(m_player);
     }
     QVector<qint32> deleteList;

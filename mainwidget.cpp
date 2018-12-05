@@ -3,14 +3,13 @@
 #include <QQuickItem>
 #include <QQmlEngine>
 #include "mainwidget.h"
+#include "map.h"
 
 const int KEY_RUSSIAN_LEFT = 1060;
 const int KEY_RUSSIAN_RIGHT = 1042;
 
 MainWidget::MainWidget() : QQuickView() {
     m_world = new World(this);
-
-    //rootContext()->setContextProperty("player", m_world->getPlayer());
 
     setMinimumSize(QSize(640, 480));
     setMaximumSize(QSize(640, 480));
@@ -95,3 +94,24 @@ QQuickItem* MainWidget::createBullet(qint32 x, qint32 y) {
                               Q_ARG(QVariant, y));
     return qvariant_cast<QQuickItem*>(retVal);
 }
+
+QQuickItem* MainWidget::createLaser(QVector2D position, QVector2D playerCoord) {
+    QVariant retVal;
+    QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createLaser", Qt::DirectConnection,
+                              Q_RETURN_ARG(QVariant, retVal),
+                              Q_ARG(QVariant, position.x()),
+                              Q_ARG(QVariant, position.y()),
+                              Q_ARG(QVariant, playerCoord.x()),
+                              Q_ARG(QVariant, playerCoord.y()));
+    return qvariant_cast<QQuickItem*>(retVal);
+}
+
+QQuickItem* MainWidget::createGrenade(qint32 x, qint32 y) {
+    QVariant retVal;
+    QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createGrenade", Qt::DirectConnection,
+                              Q_RETURN_ARG(QVariant, retVal),
+                              Q_ARG(QVariant, x),
+                              Q_ARG(QVariant, y));
+    return qvariant_cast<QQuickItem*>(retVal);
+}
+
