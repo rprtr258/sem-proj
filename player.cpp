@@ -19,7 +19,7 @@ Player::Player(Map *map, Observer *view, QQuickItem *item, QPoint position) : m_
     m_reload = 0;
     m_weapon = new Gun();
     m_weaponType = 0;
-    m_boundingBox = QRect(m_xCoord + 17, m_yCoord + 4, 24, 85);
+    m_boundingBox = QRect(m_xCoord + 5, m_yCoord + 4, 47, 85);
     m_spriteFlipped = false;
 }
 
@@ -150,7 +150,7 @@ QVector2D Player::getHandPosition() {
     const int ofsetY = 25;
 
     if (m_spriteFlipped) {
-        return QVector2D(m_xCoord - ofsetX, m_yCoord + ofsetY);
+        return QVector2D(m_xCoord + 55 - ofsetX, m_yCoord + ofsetY);
     } else {
         return QVector2D(m_xCoord + ofsetX, m_yCoord + ofsetY);
     }

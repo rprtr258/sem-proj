@@ -58,7 +58,6 @@ void World::keyReleaseEvent(qint32 key) {
         }
     }
 }
-#include <QtMath>
 
 void World::click(qint32 mouseX, qint32 mouseY) {
     Projectile *projectile = m_player->attack(mouseX, mouseY);
