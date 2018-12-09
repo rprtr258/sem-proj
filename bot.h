@@ -29,10 +29,7 @@ class Bot : public QObject, public Creature {
         void stopRight();
         void jump();
         void stopJump();
-        bool isWall();
         bool isHeroVisible(QPoint playerCoord, QPoint botCoord);
-        bool isSafePlace(QPoint playerCoord, QPoint botCoord);
-        bool thereIsSafePlace(QPoint safePlaceCoord, QPoint playerCoord, QPoint botCoord);
 
         virtual bool update() override;
 
@@ -81,13 +78,7 @@ class Bot : public QObject, public Creature {
         qint32 mana() {
             return m_mana;
         }
-        qint32 getWidthBoundingBox() {
-            return m_boundingBox.width();
-        }
 
-        void changeStandTime(qint32 value) {
-            m_standTime += value;
-        }
         void setMana(qint32 value) {
             if (m_mana == value)
                 return;
@@ -99,7 +90,6 @@ class Bot : public QObject, public Creature {
         void setReload(qint32 value) {
             m_reload = value;
         }
-        bool canAttack();
     signals:
         void xChanged();
         void yChanged();
@@ -111,10 +101,26 @@ class Bot : public QObject, public Creature {
     private:
         void flipSprite() {
             m_spriteFlipped = not m_spriteFlipped;
+            m_item->setProperty("mirrored", flipped());
             emit spriteFlipped();
         }
+        bool isWall();
+        bool canAttack();
+        bool isSafePlace(QPoint playerCoord, QPoint botCoord);
+        bool thereIsSafePlace(QPoint &safePlaceCoord, QPoint playerCoord, QPoint botCoord);
+
         void moveHorizontal(qint32 speed);
         void moveVertical(qint32 speed);
+        QVector2D getHandPosition();
+
+        void changeStandTime(qint32 value) {
+            m_standTime += value;
+        }
+
+        qint32 getWidthBoundingBox() {
+            return m_boundingBox.width();
+        }
+
     private:
         QPoint *m_playerCoord;
         QPoint m_coord;
