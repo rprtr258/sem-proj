@@ -92,6 +92,7 @@ bool Bot::isHeroVisible(QPoint playerPosition, QPoint botPosition) {
     if (direction == QVector2D(0,0)) {
         return true;
     }
+
     QVector2D position = botCoord;
     while (!m_map->isFilled(position.toPoint()) && isInScreen(position)) {
         position += direction;
@@ -99,18 +100,6 @@ bool Bot::isHeroVisible(QPoint playerPosition, QPoint botPosition) {
             return true;
         }
     }
-
-    //    botCoord = QVector2D(botPosition.x(), botPosition.y());
-    //    playerCoord = QVector2D(playerPosition.x() + 55, playerPosition.y());
-    //    direction = (playerCoord - botCoord).normalized();
-    //    position = botCoord;
-    //    while (!m_map->isFilled(position.toPoint()) && isInScreen(position)) {
-    //        position += direction;
-    //        if (isInPlayerBoundingBox(playerPosition, position)) {
-    //            return true;
-    //        }
-    //    }
-
     return false;
 }
 
@@ -119,52 +108,89 @@ bool Bot::isWall() {
     return m_map->isFilled(boundingBox);
 }
 
-bool Bot::thereIsSafePlace(QPoint &safePlaceCoord, QPoint m_playerCoord, QPoint botCoord) {
+/*bool Bot::thereIsSafePlace(QPoint &safePlaceCoord, QPoint playerCoord, QPoint botCoord) {
     QPoint leftPoint = QPoint(botCoord.x() + 27, botCoord.y() + 47);
     QPoint rightPoint = QPoint(botCoord.x() + 27, botCoord.y() + 47);
 
+    if (!isHeroVisible(playerCoord, botCoord)) {
+        leftPoint.setX(leftPoint.x() - 10);
+        rightPoint.setY(rightPoint.x() + 10);
+    }
+
     bool isLeftPoint = false;
     bool isRightPoint = false;
-    while (not(m_map->isFilled(QRect((leftPoint - QPoint(27,47)).x() - 5, (leftPoint -  QPoint(27,47)).y(), 1, 10)))) {
+    bool isCross = false;
+
+    int rightCoordLeftPoint = leftPoint.x();
+    int leftCoordLeftPoint = leftPoint.x();
+    while (not(m_map->isFilled(QRect((leftPoint - QPoint(27,47)).x() - 5, (leftPoint -  QPoint(27,47)).y(), 55, 95)))) {
         leftPoint.setX(leftPoint.x() - 5);
-        if (!isHeroVisible(leftPoint, m_playerCoord)) {
-            isLeftPoint = true;
+        if (isCross && isHeroVisible(leftPoint, playerCoord)) {
+            leftCoordLeftPoint = leftPoint.x();
+            isCross = false;
+    //        std::cout << leftCoordLeftPoint <<"LeftCoord\n";
             break;
+        }
+        if (!isHeroVisible(leftPoint, playerCoord) && !isCross) {
+            isLeftPoint = true;
+            isCross = true;
+            rightCoordLeftPoint = leftPoint.x();
+      //      std::cout << rightCoordLeftPoint <<"RightCoord\n";
         }
     }
 
-    while (not(m_map->isFilled(QRect((rightPoint - QPoint(27,47)).x() + 5, (rightPoint - QPoint(27,47)).y(), 56, 10)))) {
+    if (isCross && (leftPoint.x() == 47)) {
+        leftCoordLeftPoint = 47;
+        isCross = false;
+    }
+
+    int rightCoordRightPoint = rightPoint.x();
+    int leftCoordRightPoint = rightPoint.x();
+    while (not(m_map->isFilled(QRect((rightPoint - QPoint(27,47)).x() + 5, (rightPoint - QPoint(27,47)).y(), 55, 95)))) {
         rightPoint.setX(rightPoint.x() + 5);
 
-        if (!isHeroVisible(rightPoint, m_playerCoord)) {
+        if (isHeroVisible(rightPoint, playerCoord) && isCross) {
+            rightCoordRightPoint = rightPoint.x();
+            isCross = false;
+            break;
+        }
+
+        if (!isHeroVisible(rightPoint, playerCoord) && !isCross) {
             isRightPoint = true;
+            isCross = true;
+            leftCoordRightPoint = rightPoint.x();
             break;
         }
     }
 
+    if (isCross && (rightPoint.x() == 593)) {
+        rightCoordRightPoint = 593;
+        isCross = false;
+    }
+
+    int leftSafePoint = (rightCoordLeftPoint - 27 + leftCoordLeftPoint - 27) / 2;
+    int rightSafePoint = (rightCoordRightPoint - 27 + leftCoordRightPoint - 27) / 2;
+
+    std::cout << "safepoint coord1:  " << leftSafePoint << "\n";
+    std::cout << "safepoint coord2:  " << rightSafePoint << "\n";
     if (isLeftPoint) {
         if (isRightPoint) {
-            if (abs(botCoord.x() - leftPoint.x()) < (abs(botCoord.x() - rightPoint.x()))) {
-                safePlaceCoord = leftPoint - QPoint(27,47);
+            if (abs(botCoord.x() - leftSafePoint) < (abs(botCoord.x() - rightSafePoint))) {
+                safePlaceCoord = QPoint(leftSafePoint, leftPoint.y() - 47);
             } else {
-                safePlaceCoord = rightPoint - QPoint(27,47);
+                safePlaceCoord = QPoint(rightSafePoint, rightPoint.y() - 47);
             }
         } else {
-            safePlaceCoord = leftPoint - QPoint(27,47);
+            safePlaceCoord = QPoint(leftSafePoint, leftPoint.y() - 47);
         }
 
         return true;
     } else if (isRightPoint) {
-        safePlaceCoord = rightPoint - QPoint(27,47);
+        safePlaceCoord = QPoint(rightSafePoint, rightPoint.y() - 47);
         return true;
     }
     return false;
-}
-
-//??????!!!!!!!!!!!!!!
-bool Bot::isSafePlace(QPoint playerCoord, QPoint botCoord) {
-    return  !isHeroVisible(botCoord, playerCoord);
-}
+}*/
 
 bool Bot::canAttack() {
     return isHeroVisible(*m_playerCoord, m_coord) && (m_mana > 0) && (m_reload <= 0);
@@ -217,13 +243,14 @@ Projectile* Bot::attack(qint32 mouseX, qint32 mouseY) {
 }
 
 QVector2D Bot::getHandPosition() {
-    const int ofsetX = 47;
-    const int ofsetY = 25;
+    const int offsetX1 = 47;
+    const int offsetX2 = 8;
+    const int offsetY = 25;
 
     if (m_spriteFlipped) {
-        return QVector2D(m_coord.x() + 8, m_coord.y() + ofsetY);
+        return QVector2D(m_coord.x() + offsetX2, m_coord.y() + offsetY);
     } else {
-        return QVector2D(m_coord.x() + ofsetX, m_coord.y() + ofsetY);
+        return QVector2D(m_coord.x() + offsetX1, m_coord.y() + offsetY);
     }
 }
 
@@ -248,7 +275,6 @@ bool Bot::update() {
             m_inAir = false;
 
             flipSprite();
-            m_item->setProperty("mirrored", flipped());
             state = GoingLeft;
         }
 
@@ -258,7 +284,6 @@ bool Bot::update() {
         m_item->setX(m_coord.x());
         m_item->setY(m_coord.y());
 
-        m_item->setProperty("mirrored", flipped());
         m_item->setProperty("going", going());
         m_item->setProperty("inAir", inAir());
         m_item->setProperty("health", health());
@@ -276,18 +301,18 @@ bool Bot::update() {
         moveHorizontal(-5);
 
         if (m_mana <= 0) {
-            if (!isHeroVisible(*m_playerCoord, QPoint(m_coord.x() + 27, m_coord.y() + 47))) {
+            if ((m_coord.x() == 25)) {
+                stopLeft();
                 state = Stand;
-            } else if (thereIsSafePlace(point, *m_playerCoord, m_coord)) {
-                //std:: cout << point.x() <<"  " <<  m_coord.x() << " L\n";
-                if (point.x() > m_coord.x()) {
-                    stopLeft();
-                    flipSprite();
-                    state = GoingRight;
-                }
+                break;
+            }
+
+            if (isWall()) {
+                m_goingLeft = false;
+                flipSprite();
+                state = GoingRight;
             }
         }
-
 
         if (canAttack()) {
             state = Attack;
@@ -313,16 +338,15 @@ bool Bot::update() {
         setReload(std::max(m_reload - 1, 0));
 
         if (m_mana <= 0) {
-            if (!isHeroVisible(*m_playerCoord, QPoint(m_coord.x() + 27, m_coord.y() + 47))) {
+            if ((m_coord.x() == 560)) {
+                stopRight();
                 state = Stand;
-            } else if  (thereIsSafePlace(point, *m_playerCoord, m_coord)) {
-                //std::cout << point.x() <<" " << m_coord.x() << "  R\n";
-                if (point.x() < m_coord.x()) {
-                    stopRight();
-                    flipSprite();
-                    m_item->setProperty("mirrored", flipped());
-                    state = GoingLeft;
-                }
+            }
+
+            if (isWall()) {
+                stopRight();
+                flipSprite();
+                state = GoingLeft;
             }
         }
 
@@ -338,10 +362,6 @@ bool Bot::update() {
             state = GoingLeft;
         }
 
-        //m_item->setX(m_coord.x());
-        //m_item->setY(m_coord.y());
-
-        //m_item->setProperty("going", going());
         if (not goingChangingNotified) {
             emit goingChanged();
             goingChangingNotified = true;
@@ -368,7 +388,7 @@ bool Bot::update() {
 
         if (m_standTime <= 0) {
             changeStandTime(20);
-            if (canAttack()) {
+            if (m_mana > 50 && canAttack()) {
                 state = Attack;
             } else if (m_mana == 100) {
                 state = lastActivity;

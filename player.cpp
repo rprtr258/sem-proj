@@ -130,7 +130,6 @@ void Player::moveHorizontal(qint32 speed) {
         return;
     //setX(m_xCoord + dx);
     m_coord.setX(m_coord.x() + dx);
-
     m_boundingBox.translate(dx, 0);
 }
 
@@ -152,14 +151,17 @@ void Player::moveVertical(qint32 speed) {
 }
 
 QVector2D Player::getHandPosition() {
-    const int ofsetX = 47;
-    const int ofsetY = 25;
+    //const int ofsetX = 47;
+    //const int ofsetY = 25;
+    const int offsetX1 = 47;
+    const int offsetX2 = 8;
+    const int offsetY = 25;
 
     if (m_spriteFlipped) {
         //return QVector2D(m_xCoord - ofsetX, m_yCoord + ofsetY);
-        return QVector2D(m_coord.x() - ofsetX, m_coord.y() + ofsetY);
+        return QVector2D(m_coord.x() + offsetX2, m_coord.y() + offsetY);
     } else {
         //return QVector2D(m_xCoord + ofsetX, m_yCoord + ofsetY);
-        return QVector2D(m_coord.x() + ofsetX, m_coord.y() + ofsetY);
+        return QVector2D(m_coord.x() + offsetX1, m_coord.y() + offsetY);
     }
 }
