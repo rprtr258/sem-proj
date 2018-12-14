@@ -18,7 +18,7 @@ Character::Character(Map *map, Observer *view, QQuickItem *item, QPoint position
     m_reload = 0;
     m_weapon = new Gun();
     m_weaponType = 0;
-    m_boundingBox = QRect(m_coord.x() + 17, m_coord.y() + 4, 24, 85);
+    m_boundingBox = QRect(m_coord.x(), m_coord.y(), 55, 85);
     m_spriteFlipped = false;
 }
 
@@ -143,17 +143,11 @@ void Character::moveVertical(qint32 speed) {
 }
 
 QVector2D Character::getHandPosition() {
-    //const int ofsetX = 47;
-    //const int ofsetY = 25;
-    const int offsetX1 = 47;
-    const int offsetX2 = 8;
+    const int offsetX = 8;
     const int offsetY = 25;
 
-    if (m_spriteFlipped) {
-        //return QVector2D(m_xCoord - ofsetX, m_yCoord + ofsetY);
-        return QVector2D(m_coord.x() + offsetX2, m_coord.y() + offsetY);
-    } else {
-        //return QVector2D(m_xCoord + ofsetX, m_yCoord + ofsetY);
-        return QVector2D(m_coord.x() + offsetX1, m_coord.y() + offsetY);
-    }
+    if (m_spriteFlipped)
+        return QVector2D(m_coord.x() + offsetX, m_coord.y() + offsetY);
+    else
+        return QVector2D(m_coord.x() + 55 - offsetX, m_coord.y() + offsetY);
 }

@@ -74,12 +74,13 @@ void World::update() {
         QQuickItem *playerItem = m_view->createCharacter(position.x(), position.y());
         m_player = new Player(&m_map, m_view, playerItem, position);
         m_updateList.push_back(m_player);
+        m_map.addMarkedPoint("player", m_player->getPosition());
     }
 
     if (m_bot == nullptr) {
         QPoint position(500, 0);
         QQuickItem *botItem = m_view->createCharacter(position.x(), position.y());
-        m_bot = new Bot(&m_map, m_view, botItem, m_player->getCoord(), position);
+        m_bot = new Bot(&m_map, m_view, botItem, position);
         m_updateList.push_back(m_bot);
     }
 

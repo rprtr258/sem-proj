@@ -24,9 +24,6 @@ class Character : public Creature {
         virtual void changeWeapon();
         virtual void attack(qint32 mouseX, qint32 mouseY);
 
-        virtual QPoint *getCoord() {
-            return &m_coord;
-        }
         virtual void setHealth(qint32 value) {
             m_health = value;
         }
@@ -38,7 +35,7 @@ class Character : public Creature {
         }
 
         virtual bool update() override;
-protected:
+    protected:
         virtual void flipSprite() {
             m_spriteFlipped = not m_spriteFlipped;
         }

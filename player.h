@@ -9,6 +9,9 @@ class Player : public QObject, public Character {
 
     public:
         Player(Map *map, Observer *view, QQuickItem *item, QPoint position) : Character(map, view, item, position) {}
+        QPoint *getPosition() {
+            return &m_coord;
+        }
 };
 
 #endif // PLAYER_H
