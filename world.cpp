@@ -61,9 +61,11 @@ void World::keyReleaseEvent(qint32 key) {
 }
 
 void World::click(qint32 mouseX, qint32 mouseY) {
-    Projectile *projectile = m_player->attack(mouseX, mouseY);
-    if (projectile != nullptr)
-        m_updateList.push_back(projectile);
+    m_player->attack(mouseX, mouseY);
+}
+
+void World::addToUpdateList(Creature *creature) {
+    m_updateList.push_back(creature);
 }
 
 void World::update() {

@@ -124,3 +124,6 @@ QQuickItem* MainWidget::createGrenade(qint32 x, qint32 y) {
     return qvariant_cast<QQuickItem*>(retVal);
 }
 
+void MainWidget::addCreature(Creature *creature) {
+    m_world->addToUpdateList(creature);
+}

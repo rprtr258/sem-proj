@@ -16,6 +16,7 @@ class World {
         void keyPressEvent(qint32 key);
         void keyReleaseEvent(qint32 key);
         void click(qint32 mouseX, qint32 mouseY);
+        void addToUpdateList(Creature *creature);
         Player* getPlayer() {
             return m_player;
         }

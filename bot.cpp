@@ -13,24 +13,10 @@
 //QState *activeGoing = new QState;
 //QState *activeSafePlace = new QState;
 
-qint32 newSign(const qint32 &x) {
-    return (x > 0) - (x < 0);
-}
-
 Bot::Bot(Map *worldMap, Observer *view, QQuickItem *item, QPoint *playerPosition, QPoint botPosition) :
     Character(worldMap, view, item, botPosition) {
-    m_item = item;
-    m_health = 100;
-    m_mana = 100;
     m_reload = 0;
-    m_goingLeft = m_goingRight = false;
     m_vspeed = 0;
-    m_map = worldMap;
-    m_boundingBox = QRect(botPosition.x(), botPosition.y(), 55, 95);
-    m_spriteFlipped = false;
-    m_weapon = new Gun();
-    m_view = view;
-    m_coord = QPoint(botPosition.x(), botPosition.y());
     m_playerCoord = playerPosition;
     m_standTime = 20;
 }
@@ -41,12 +27,12 @@ bool isInScreen(QVector2D point) {
     const qint32 topScreenY = 480;
     const qint32 bottomScreenY = 0;
     return point.x() >= bottomScreenX && point.x() <= topScreenX &&
-            point.y() >= bottomScreenY && point.y() <= topScreenY;
+           point.y() >= bottomScreenY && point.y() <= topScreenY;
 }
 
 bool isInPlayerBoundingBox(QVector2D playerCoord, QVector2D point) {
     return point.x() >= playerCoord.x() && point.x() <= playerCoord.x() + 55 &&
-            point.y() >= playerCoord.y() && point.y() <= playerCoord.y() + 95;
+           point.y() >= playerCoord.y() && point.y() <= playerCoord.y() + 95;
 }
 
 bool Bot::isHeroVisible(QPoint playerPosition, QPoint botPosition) {
