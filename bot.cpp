@@ -2,7 +2,6 @@
 #include <QVariant>
 #include <iostream>
 #include <QStateMachine>
-#include "statemachine.h"
 
 //QStateMachine machine;
 //QState *activeAttack = new QState;

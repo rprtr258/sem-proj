@@ -29,8 +29,7 @@ SOURCES += \
         observer.cpp \
         projectile.cpp \
         weapon.cpp \
-    statemachine.cpp \
-    bot.cpp
+        bot.cpp
 
 RESOURCES += qml.qrc
 
@@ -54,9 +53,7 @@ HEADERS += \
         lasergun.h \
         grenadegun.h \
         grenade.h \
-    statemachine.h \
-    bot.h \
-    botnew.h
+        bot.h
 
 SUBDIRS += \
     sem-proj.pro
