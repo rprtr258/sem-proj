@@ -94,20 +94,12 @@ Item {
             worldUpdate();
         }
     }
-    function createPlayer(playerX, playerY) {
+    function createCharacter(posX, posY) {
         var comp = Qt.createComponent("Player.qml")
-        var player = comp.createObject(item)
-        player.x = playerX
-        player.y = playerY
-        return player
-    }
-
-    function createBot(botX, botY) {
-        var comp = Qt.createComponent("Player.qml")
-        var bot = comp.createObject(item)
-        bot.x = botX
-        bot.y = botY
-        return bot
+        var character = comp.createObject(item)
+        character.x = posX
+        character.y = posY
+        return character
     }
 
     function createLaser(finishX, finishY, playerX, playerY) {

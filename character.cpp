@@ -69,19 +69,18 @@ void Character::changeWeapon() {
     }
 }
 
-Projectile* Character::attack(qint32 mouseX, qint32 mouseY) {
-    if (m_reload == 0) {
-        m_reload = 25;
+void Character::attack(qint32 mouseX, qint32 mouseY) {
+    if (m_reload == 0 and m_mana >= m_weapon->getManaCost()) {
+        m_reload = 20;
+        setMana(m_mana - m_weapon->getManaCost());
         QVector2D startCoord = getHandPosition();
-        return m_weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map);
+        m_weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map);
     }
-    return nullptr;
 }
 
 bool Character::update() {
-    setHealth(((m_health + (rand() % 2 ? 1 : -1)) % 101 + 101) % 101);
-    setMana(((m_health + (rand() % 2 ? 1 : -1)) % 101 + 101) % 101);
-    if (m_goingLeft != m_goingRight) {
+    setMana(std::min(m_mana + 1, 100));
+    if (m_goingLeft xor m_goingRight) {
         if (m_goingLeft) {
             if (not m_spriteFlipped)
                 flipSprite();

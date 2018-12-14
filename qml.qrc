@@ -8,6 +8,5 @@
         <file>Laser.qml</file>
         <file>Grenade.qml</file>
         <file>img/player_sheet.png</file>
-        <file>Bot.qml</file>
     </qresource>
 </RCC>

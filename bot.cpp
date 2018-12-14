@@ -1,63 +1,7 @@
+#include <QRandomGenerator>
+
 #include "bot.h"
 #include "gun.h"
-
-//QStateMachine machine;
-//QState *activeAttack = new QState;
-//QState *activeGoingLeft = new QState;
-//QState *activeGoingRight = new QState;
-//QState *activeSafePlaceStand = new QState;
-//QState *activeSafePlaceGoingLeft = new QState;
-//QState *activeSafePlaceGoingRight = new QState;
-//QState *respawn = new QState;
-//QState *active = new QState;
-//QState *activeGoing = new QState;
-//QState *activeSafePlace = new QState;
-
-Bot::Bot(Map *worldMap, Observer *view, QQuickItem *item, QPoint *playerPosition, QPoint botPosition) :
-    Character(worldMap, view, item, botPosition) {
-    m_reload = 0;
-    m_vspeed = 0;
-    m_playerCoord = playerPosition;
-    m_standTime = 20;
-}
-
-bool isInScreen(QVector2D point) {
-    const qint32 topScreenX = 640;
-    const qint32 bottomScreenX = 0;
-    const qint32 topScreenY = 480;
-    const qint32 bottomScreenY = 0;
-    return point.x() >= bottomScreenX && point.x() <= topScreenX &&
-           point.y() >= bottomScreenY && point.y() <= topScreenY;
-}
-
-bool isInPlayerBoundingBox(QVector2D playerCoord, QVector2D point) {
-    return point.x() >= playerCoord.x() && point.x() <= playerCoord.x() + 55 &&
-           point.y() >= playerCoord.y() && point.y() <= playerCoord.y() + 95;
-}
-
-bool Bot::isHeroVisible(QPoint playerPosition, QPoint botPosition) {
-    QVector2D botCoord = QVector2D(botPosition.x(), botPosition.y());
-    QVector2D playerCoord = QVector2D(playerPosition.x(), playerPosition.y());
-    QVector2D ofset = QVector2D(27, 47);
-    QVector2D direction = (playerCoord + ofset - botCoord).normalized();
-    if (direction == QVector2D(0,0)) {
-        return true;
-    }
-
-    QVector2D position = botCoord;
-    while (!m_map->isFilled(position.toPoint()) && isInScreen(position)) {
-        position += direction;
-        if (isInPlayerBoundingBox(playerCoord, position)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool Bot::isWall() {
-    QRect boundingBox = QRect(m_boundingBox.x() - 1, m_boundingBox.y() - 1, m_boundingBox.width() + 2, m_boundingBox.height());
-    return m_map->isFilled(boundingBox);
-}
 
 /*bool Bot::thereIsSafePlace(QPoint &safePlaceCoord, QPoint playerCoord, QPoint botCoord) {
     QPoint leftPoint = QPoint(botCoord.x() + 27, botCoord.y() + 47);
@@ -142,19 +86,61 @@ bool Bot::isWall() {
     }
     return false;
 }*/
+//QStateMachine machine;
+//QState *activeAttack = new QState;
+//QState *activeGoingLeft = new QState;
+//QState *activeGoingRight = new QState;
+//QState *activeSafePlaceStand = new QState;
+//QState *activeSafePlaceGoingLeft = new QState;
+//QState *activeSafePlaceGoingRight = new QState;
+//QState *respawn = new QState;
+//QState *active = new QState;
+//QState *activeGoing = new QState;
+//QState *activeSafePlace = new QState;
 
-bool Bot::canAttack() {
-    return isHeroVisible(*m_playerCoord, m_coord) && (m_mana > 0) && (m_reload <= 0);
+Bot::Bot(Map *worldMap, Observer *view, QQuickItem *item, QPoint *playerPosition, QPoint botPosition) :
+    Character(worldMap, view, item, botPosition) {
+    m_reload = 0;
+    m_vspeed = 0;
+    m_playerCoord = playerPosition;
+    m_standTime = 20;
 }
 
-Projectile* Bot::attack(qint32 mouseX, qint32 mouseY) {
-    if (m_reload <= 0) {
-        setReload(30);
+bool isInScreen(QVector2D point) {
+    const qint32 topScreenX = 640;
+    const qint32 bottomScreenX = 0;
+    const qint32 topScreenY = 480;
+    const qint32 bottomScreenY = 0;
+    return point.x() >= bottomScreenX && point.x() <= topScreenX &&
+           point.y() >= bottomScreenY && point.y() <= topScreenY;
+}
 
-        QVector2D startCoord = getHandPosition();
-        return m_weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map);
+bool isInPlayerBoundingBox(QVector2D playerCoord, QVector2D point) {
+    return point.x() >= playerCoord.x() && point.x() <= playerCoord.x() + 55 &&
+           point.y() >= playerCoord.y() && point.y() <= playerCoord.y() + 95;
+}
+
+bool Bot::isHeroVisible(QPoint playerPosition, QPoint botPosition) {
+    QVector2D botCoord = QVector2D(botPosition.x(), botPosition.y());
+    QVector2D playerCoord = QVector2D(playerPosition.x(), playerPosition.y());
+    QVector2D ofset = QVector2D(27, 47);
+    QVector2D direction = (playerCoord + ofset - botCoord).normalized();
+    if (direction == QVector2D(0,0)) {
+        return true;
     }
-    return nullptr;
+
+    QVector2D position = botCoord;
+    while (!m_map->isFilled(position.toPoint()) && isInScreen(position)) {
+        position += direction;
+        if (isInPlayerBoundingBox(playerCoord, position)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Bot::canAttack() {
+    return isHeroVisible(*m_playerCoord, m_coord) && (m_mana >= m_weapon->getManaCost()) && (m_reload <= 0);
 }
 
 QVector2D Bot::getHandPosition() {
@@ -169,126 +155,71 @@ QVector2D Bot::getHandPosition() {
     }
 }
 
-enum BotState {
-    Attack,
-    Stand,
-    GoingLeft,
-    GoingRight,
-    Respawn
-};
-
-static BotState state = Respawn;
-static BotState lastActivity = Respawn;
-
 bool Bot::update() {
-    Character::update();
     switch (state) {
-        case(Respawn): {
-            setReload(std::max(m_reload - 1, 0));
-            if (m_map->isFilled(m_boundingBox.translated(0, 1))) {
-                m_inAir = false;
-
-                flipSprite();
-                state = GoingLeft;
-            }
-
-            moveVertical(10 - m_vspeed);
-            m_vspeed = std::max(m_vspeed - 1, 0);
-
-            m_item->setX(m_coord.x());
-            m_item->setY(m_coord.y());
-
-            if (not goingChangingNotified) {
-                goingChangingNotified = true;
-            }
-            break;
-        }
-        case(GoingLeft): {
-            setReload(std::max(m_reload - 1, 0));
-            lastActivity = GoingLeft;
-            m_goingLeft = true;
-            moveHorizontal(-5);
-
-            if (m_mana <= 0) {
-                if ((m_coord.x() == 25)) {
-                    stopLeft();
-                    state = Stand;
-                    break;
-                }
-
-                if (isWall()) {
-                    m_goingLeft = false;
-                    flipSprite();
-                    state = GoingRight;
-                }
-            }
-
-            if (canAttack()) {
+        case Respawn: {
+            qDebug() << "Respawn";
+            stopRight();
+            goLeft();
+            if (m_mana >= m_weapon->getManaCost())
                 state = Attack;
-            }
-
-            if (isWall()) {
-                m_goingLeft = false;
-                flipSprite();
-                state = GoingRight;
-            }
-            break;
-        }
-        case GoingRight: {
-            lastActivity = GoingRight;
-            m_goingRight = true;
-            moveHorizontal(5);
-            setReload(std::max(m_reload - 1, 0));
-
-            if (m_mana <= 0) {
-                if ((m_coord.x() == 560)) {
-                    stopRight();
-                    state = Stand;
-                }
-
-                if (isWall()) {
-                    stopRight();
-                    flipSprite();
-                    state = GoingLeft;
-                }
-            }
-
-            if (canAttack()) {
-                state = Attack;
-            }
-
-            if (isWall()) {
-                m_goingRight = false;
-                flipSprite();
-                state = GoingLeft;
-            }
+            else
+                state = Flee;
             break;
         }
 
         case Attack: {
-            setMana(m_mana - 30);
-            //m_updateList->push_back(attack(m_playerCoord->x() + 27, m_playerCoord->y() + 40));
-            //m_item->setProperty("mana", mana());
-            state = lastActivity;
+            qDebug() << "Attack";
+            if (canAttack())
+                attack(m_playerCoord->x() + 27, m_playerCoord->y() + 40);
+            else
+                state = Walk;
+            if (m_playerCoord->x() <= m_coord.x()) {
+                stopRight();
+                goLeft();
+            } else {
+                stopLeft();
+                goRight();
+            }
+            if (m_mana < m_weapon->getManaCost())
+                state = Flee;
             break;
         }
 
-        case Stand: {
-            setMana(m_mana + 3);
-            stopLeft();
-            stopRight();
-            changeStandTime(-2);
+        case Flee: {
+            qDebug() << "Flee";
+            if (m_mana >= m_weapon->getManaCost()) {
+                state = Attack;
+            } else {
+                if (m_playerCoord->x() >= m_coord.x()) {
+                    stopRight();
+                    goLeft();
+                } else {
+                    stopLeft();
+                    goRight();
+                }
+            }
+            break;
+        }
 
-            if (m_standTime <= 0) {
-                changeStandTime(20);
-                if (m_mana > 50 && canAttack()) {
-                    state = Attack;
-                } else if (m_mana == 100) {
-                    state = lastActivity;
+        case Walk: {
+            qDebug() << "Walk";
+            if (canAttack()) {
+                state = Attack;
+            } else {
+                QRandomGenerator qrg;
+                if (qrg.generate() % 70 == 0) {
+                    if (m_goingLeft) {
+                        stopLeft();
+                        goRight();
+                    } else if (m_goingRight){
+                        stopRight();
+                        goLeft();
+                    }
                 }
             }
             break;
         }
     }
-    return false;
+    return Character::update();
 }

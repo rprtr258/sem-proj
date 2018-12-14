@@ -10,8 +10,7 @@ class MainWidget : public QQuickView, public Observer {
     public:
         MainWidget();
         ~MainWidget() override;
-        QQuickItem* createPlayer(qint32 x, qint32 y) override;
-        QQuickItem* createBot(qint32 x, qint32 y) override;
+        QQuickItem* createCharacter(qint32 x, qint32 y) override;
         QQuickItem* createBullet(qint32 x, qint32 y) override;
         QQuickItem* createLaser(QVector2D mouseCoord, QVector2D playerCoord) override;
         QQuickItem* createGrenade(qint32 x, qint32 y) override;

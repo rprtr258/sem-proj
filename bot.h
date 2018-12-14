@@ -7,20 +7,22 @@
 #include "map.h"
 #include "character.h"
 
+enum BotState {
+    Attack,
+    Flee,
+    Walk,
+    Respawn
+};
+
 class Bot : public Character {
     Q_DISABLE_COPY(Bot)
 
     public:
         Bot(Map *m_map, Observer *view, QQuickItem *item, QPoint *playerPosition, QPoint botPosition);
-        Projectile* attack(qint32 mouseX, qint32 mouseY) override;
 
         virtual bool update() override;
     private:
         bool isHeroVisible(QPoint playerCoord, QPoint botCoord);
-        void setReload(qint32 value) {
-            m_reload = value;
-        }
-        bool isWall();
         bool canAttack();
         bool isSafePlace(QPoint playerCoord, QPoint botCoord);
         bool thereIsSafePlace(QPoint &safePlaceCoord, QPoint playerCoord, QPoint botCoord);
@@ -38,7 +40,8 @@ class Bot : public Character {
     private:
         QPoint *m_playerCoord;
         qint32 m_standTime;
-        bool goingChangingNotified = true;
+        BotState state = Respawn;
+        BotState lastActivity = Respawn;
 };
 
 #endif // BOT_H

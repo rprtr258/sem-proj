@@ -22,7 +22,7 @@ class Character : public Creature {
         virtual void jump();
         virtual void stopJump();
         virtual void changeWeapon();
-        virtual Projectile* attack(qint32 mouseX, qint32 mouseY);
+        virtual void attack(qint32 mouseX, qint32 mouseY);
 
         virtual QPoint *getCoord() {
             return &m_coord;
