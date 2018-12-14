@@ -6,8 +6,7 @@
 enum BotState {
     Attack,
     Flee,
-    Walk,
-    Respawn
+    Walk
 };
 
 class Bot : public Character {
@@ -21,7 +20,7 @@ class Bot : public Character {
         bool canAttack();
 
     private:
-        BotState state = Respawn;
+        BotState state = BotState::Attack;
 };
 
 #endif // BOT_H

@@ -29,21 +29,12 @@ bool Bot::canAttack() {
 
 bool Bot::update() {
     switch (state) {
-        case Respawn: {
-            stopRight();
-            goLeft();
-            if (m_mana >= m_weapon->getManaCost())
-                state = Attack;
-            else
-                state = Flee;
-            break;
-        }
-
         case Attack: {
-            if (canAttack())
+            if (canAttack()) // attack player if can
                 attack(m_map->getMarkedPoint("player").x() + 27, m_map->getMarkedPoint("player").y() + 40);
             else
                 state = Walk;
+            // chase player
             if (m_map->getMarkedPoint("player").x() <= m_coord.x()) {
                 stopRight();
                 goLeft();
@@ -57,7 +48,7 @@ bool Bot::update() {
         }
 
         case Flee: {
-            if (m_mana >= 4 * m_weapon->getManaCost()) {
+            if (m_mana >= 3 * m_weapon->getManaCost()) {
                 state = Attack;
             } else {
                 if (m_map->getMarkedPoint("player").x() >= m_coord.x()) {
