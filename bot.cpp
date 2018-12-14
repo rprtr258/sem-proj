@@ -1,7 +1,5 @@
 #include "bot.h"
-#include <QVariant>
-#include <iostream>
-#include <QStateMachine>
+#include "gun.h"
 
 //QStateMachine machine;
 //QState *activeAttack = new QState;
@@ -19,7 +17,8 @@ qint32 newSign(const qint32 &x) {
     return (x > 0) - (x < 0);
 }
 
-Bot::Bot(Map *worldMap, Observer *view, QQuickItem *item, QPoint *playerPosition, QPoint botPosition, Weapon *weapon,QVector<Creature*> *updateList) {
+Bot::Bot(Map *worldMap, Observer *view, QQuickItem *item, QPoint *playerPosition, QPoint botPosition) :
+    Character(worldMap, view, item, botPosition) {
     m_item = item;
     m_health = 100;
     m_mana = 100;
@@ -29,44 +28,11 @@ Bot::Bot(Map *worldMap, Observer *view, QQuickItem *item, QPoint *playerPosition
     m_map = worldMap;
     m_boundingBox = QRect(botPosition.x(), botPosition.y(), 55, 95);
     m_spriteFlipped = false;
-    m_weapon = weapon;
+    m_weapon = new Gun();
     m_view = view;
     m_coord = QPoint(botPosition.x(), botPosition.y());
     m_playerCoord = playerPosition;
-    m_updateList = updateList;
     m_standTime = 20;
-}
-
-void Bot::goLeft() {
-    if (not m_goingLeft) {
-        m_goingLeft = true;
-        goingChangingNotified = false;
-    }
-}
-
-void Bot::stopLeft() {
-    m_goingLeft = false;
-    goingChangingNotified = false;
-}
-
-void Bot::goRight() {
-    if (not m_goingRight) {
-        m_goingRight = true;
-        goingChangingNotified = false;
-    }
-}
-
-void Bot::stopRight() {
-    m_goingRight = false;
-    goingChangingNotified = false;
-}
-
-void Bot::jump() {
-    m_jumping = true;
-}
-
-void Bot::stopJump() {
-    m_jumping = false;
 }
 
 bool isInScreen(QVector2D point) {
@@ -195,42 +161,6 @@ bool Bot::canAttack() {
     return isHeroVisible(*m_playerCoord, m_coord) && (m_mana > 0) && (m_reload <= 0);
 }
 
-void Bot::moveHorizontal(qint32 speed) {
-    qint32 dx = speed;
-    qint32 delta = newSign(speed);
-    QRect newRect = m_boundingBox.translated(dx, 0);
-    while (m_map->isFilled(newRect) and dx != 0) {
-        dx -= delta;
-        newRect.translate(-delta, 0);
-    }
-    if (dx == 0)
-        return;
-    setX(m_coord.x() + dx);
-    m_boundingBox.translate(dx, 0);
-
-
-    m_item->setX(m_coord.x());
-    m_item->setY(m_coord.y());
-    m_item->setProperty("going", going());
-}
-
-void Bot::moveVertical(qint32 speed) {
-    qint32 dy = speed;
-    qint32 delta = newSign(speed);
-    QRect newRect = m_boundingBox.translated(0, dy);
-    while (m_map->isFilled(newRect) and dy != 0) {
-        dy -= delta;
-        newRect.translate(0, -delta);
-        m_vspeed = 0;
-    }
-    if (dy == 0)
-        return;
-    if (not inAir())
-        setInAir(true);
-    setY(m_coord.y() + dy);
-    m_boundingBox.translate(0, dy);
-}
-
 Projectile* Bot::attack(qint32 mouseX, qint32 mouseY) {
     if (m_reload <= 0) {
         setReload(30);
@@ -253,7 +183,6 @@ QVector2D Bot::getHandPosition() {
     }
 }
 
-
 enum BotState {
     Attack,
     Stand,
@@ -264,46 +193,52 @@ enum BotState {
 
 static BotState state = Respawn;
 static BotState lastActivity = Respawn;
-static QPoint point;
 
 bool Bot::update() {
+    Character::update();
     switch (state) {
-    case(Respawn): {
-        setReload(std::max(m_reload - 1, 0));
-        if (m_map->isFilled(m_boundingBox.translated(0, 1))) {
-            m_inAir = false;
+        case(Respawn): {
+            setReload(std::max(m_reload - 1, 0));
+            if (m_map->isFilled(m_boundingBox.translated(0, 1))) {
+                m_inAir = false;
 
-            flipSprite();
-            state = GoingLeft;
+                flipSprite();
+                state = GoingLeft;
+            }
+
+            moveVertical(10 - m_vspeed);
+            m_vspeed = std::max(m_vspeed - 1, 0);
+
+            m_item->setX(m_coord.x());
+            m_item->setY(m_coord.y());
+
+            if (not goingChangingNotified) {
+                goingChangingNotified = true;
+            }
+            break;
         }
+        case(GoingLeft): {
+            setReload(std::max(m_reload - 1, 0));
+            lastActivity = GoingLeft;
+            m_goingLeft = true;
+            moveHorizontal(-5);
 
-        moveVertical(10 - m_vspeed);
-        m_vspeed = std::max(m_vspeed - 1, 0);
+            if (m_mana <= 0) {
+                if ((m_coord.x() == 25)) {
+                    stopLeft();
+                    state = Stand;
+                    break;
+                }
 
-        m_item->setX(m_coord.x());
-        m_item->setY(m_coord.y());
+                if (isWall()) {
+                    m_goingLeft = false;
+                    flipSprite();
+                    state = GoingRight;
+                }
+            }
 
-        m_item->setProperty("going", going());
-        m_item->setProperty("inAir", inAir());
-        m_item->setProperty("health", health());
-        m_item->setProperty("mana", mana());
-        if (not goingChangingNotified) {
-            emit goingChanged();
-            goingChangingNotified = true;
-        }
-        break;
-    }
-    case(GoingLeft): {
-        setReload(std::max(m_reload - 1, 0));
-        lastActivity = GoingLeft;
-        m_goingLeft = true;
-        moveHorizontal(-5);
-
-        if (m_mana <= 0) {
-            if ((m_coord.x() == 25)) {
-                stopLeft();
-                state = Stand;
-                break;
+            if (canAttack()) {
+                state = Attack;
             }
 
             if (isWall()) {
@@ -311,90 +246,63 @@ bool Bot::update() {
                 flipSprite();
                 state = GoingRight;
             }
+            break;
         }
+        case GoingRight: {
+            lastActivity = GoingRight;
+            m_goingRight = true;
+            moveHorizontal(5);
+            setReload(std::max(m_reload - 1, 0));
 
-        if (canAttack()) {
-            state = Attack;
-        }
+            if (m_mana <= 0) {
+                if ((m_coord.x() == 560)) {
+                    stopRight();
+                    state = Stand;
+                }
 
-        if (isWall()) {
-            m_goingLeft = false;
-            flipSprite();
-            state = GoingRight;
-        }
+                if (isWall()) {
+                    stopRight();
+                    flipSprite();
+                    state = GoingLeft;
+                }
+            }
 
-        m_item->setProperty("mirrored", flipped());
-        if (not goingChangingNotified) {
-            emit goingChanged();
-            goingChangingNotified = true;
-        }
-        break;
-    }
-    case(GoingRight): {
-        lastActivity = GoingRight;
-        m_goingRight = true;
-        moveHorizontal(5);
-        setReload(std::max(m_reload - 1, 0));
-
-        if (m_mana <= 0) {
-            if ((m_coord.x() == 560)) {
-                stopRight();
-                state = Stand;
+            if (canAttack()) {
+                state = Attack;
             }
 
             if (isWall()) {
-                stopRight();
+                m_goingRight = false;
                 flipSprite();
                 state = GoingLeft;
             }
+            break;
         }
 
-        if (canAttack()) {
-            state = Attack;
+        case Attack: {
+            setMana(m_mana - 30);
+            //m_updateList->push_back(attack(m_playerCoord->x() + 27, m_playerCoord->y() + 40));
+            //m_item->setProperty("mana", mana());
+            state = lastActivity;
+            break;
         }
 
-        m_item->setProperty("going", going());
+        case Stand: {
+            setMana(m_mana + 3);
+            stopLeft();
+            stopRight();
+            changeStandTime(-2);
 
-        if (isWall()) {
-            m_goingRight = false;
-            flipSprite();
-            state = GoingLeft;
-        }
-
-        if (not goingChangingNotified) {
-            emit goingChanged();
-            goingChangingNotified = true;
-        }
-
-        break;
-    }
-
-    case(Attack): {
-        setMana(m_mana - 30);
-        m_updateList->push_back(attack(m_playerCoord->x() + 27, m_playerCoord->y() + 40));
-        m_item->setProperty("mana", mana());
-        state = lastActivity;
-        break;
-    }
-
-    case(Stand): {
-        setMana(m_mana + 3);
-        stopLeft();
-        stopRight();
-        m_item->setProperty("going", going());
-        m_item->setProperty("mana", mana());
-        changeStandTime(-2);
-
-        if (m_standTime <= 0) {
-            changeStandTime(20);
-            if (m_mana > 50 && canAttack()) {
-                state = Attack;
-            } else if (m_mana == 100) {
-                state = lastActivity;
+            if (m_standTime <= 0) {
+                changeStandTime(20);
+                if (m_mana > 50 && canAttack()) {
+                    state = Attack;
+                } else if (m_mana == 100) {
+                    state = lastActivity;
+                }
             }
+            break;
         }
-    }
-        break;
     }
     return false;
 }

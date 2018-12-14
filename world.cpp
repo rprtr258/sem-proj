@@ -77,7 +77,7 @@ void World::update() {
     if (m_bot == nullptr) {
         QPoint position(500, 0);
         QQuickItem *botItem = m_view->createBot(position.x(), position.y());
-        m_bot = new Bot(&m_map, m_view, botItem, m_player->getCoord(), position, new Gun, &m_updateList);
+        m_bot = new Bot(&m_map, m_view, botItem, m_player->getCoord(), position);
         m_updateList.push_back(m_bot);
     }
 
