@@ -36,6 +36,8 @@ class Character : public Creature {
         virtual bool flipped() {
             return m_spriteFlipped;
         }
+
+        virtual bool update() override;
 protected:
         virtual void flipSprite() {
             m_spriteFlipped = not m_spriteFlipped;

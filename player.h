@@ -9,7 +9,6 @@ class Player : public QObject, public Character {
 
     public:
         Player(Map *map, Observer *view, QQuickItem *item, QPoint position) : Character(map, view, item, position) {}
-        bool update() override;
 };
 
 #endif // PLAYER_H
