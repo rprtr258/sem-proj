@@ -15,7 +15,7 @@ class Weapon {
 
     private:
         qint32 const m_damage = 10;
-        qint32 const m_mana = 30;
+        qint32 const m_mana = 40;
 };
 
 #endif // WEAPON_H

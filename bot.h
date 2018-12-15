@@ -7,7 +7,8 @@ enum BotState {
     Attack,
     Flee,
     Walk,
-    Stand
+    Stand,
+    WaitReload
 };
 
 class Bot : public Character {
@@ -15,6 +16,8 @@ class Bot : public Character {
 
     public:
         Bot(Map *map, Observer *view, QQuickItem *item, QPoint pos);
+        void goLeft() override;
+        void goRight() override;
         virtual bool update() override;
     private:
         bool isHeroVisible();
