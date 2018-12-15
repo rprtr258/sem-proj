@@ -20,12 +20,21 @@ void Bot::goRight() {
 }
 
 bool Bot::update() {
+    QRandomGenerator qrg = qrg.securelySeeded();
     switch (state) {
         case Attack: {
             qDebug() << "Attack";
             if (canAttack()) { // attack player if can
-                attack(m_map->getMarkedPoint("player").x() + 27, m_map->getMarkedPoint("player").y() + 40);
-                state = WaitReload;
+                if (qrg.generate() % 10 > 7) {
+                    attack(m_map->getMarkedPoint("player").x() + 27, m_map->getMarkedPoint("player").y() + 40);
+                    state = WaitReload;
+                } else {
+                    if (m_map->getMarkedPoint("player").x() <= m_coord.x()) {
+                        goLeft();
+                    } else {
+                        goRight();
+                    }
+                }
             } else if (m_mana < m_weapon->getManaCost()) {
                 state = Flee;
             } else if (isHeroVisible()) {
@@ -63,12 +72,13 @@ bool Bot::update() {
 
         case Walk: {
             qDebug() << "Walk" << canAttack();
-            if (not m_goingRight)
+            if (not m_goingRight and qrg.generate() % 2)
                 goLeft();
+            else if (not m_goingLeft)
+                goRight();
             if (canAttack()) {
                 state = Attack;
             } else {
-                QRandomGenerator qrg;
                 if (m_map->isFilled(m_boundingBox.translated(-5, 0))) {
                     goRight();
                 } else if (m_map->isFilled(m_boundingBox.translated(5, 0))) {
