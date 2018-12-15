@@ -101,7 +101,13 @@ Item {
         character.y = posY
         return character
     }
-
+    function createBot(posX, posY) {
+        var comp = Qt.createComponent("Bot.qml")
+        var character = comp.createObject(item)
+        character.x = posX
+        character.y = posY
+        return character
+    }
     function createLaser(finishX, finishY, playerX, playerY) {
         var comp = Qt.createComponent("Laser.qml")
         var sprite = comp.createObject(item)

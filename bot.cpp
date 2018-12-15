@@ -24,7 +24,7 @@ bool Bot::isHeroVisible() {
 }
 
 bool Bot::canAttack() {
-    return isHeroVisible() && (m_mana >= m_weapon->getManaCost()) && (m_reload <= 0);
+    return isHeroVisible() && (m_mana >= m_weapon->getManaCost()) && (m_reload == 0);
 }
 
 bool Bot::update() {

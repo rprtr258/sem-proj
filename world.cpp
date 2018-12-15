@@ -71,7 +71,7 @@ void World::addToUpdateList(Creature *creature) {
 void World::update() {
     if (m_player == nullptr) {
         QPoint position(170, 0);
-        QQuickItem *playerItem = m_view->createCharacter(position.x(), position.y());
+        QQuickItem *playerItem = m_view->createCharacter(position.x(), position.y(), 0);
         m_player = new Player(&m_map, m_view, playerItem, position);
         m_updateList.push_back(m_player);
         m_map.addMarkedPoint("player", m_player->getPosition());
@@ -79,7 +79,7 @@ void World::update() {
 
     if (m_bot == nullptr) {
         QPoint position(500, 0);
-        QQuickItem *botItem = m_view->createCharacter(position.x(), position.y());
+        QQuickItem *botItem = m_view->createCharacter(position.x(), position.y(), 1);
         m_bot = new Bot(&m_map, m_view, botItem, position);
         m_updateList.push_back(m_bot);
     }
