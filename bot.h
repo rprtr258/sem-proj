@@ -6,7 +6,8 @@
 enum BotState {
     Attack,
     Flee,
-    Walk
+    Walk,
+    Stand
 };
 
 class Bot : public Character {

@@ -80,6 +80,9 @@ void Character::attack(qint32 mouseX, qint32 mouseY) {
 
 bool Character::update() {
     setMana(std::min(m_mana + 1, 100));
+    m_vspeed = std::max(m_vspeed - 1, 0);
+    m_reload = std::max(m_reload - 1, 0);
+
     if (m_goingLeft xor m_goingRight) {
         if (m_goingLeft) {
             if (not m_spriteFlipped)
@@ -99,8 +102,6 @@ bool Character::update() {
         m_inAir = false;
     }
     moveVertical(10 - m_vspeed);
-    m_vspeed = std::max(m_vspeed - 1, 0);
-    m_reload = std::max(m_reload - 1, 0);
 
     m_item->setPosition(m_coord);
     m_item->setProperty("mirrored", m_spriteFlipped);

@@ -30,6 +30,7 @@ bool Bot::canAttack() {
 bool Bot::update() {
     switch (state) {
         case Attack: {
+            qDebug() << "Attack";
             if (canAttack()) // attack player if can
                 attack(m_map->getMarkedPoint("player").x() + 27, m_map->getMarkedPoint("player").y() + 40);
             else
@@ -48,6 +49,7 @@ bool Bot::update() {
         }
 
         case Flee: {
+            qDebug() << "Flee";
             if (m_mana >= 3 * m_weapon->getManaCost()) {
                 state = Attack;
             } else {
@@ -58,11 +60,18 @@ bool Bot::update() {
                     stopLeft();
                     goRight();
                 }
+                if (m_goingLeft && m_map->isFilled(m_boundingBox.translated(-5, 0))) {
+                    state = Stand;
+                }
+                if (m_goingRight && m_map->isFilled(m_boundingBox.translated(5, 0))) {
+                    state = Stand;
+                }
             }
             break;
         }
 
         case Walk: {
+            qDebug() << "Walk";
             if (canAttack()) {
                 state = Attack;
             } else {
@@ -82,8 +91,23 @@ bool Bot::update() {
                         goLeft();
                     }
                 }
+                if (m_goingLeft && m_map->isFilled(m_boundingBox.translated(-5, 0))) {
+                    state = Stand;
+                }
+                if (m_goingRight && m_map->isFilled(m_boundingBox.translated(5, 0))) {
+                    state = Stand;
+                }
             }
             break;
+        }
+
+        case Stand: {
+            qDebug() << "Stand";
+            stopLeft();
+            stopRight();
+            if (canAttack() and m_mana >= 3 * m_weapon->getManaCost()) {
+                state = Attack;
+            }
         }
     }
     return Character::update();

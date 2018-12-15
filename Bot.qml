@@ -48,6 +48,7 @@ Item {
             frameWidth: 54
             frameHeight: 77
             frameCount: 8
+            frameRate: 10
         }
         Sprite {
             name: "jumping"
