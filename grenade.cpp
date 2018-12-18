@@ -2,10 +2,10 @@
 #include <QtMath>
 #include "grenade.h"
 
-Grenade::Grenade(QQuickItem *item, QVector2D mouseCoord, QVector2D playerCoord, Map *worldMap) : m_item(item), m_map(worldMap) {
+Grenade::Grenade(QQuickItem *item, QVector2D direction, Map *map, qint32 damage) : Projectile(item, map, damage) {
     m_position = QVector2D(m_item->position());
-    float hSpeed = (mouseCoord.x() - playerCoord.x()) / 17;
-    float vSpeed = (mouseCoord.y() - playerCoord.y()) / 12;
+    float hSpeed = direction.x() / 17;
+    float vSpeed = direction.y() / 12;
     m_speed = QVector2D(hSpeed, vSpeed);
 }
 

@@ -24,9 +24,7 @@ class Character : public Creature {
         virtual void changeWeapon();
         virtual void attack(qint32 mouseX, qint32 mouseY);
 
-        virtual void setHealth(qint32 value) {
-            m_health = value;
-        }
+        virtual void hit(qint32 value);
         virtual void setMana(qint32 value) {
             m_mana = value;
         }

@@ -7,14 +7,12 @@
 
 class Grenade : public Projectile {
     public:
-        Grenade(QQuickItem *item, QVector2D mouseCoord, QVector2D playerCoord, Map *map);
+        Grenade(QQuickItem *item, QVector2D direction, Map *map, qint32 damage);
         ~Grenade() override;
         bool update() override;
     private:
-        QQuickItem *m_item;
         QVector2D m_position;
         QVector2D m_speed;
-        Map *m_map;
 };
 
 #endif // GRENADE_H

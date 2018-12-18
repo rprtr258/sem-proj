@@ -6,11 +6,10 @@
 
 class Laser : public Projectile {
     public:
-        Laser(QQuickItem *item, QVector2D direction);
+        Laser(QQuickItem *item, QVector2D direction, qint32 damage);
         ~Laser() override;
         bool update() override;
     private:
-        QQuickItem* m_item;
         QVector2D m_direction;
         QVector2D m_position;
         qint32 m_lifetime;

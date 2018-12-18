@@ -13,7 +13,7 @@ class Weapon {
             return m_mana;
         }
 
-    private:
+    protected:
         qint32 const m_damage = 10;
         qint32 const m_mana = 40;
 };

@@ -1,7 +1,7 @@
 #include <QRect>
 #include "bullet.h"
 
-Bullet::Bullet(QQuickItem *item, QVector2D direction, Map *map) : m_item(item), m_map(map) {
+Bullet::Bullet(QQuickItem *item, QVector2D direction, Map *map, qint32 damage) : Projectile(item, map, damage) {
     m_direction = direction.normalized() * 10;
     m_position = QVector2D(m_item->position());
 }

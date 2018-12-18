@@ -84,6 +84,11 @@ void World::update() {
         m_updateList.push_back(m_bot);
     }
 
+    for (Creature *creature : m_updateList) {
+        creature->affect(m_player);
+        creature->affect(m_bot);
+    }
+
     QVector<qint32> deleteList;
     for (qint32 i = 0; i < m_updateList.size(); i++) {
         Creature *creature = m_updateList[i];
