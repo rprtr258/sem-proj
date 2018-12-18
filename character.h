@@ -24,7 +24,7 @@ class Character : public Creature {
         virtual void changeWeapon();
         virtual void attack(qint32 mouseX, qint32 mouseY);
 
-        virtual void hit(qint32 value);
+        virtual void hit(qreal value);
         virtual void setMana(qint32 value) {
             m_mana = value;
         }
@@ -51,7 +51,7 @@ class Character : public Creature {
         qint32 m_id;
         QPoint m_coord;
         qint32 m_vspeed;
-        qint32 m_health;
+        qreal m_health;
         qint32 m_mana;
         qint32 m_reload;
         QRect m_boundingBox;
