@@ -19,8 +19,9 @@ void Grenade::affect(Character *character) {
         return;
     if (m_readyToDie) {
         QVector2D characterPos(character->getBoundingBox().center());
-        qint32 dist = qint32(m_position.distanceToPoint(characterPos));
-        character->hit(dist * m_damage / 100);
+        qreal dist = qint32(m_position.distanceToPoint(characterPos));
+        qreal damage = sqrt(std::max(0.0, pow(200, 2) - pow(dist, 2))) * m_damage / 100;
+        character->hit(damage);
     }
 }
 
