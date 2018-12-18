@@ -23,7 +23,6 @@ bool Bot::update() {
     QRandomGenerator qrg = qrg.securelySeeded();
     switch (state) {
         case Attack: {
-            qDebug() << "Attack";
             if (canAttack()) { // attack player if can
                 if (qrg.generate() % 10 > 7) {
                     attack(m_map->getMarkedPoint("player").x() + 27, m_map->getMarkedPoint("player").y() + 40);
@@ -51,7 +50,6 @@ bool Bot::update() {
         }
 
         case Flee: {
-            qDebug() << "Flee";
             if (m_mana >= 3 * m_weapon->getManaCost()) {
                 state = Attack;
             } else {
@@ -71,7 +69,6 @@ bool Bot::update() {
         }
 
         case Walk: {
-            qDebug() << "Walk" << canAttack();
             if (not m_goingRight and qrg.generate() % 2)
                 goLeft();
             else if (not m_goingLeft)
@@ -95,7 +92,6 @@ bool Bot::update() {
         }
 
         case Stand: {
-            qDebug() << "Stand";
             stopLeft();
             stopRight();
             if (m_mana >= 2 * m_weapon->getManaCost()) {
@@ -108,7 +104,6 @@ bool Bot::update() {
         }
 
         case WaitReload: {
-            qDebug() << "WaitReload";
             stopLeft();
             stopRight();
             if (m_reload == 0) {
