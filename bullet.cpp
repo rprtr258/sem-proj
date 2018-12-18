@@ -3,7 +3,7 @@
 #include "bullet.h"
 
 Bullet::Bullet(QQuickItem *item, QVector2D direction, Map *map, qint32 damage, qint32 ownerId) : Projectile(item, map, damage, ownerId) {
-    m_direction = direction.normalized() * 10;
+    m_direction = direction.normalized() * 20;
     m_position = QVector2D(m_item->position());
 }
 
