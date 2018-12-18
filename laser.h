@@ -8,6 +8,7 @@ class Laser : public Projectile {
     public:
         Laser(QQuickItem *item, QVector2D direction, qint32 damage, qint32 ownerId);
         ~Laser() override;
+        void affect(Character *character) override;
         bool update() override;
     private:
         QVector2D m_direction;

@@ -9,8 +9,10 @@ class Grenade : public Projectile {
     public:
         Grenade(QQuickItem *item, QVector2D direction, Map *map, qint32 damage, qint32 ownerId);
         ~Grenade() override;
+        void affect(Character *character) override;
         bool update() override;
     private:
+        bool m_readyToDie = false;
         QVector2D m_position;
         QVector2D m_speed;
 };

@@ -1,3 +1,4 @@
+#include "character.h"
 #include "laser.h"
 
 Laser::Laser(QQuickItem *item, QVector2D direction, qint32 damage, qint32 ownerId) : Projectile(item, nullptr, damage, ownerId), m_direction(direction) {
@@ -8,6 +9,15 @@ Laser::Laser(QQuickItem *item, QVector2D direction, qint32 damage, qint32 ownerI
 
 Laser::~Laser() {
     m_item->deleteLater();
+}
+
+void Laser::affect(Character *character) {
+    if (character->getId() == m_ownerId)
+        return;
+    // TODO: check collision with laser
+    //if (character->getBoundingBox().intersects(this)) {
+    //    character->hit(m_damage);
+    //}
 }
 
 bool Laser::update() {
