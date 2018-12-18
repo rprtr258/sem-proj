@@ -7,12 +7,12 @@
 
 class Projectile : public Creature {
     public:
-        Projectile(QQuickItem *item, Map *map, qint32 damage);
-        void affect(Character *character) override;
+        Projectile(QQuickItem *item, Map *map, qint32 damage, qint32 ownerId);
     protected:
-        qint32 m_damage;
         QQuickItem *m_item = nullptr;
         Map *m_map = nullptr;
+        qint32 m_damage;
+        qint32 m_ownerId;
 };
 
 #endif // PROJECTILE_H

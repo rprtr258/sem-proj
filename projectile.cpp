@@ -1,8 +1,4 @@
 #include "character.h"
 #include "projectile.h"
 
-Projectile::Projectile(QQuickItem *item, Map *map, qint32 damage) : m_damage(damage), m_item(item), m_map(map) {}
-
-void Projectile::affect(Character *character) {
-    character->hit(m_damage);
-}
+Projectile::Projectile(QQuickItem *item, Map *map, qint32 damage, qint32 ownerId) : m_item(item), m_map(map), m_damage(damage), m_ownerId(ownerId) {}

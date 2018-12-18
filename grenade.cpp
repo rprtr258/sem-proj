@@ -2,7 +2,7 @@
 #include <QtMath>
 #include "grenade.h"
 
-Grenade::Grenade(QQuickItem *item, QVector2D direction, Map *map, qint32 damage) : Projectile(item, map, damage) {
+Grenade::Grenade(QQuickItem *item, QVector2D direction, Map *map, qint32 damage, qint32 ownerId) : Projectile(item, map, damage, ownerId) {
     m_position = QVector2D(m_item->position());
     float hSpeed = direction.x() / 17;
     float vSpeed = direction.y() / 12;

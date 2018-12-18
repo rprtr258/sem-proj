@@ -6,7 +6,7 @@
 
 class GrenadeGun : public Weapon {
     public:
-        void shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map) override;
+        void shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map, qint32 ownerId) override;
 };
 
 #endif // GRENADEGUN_H

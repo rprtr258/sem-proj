@@ -1,6 +1,6 @@
 #include "laser.h"
 
-Laser::Laser(QQuickItem *item, QVector2D direction, qint32 damage) : Projectile(item, nullptr, damage), m_direction(direction) {
+Laser::Laser(QQuickItem *item, QVector2D direction, qint32 damage, qint32 ownerId) : Projectile(item, nullptr, damage, ownerId), m_direction(direction) {
     m_position.setX(m_item->property("x").toInt());
     m_position.setY(m_item->property("y").toInt());
     m_lifetime = 20;

@@ -7,7 +7,9 @@ bool isInPlayerBoundingBox(QPoint playerCoord, QVector2D point) {
            point.y() >= playerCoord.y() && point.y() <= playerCoord.y() + 95;
 }
 
-Bot::Bot(Map *map, Observer *view, QQuickItem *item, QPoint pos) : Character (map, view, item, pos) {}
+Bot::Bot(Map *map, Observer *view, QQuickItem *item, QPoint pos) : Character (map, view, item, pos) {
+    m_id = 1;
+}
 
 void Bot::goLeft() {
     stopRight();

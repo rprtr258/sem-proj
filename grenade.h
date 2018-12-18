@@ -7,7 +7,7 @@
 
 class Grenade : public Projectile {
     public:
-        Grenade(QQuickItem *item, QVector2D direction, Map *map, qint32 damage);
+        Grenade(QQuickItem *item, QVector2D direction, Map *map, qint32 damage, qint32 ownerId);
         ~Grenade() override;
         bool update() override;
     private:

@@ -32,6 +32,13 @@ class Character : public Creature {
             return m_spriteFlipped;
         }
 
+        virtual QRect getBoundingBox() {
+            return m_boundingBox;
+        }
+        qint32 getId() {
+            return m_id;
+        }
+
         virtual bool update() override;
     protected:
         virtual void flipSprite() {
@@ -41,6 +48,7 @@ class Character : public Creature {
         virtual void moveVertical(qint32 speed);
         virtual QVector2D getHandPosition();
     protected:
+        qint32 m_id;
         QPoint m_coord;
         qint32 m_vspeed;
         qint32 m_health;

@@ -74,7 +74,7 @@ void Character::attack(qint32 mouseX, qint32 mouseY) {
         m_reload = 20;
         setMana(m_mana - m_weapon->getManaCost());
         QVector2D startCoord = getHandPosition();
-        m_weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map);
+        m_weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map, m_id);
     }
 }
 
