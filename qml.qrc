@@ -10,5 +10,7 @@
         <file>img/player_sheet.png</file>
         <file>Bot.qml</file>
         <file>img/ai_sheet.png</file>
+        <file>img/hp.png</file>
+        <file>img/mana.png</file>
     </qresource>
 </RCC>

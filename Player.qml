@@ -15,7 +15,12 @@ Item {
         anchors.leftMargin: -(100 - sprite.width) / 2
         height: 10
         width: health
-        color: "red"
+        clip: true
+        Image {
+            source: "qrc:/img/hp.png"
+            anchors.top: parent.top
+            anchors.left: parent.left
+        }
     }
     Rectangle {
         anchors.top: parent.top
@@ -24,7 +29,12 @@ Item {
         anchors.leftMargin: -(100 - sprite.width) / 2
         height: 10
         width: mana
-        color: "blue"
+        clip: true
+        Image {
+            source: "qrc:/img/mana.png"
+            anchors.top: parent.top
+            anchors.left: parent.left
+        }
     }
     SpriteSequence {
         id: sprite

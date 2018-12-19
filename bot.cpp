@@ -27,6 +27,11 @@ bool Bot::update() {
         case Attack: {
             if (canAttack()) { // attack player if can
                 if (qrg.generate() % 10 > 7) {
+                    qint32 weapon = qrg.generate() % 20;
+                    if (weapon > 10)
+                        changeWeapon();
+                    if (weapon > 15)
+                        changeWeapon();
                     attack(m_map->getMarkedPoint("player").x() + 27, m_map->getMarkedPoint("player").y() + 40);
                     state = WaitReload;
                 } else {
