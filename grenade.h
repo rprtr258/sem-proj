@@ -12,7 +12,7 @@ class Grenade : public Projectile {
         void affect(Character *character) override;
         bool update() override;
     private:
-        bool m_readyToDie = false;
+        int m_dieCounter = -1;
         QVector2D m_position;
         QVector2D m_speed;
 };
