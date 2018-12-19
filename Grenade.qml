@@ -11,11 +11,11 @@ Item {
         visible: !explosion
     }
     SpriteSequence {
-        height: 100
-        width: 100
+        height: 200
+        width: 200
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: -20
+        anchors.bottomMargin: -40
         running: true
         visible: explosion
         Sprite {
