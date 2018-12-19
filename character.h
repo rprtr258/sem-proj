@@ -61,7 +61,6 @@ class Character : public Creature {
         qint32 m_weaponType;
         bool m_goingLeft;
         bool m_goingRight;
-        bool m_jumping;
         bool m_spriteFlipped;
         bool m_inAir = true;
 };

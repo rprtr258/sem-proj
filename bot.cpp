@@ -35,6 +35,9 @@ bool Bot::update() {
                     } else {
                         goRight();
                     }
+                    if (not m_map->isFilled(m_boundingBox.translated(0, -60))) {
+                        jump();
+                    }
                 }
             } else if (m_mana < m_weapon->getManaCost()) {
                 state = Flee;
@@ -75,6 +78,9 @@ bool Bot::update() {
                 goLeft();
             else if (not m_goingLeft)
                 goRight();
+            if (not m_map->isFilled(m_boundingBox.translated(0, -60))) {
+                jump();
+            }
             if (canAttack()) {
                 state = Attack;
             } else {

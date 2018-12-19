@@ -12,7 +12,6 @@ Character::Character(Map *map, Observer *view, QQuickItem *item, QPoint position
     m_health = 100;
     m_mana = 100;
     m_goingLeft = m_goingRight = false;
-    m_jumping = false;
     m_vspeed = 0;
     m_coord = position;
     m_reload = 0;

@@ -80,11 +80,6 @@ Item {
         x: ma.mouseX - width / 2
         y: ma.mouseY - height / 2
     }
-    Text {
-        x: 0
-        y: 0
-        text: ma.mouseX + ", " + ma.mouseY
-    }
     Timer {
         id: worldTimer
         interval: 20
