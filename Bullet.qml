@@ -4,6 +4,12 @@ import QtQuick.Particles 2.0
 Item {
     id: item
     property real dir : 180
+    Image {
+        anchors.centerIn: parent
+        source: "qrc:/img/bullet.png"
+        rotation: dir
+    }
+
     ParticleSystem {
         id: particleSystem
         anchors.fill: parent
