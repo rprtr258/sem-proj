@@ -10,46 +10,60 @@ Item {
     signal mouseMoved(int mouseX, int mouseY)
     signal mousePressed(int mouseX, int mouseY)
 
-    Rectangle {
+    Rectangle { // background
         x: 0
         y: 0
         width: 640
         height: 480
         color: "violet"
     }
-    Rectangle {
+    Rectangle { // left wall
         x: 0
         y: 0
         width: 20
         height: 480
         color: "brown"
     }
-    Rectangle {
-        x: 0
-        y: 300
-        width: 100
-        height: 20
-        color: "brown"
-    }
-    Rectangle {
+    Rectangle { // right wall
         x: 620
         y: 0
         width: 20
         height: 480
         color: "brown"
     }
-    Rectangle {
+    Rectangle { // bottom wall
         x: 0
         y: 460
         width: 640
         height: 20
         color: "brown"
     }
-    Rectangle {
-        x: 200
-        y: 200
-        width: 100
+    Rectangle { // left platform
+        x: 20
+        y: 274
+        width: 147
         height: 20
+        color: "brown"
+    }
+    Rectangle { // right platform
+        x: 473
+        y: 274
+        width: 147
+        height: 20
+        color: "brown"
+    }
+    Rectangle { // top platform
+        x: 256
+        y: 113
+        width: 128
+        height: 20
+        color: "brown"
+    }
+    Rectangle { // central platform
+        x: 310
+        y: 132
+        width: 20
+        height: 150
         color: "brown"
     }
     focus: true
@@ -80,11 +94,6 @@ Item {
         x: ma.mouseX - width / 2
         y: ma.mouseY - height / 2
     }
-    Text {
-        x: 0
-        y: 0
-        text: ma.mouseX + ", " + ma.mouseY
-    }
     Timer {
         id: worldTimer
         interval: 20
@@ -94,12 +103,19 @@ Item {
             worldUpdate();
         }
     }
-    function createPlayer(playerX, playerY) {
+    function createCharacter(posX, posY) {
         var comp = Qt.createComponent("Player.qml")
-        var player = comp.createObject(item)
-        player.x = playerX
-        player.y = playerY
-        return player
+        var character = comp.createObject(item)
+        character.x = posX
+        character.y = posY
+        return character
+    }
+    function createBot(posX, posY) {
+        var comp = Qt.createComponent("Bot.qml")
+        var character = comp.createObject(item)
+        character.x = posX
+        character.y = posY
+        return character
     }
     function createLaser(finishX, finishY, playerX, playerY) {
         var comp = Qt.createComponent("Laser.qml")

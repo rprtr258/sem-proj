@@ -1,6 +1,7 @@
 #include "grenadegun.h"
 
-Grenade* GrenadeGun::shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map) {
+void GrenadeGun::shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map, qint32 ownerId) {
     QQuickItem *grenadeItem = view->createGrenade(playerCoord.toPoint().x(), playerCoord.toPoint().y());
-    return new Grenade(grenadeItem, mouseCoord, playerCoord, map);
+    Grenade *grenade = new Grenade(grenadeItem, mouseCoord - playerCoord, map, m_damage, ownerId);
+    view->addCreature(grenade);
 }

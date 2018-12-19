@@ -77,12 +77,18 @@ bool MainWidget::event(QEvent *event) {
     return QQuickView::event(event);
 }
 
-QQuickItem* MainWidget::createPlayer(qint32 x, qint32 y) {
+QQuickItem* MainWidget::createCharacter(qint32 x, qint32 y, qint32 type) {
     QVariant retVal;
-    QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createPlayer", Qt::DirectConnection,
-                              Q_RETURN_ARG(QVariant, retVal),
-                              Q_ARG(QVariant, x),
-                              Q_ARG(QVariant, y));
+    if (type == 0)
+        QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createCharacter", Qt::DirectConnection,
+                                  Q_RETURN_ARG(QVariant, retVal),
+                                  Q_ARG(QVariant, x),
+                                  Q_ARG(QVariant, y));
+    else if (type == 1)
+        QMetaObject::invokeMethod(findChild<QQuickItem*>("gameView"), "createBot", Qt::DirectConnection,
+                                  Q_RETURN_ARG(QVariant, retVal),
+                                  Q_ARG(QVariant, x),
+                                  Q_ARG(QVariant, y));
     return qvariant_cast<QQuickItem*>(retVal);
 }
 
@@ -115,3 +121,6 @@ QQuickItem* MainWidget::createGrenade(qint32 x, qint32 y) {
     return qvariant_cast<QQuickItem*>(retVal);
 }
 
+void MainWidget::addCreature(Creature *creature) {
+    m_world->addToUpdateList(creature);
+}

@@ -7,16 +7,14 @@
 
 class Bullet : public Projectile {
     public:
-        Bullet(QQuickItem *item, QVector2D direction, Map *map);
+        Bullet(QQuickItem *item, QVector2D direction, Map *map, qint32 damage, qint32 ownerId);
         ~Bullet() override;
+        void affect(Character *character) override;
         bool update() override;
     private:
-        QQuickItem* m_item = nullptr;
+        bool m_hit = false;
         QVector2D m_direction;
         QVector2D m_position;
-        bool m_died = false;
-        qint32 m_ttl = 50;
-        Map *m_map;
 };
 
 #endif // BULLET_H

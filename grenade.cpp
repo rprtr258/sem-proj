@@ -1,11 +1,12 @@
 #include <QRect>
 #include <QtMath>
+#include "character.h"
 #include "grenade.h"
 
-Grenade::Grenade(QQuickItem *item, QVector2D mouseCoord, QVector2D playerCoord, Map *worldMap) : m_item(item), m_map(worldMap) {
+Grenade::Grenade(QQuickItem *item, QVector2D direction, Map *map, qint32 damage, qint32 ownerId) : Projectile(item, map, damage, ownerId) {
     m_position = QVector2D(m_item->position());
-    float hSpeed = (mouseCoord.x() - playerCoord.x()) / 17;
-    float vSpeed = (mouseCoord.y() - playerCoord.y()) / 12;
+    float hSpeed = direction.x() / 17;
+    float vSpeed = direction.y() / 12;
     m_speed = QVector2D(hSpeed, vSpeed);
 }
 
@@ -13,13 +14,30 @@ Grenade::~Grenade() {
     m_item->deleteLater();
 }
 
+void Grenade::affect(Character *character) {
+    if (character->getId() == m_ownerId)
+        return;
+    if (m_readyToDie) {
+        QVector2D characterPos(character->getBoundingBox().center());
+        qreal dist = qint32(m_position.distanceToPoint(characterPos));
+        qreal damage = sqrt(std::max(0.0, pow(200, 2) - pow(dist, 2))) * m_damage / 100;
+        character->hit(damage);
+    }
+}
+
 bool Grenade::update() {
     m_speed += QVector2D(0, 1);
     m_position += m_speed;
-    m_item->setPosition(m_position.toPointF());
 
     QRect m_boundingBox = QRect(m_position.toPoint().x(), m_position.toPoint().y(), 1, 1);
-    return (m_position.x() < 0 or m_position.x() > 640 or
-            m_position.y() < 0 or m_position.y() > 480 or
-            m_map->isFilled(m_boundingBox));
+    if ((m_position.x() < -200 or m_position.x() > 640 + 200 or
+        m_position.y() < -200 or m_position.y() > 480 + 200 or
+        m_map->isFilled(m_boundingBox)) and (not m_readyToDie)) {
+        m_readyToDie = true;
+        m_speed = QVector2D(0, 0);
+        return false;
+    }
+    if (not m_readyToDie)
+        m_item->setPosition(m_position.toPointF());
+    return m_readyToDie;
 }
