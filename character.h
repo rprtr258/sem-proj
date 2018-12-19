@@ -20,7 +20,6 @@ class Character : public Creature {
         virtual void goRight();
         virtual void stopRight();
         virtual void jump();
-        virtual void stopJump();
         virtual void changeWeapon();
         virtual void attack(qint32 mouseX, qint32 mouseY);
 

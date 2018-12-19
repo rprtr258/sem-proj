@@ -53,10 +53,6 @@ void World::keyReleaseEvent(qint32 key) {
             m_player->stopRight();
             break;
         }
-        case (Qt::Key_Space): {
-            m_player->stopJump();
-            break;
-        }
     }
 }
 

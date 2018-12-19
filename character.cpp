@@ -43,11 +43,8 @@ void Character::stopRight() {
 }
 
 void Character::jump() {
-    m_jumping = true;
-}
-
-void Character::stopJump() {
-    m_jumping = false;
+    if (m_map->isFilled(m_boundingBox.translated(0, 1)))
+        m_vspeed = 30;
 }
 
 void Character::changeWeapon() {
@@ -100,12 +97,7 @@ bool Character::update() {
             moveHorizontal(5);
         }
     }
-    if (m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1))) {
-        m_inAir = true;
-        m_vspeed = 30;
-    } else if (!m_jumping and m_map->isFilled(m_boundingBox.translated(0, 1))) {
-        m_inAir = false;
-    }
+    m_inAir = (not m_map->isFilled(m_boundingBox.translated(0, 1)));
     moveVertical(10 - m_vspeed);
 
     m_item->setPosition(m_coord);
