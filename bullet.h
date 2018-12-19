@@ -2,17 +2,17 @@
 #define BULLET_H
 
 #include <QQuickItem>
+#include "map.h"
+#include "projectile.h"
 
-#include "creature.h"
-
-class Bullet : public Creature {
+class Bullet : public Projectile {
     public:
-        Bullet(QQuickItem *item, QVector2D direction);
-        virtual ~Bullet();
-
-        virtual bool update() override;
+        Bullet(QQuickItem *item, QVector2D direction, Map *map, qint32 damage, qint32 ownerId);
+        ~Bullet() override;
+        void affect(Character *character) override;
+        bool update() override;
     private:
-        QQuickItem *m_item = nullptr;
+        bool m_hit = false;
         QVector2D m_direction;
         QVector2D m_position;
 };

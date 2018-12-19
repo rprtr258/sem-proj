@@ -9,6 +9,7 @@ Item {
     signal worldUpdate()
     signal mouseMoved(int mouseX, int mouseY)
     signal mousePressed(int mouseX, int mouseY)
+
     Rectangle {
         x: 0
         y: 0
@@ -68,6 +69,9 @@ Item {
         onPressed: {
             mousePressed(mouseX, mouseY)
         }
+        onDoubleClicked: {
+            mousePressed(mouseX, mouseY)
+        }
         id: ma
     }
     Image {
@@ -85,18 +89,41 @@ Item {
             worldUpdate();
         }
     }
-    function createPlayer(playerX, playerY) {
+    function createCharacter(posX, posY) {
         var comp = Qt.createComponent("Player.qml")
-        var player = comp.createObject(item)
-        player.x = playerX
-        player.y = playerY
-        return player
+        var character = comp.createObject(item)
+        character.x = posX
+        character.y = posY
+        return character
     }
-    function createBullet(projectileX, projectileY) {
+    function createBot(posX, posY) {
+        var comp = Qt.createComponent("Bot.qml")
+        var character = comp.createObject(item)
+        character.x = posX
+        character.y = posY
+        return character
+    }
+    function createLaser(finishX, finishY, playerX, playerY) {
+        var comp = Qt.createComponent("Laser.qml")
+        var sprite = comp.createObject(item)
+        sprite.finishX = finishX
+        sprite.finishY = finishY
+        sprite.playerX = playerX
+        sprite.playerY = playerY
+        return sprite
+    }
+    function createGrenade(bulletX, bulletY) {
+        var comp = Qt.createComponent("Grenade.qml")
+        var sprite = comp.createObject(item)
+        sprite.x = bulletX
+        sprite.y = bulletY
+        return sprite
+    }
+    function createBullet(bulletX, bulletY) {
         var comp = Qt.createComponent("Bullet.qml")
         var sprite = comp.createObject(item)
-        sprite.x = projectileX
-        sprite.y = projectileY
+        sprite.x = bulletX
+        sprite.y = bulletY
         return sprite
     }
 }

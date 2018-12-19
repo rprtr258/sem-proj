@@ -7,7 +7,6 @@ Item {
     property bool attack: false
     property int health: 100
     property int mana: 100
-    id: player
     Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
@@ -33,41 +32,42 @@ Item {
         running: true
         Sprite {
             name: "standing"
-            source: "qrc:/img/player_sheet.png"
+            source: "qrc:/img/ai_sheet.png"
             frameX: 0
             frameY: 0
-            frameHeight: 96
-            frameWidth: 55
-            frameCount: 16
+            frameWidth: 64
+            frameHeight: 79
+            frameCount: 6
             frameRate: 10
         }
         Sprite {
             name: "running"
-            source: "qrc:/img/player_sheet.png"
+            source: "qrc:/img/ai_sheet.png"
             frameX: 0
-            frameY: 96
-            frameHeight: 93
+            frameY: 79
             frameWidth: 54
-            frameCount: 10
+            frameHeight: 77
+            frameCount: 8
+            frameRate: 10
         }
         Sprite {
             name: "jumping"
-            source: "qrc:/img/player_sheet.png"
+            source: "qrc:/img/ai_sheet.png"
             frameX: 0
-            frameY: 189
-            frameHeight: 104
-            frameWidth: 61
-            frameCount: 9
+            frameY: 156
+            frameWidth: 58
+            frameHeight: 76
+            frameCount: 7
             frameRate: 10
         }
         Sprite {
             name: "attack"
-            source: "qrc:/img/player_sheet.png"
+            source: "qrc:/img/ai_sheet.png"
             frameX: 0
-            frameY: 293
-            frameHeight: 96
-            frameWidth: 55
-            frameCount: 10
+            frameY: 232
+            frameWidth: 64
+            frameHeight: 81
+            frameCount: 20
             frameRate: 20
         }
         transform: [
