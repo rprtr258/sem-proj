@@ -6,11 +6,13 @@
 #include "grenadegun.h"
 
 World::World(Observer *view) : m_view(view) {
-    m_map.fillRectangle(0, 0, 20, 480);
-    m_map.fillRectangle(0, 300, 100, 20);
-    m_map.fillRectangle(620, 0, 20, 480);
-    m_map.fillRectangle(0, 460, 640, 20);
-    m_map.fillRectangle(200, 200, 100, 20);
+    m_map.fillRectangle(0, 0, 20, 480); // left wall
+    m_map.fillRectangle(620, 0, 20, 480); // right wall
+    m_map.fillRectangle(0, 460, 640, 20); // bottom wall
+    m_map.fillRectangle(20, 274, 147, 20); // left platform
+    m_map.fillRectangle(473, 274, 147, 20); // right platform
+    m_map.fillRectangle(256, 113, 128, 20); // top platform
+    m_map.fillRectangle(310, 132, 20, 150); // central platform
 }
 
 World::~World() {
