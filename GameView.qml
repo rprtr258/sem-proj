@@ -17,20 +17,6 @@ Item {
         height: 480
         color: "violet"
     }
-    Rectangle { // left wall
-        x: 0
-        y: 0
-        width: 20
-        height: 480
-        color: "brown"
-    }
-    Rectangle { // right wall
-        x: 620
-        y: 0
-        width: 20
-        height: 480
-        color: "brown"
-    }
     Rectangle { // bottom wall
         x: 0
         y: 460
@@ -39,16 +25,16 @@ Item {
         color: "brown"
     }
     Rectangle { // left platform
-        x: 20
+        x: 0
         y: 274
-        width: 147
+        width: 167
         height: 20
         color: "brown"
     }
     Rectangle { // right platform
         x: 473
         y: 274
-        width: 147
+        width: 167
         height: 20
         color: "brown"
     }
