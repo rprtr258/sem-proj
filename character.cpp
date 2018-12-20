@@ -79,7 +79,7 @@ void Character::hit(qreal value) {
 }
 
 bool Character::update() {
-    m_health = std::min(m_health + 0.1, 100.0);
+    m_health = std::min(m_health + 0.2, 100.0);
     setMana(std::min(m_mana + 1, 100));
     m_vspeed = std::max(m_vspeed - 1, 0);
     m_reload = std::max(m_reload - 1, 0);

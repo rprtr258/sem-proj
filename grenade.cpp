@@ -20,7 +20,7 @@ void Grenade::affect(Character *character) {
     if (m_dieCounter) {
         QVector2D characterPos(character->getBoundingBox().center());
         qreal dist = qint32(m_position.distanceToPoint(characterPos));
-        qreal damage = sqrt(std::max(0.0, pow(200, 2) - pow(dist, 2))) * m_damage / 100;
+        qreal damage = pow(std::max(0.0, pow(200, 2) - pow(dist, 2)), 1.0 / 4) * m_damage / 100;
         character->hit(damage);
     }
 }
