@@ -24,6 +24,7 @@ class Character : public Creature {
         virtual void attack(qint32 mouseX, qint32 mouseY);
 
         virtual void hit(qreal value);
+        void respawn(qint32 x, qint32 y);
         virtual void setMana(qint32 value) {
             m_mana = value;
         }
@@ -36,6 +37,10 @@ class Character : public Creature {
         }
         qint32 getId() {
             return m_id;
+        }
+
+        qreal getHealth() {
+            return m_health;
         }
 
         virtual bool update() override;

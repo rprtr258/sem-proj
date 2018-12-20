@@ -68,7 +68,7 @@ void World::addToUpdateList(Creature *creature) {
 
 void World::update() {
     if (m_player == nullptr) {
-        QPoint position(170, 0);
+        QPoint position(0, 0);
         QQuickItem *playerItem = m_view->createCharacter(position.x(), position.y(), 0);
         m_player = new Player(&m_map, m_view, playerItem, position);
         m_updateList.push_back(m_player);
@@ -96,5 +96,9 @@ void World::update() {
     for (auto it = deleteList.rbegin(); it != deleteList.rend(); it++) {
         delete m_updateList[*it];
         m_updateList.remove(*it);
+    }
+    if (m_player->getHealth() <= 0.2 or m_bot->getHealth() <= 0.2) {
+        m_player->respawn(0, 0);
+        m_bot->respawn(500, 0);
     }
 }

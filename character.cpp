@@ -78,6 +78,17 @@ void Character::hit(qreal value) {
     m_health = std::max(0.0, m_health - value);
 }
 
+void Character::respawn(qint32 x, qint32 y) {
+    m_coord = QPoint(x, y);
+    m_boundingBox = QRect(m_coord.x(), m_coord.y(), 55, 90);
+    m_health = 100;
+    m_mana = 100;
+    m_goingLeft = m_goingRight = false;
+    m_vspeed = 0;
+    m_reload = 0;
+    m_spriteFlipped = false;
+}
+
 bool Character::update() {
     m_health = std::min(m_health + 0.2, 100.0);
     setMana(std::min(m_mana + 1, 100));
