@@ -42,6 +42,9 @@ class Character : public Creature {
         qreal getHealth() {
             return m_health;
         }
+        void addKill() {
+            m_score++;
+        }
 
         virtual bool update() override;
     protected:
@@ -57,6 +60,7 @@ class Character : public Creature {
         qint32 m_vspeed;
         qreal m_health;
         qint32 m_mana;
+        qint32 m_score = 0;
         qint32 m_reload;
         QRect m_boundingBox;
         QQuickItem *m_item;

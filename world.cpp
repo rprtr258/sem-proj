@@ -98,6 +98,10 @@ void World::update() {
         m_updateList.remove(*it);
     }
     if (m_player->getHealth() <= 0.2 or m_bot->getHealth() <= 0.2) {
+        if (m_player->getHealth() <= 0.2)
+            m_bot->addKill();
+        else
+            m_player->addKill();
         m_player->respawn(0, 0);
         m_bot->respawn(500, 0);
     }

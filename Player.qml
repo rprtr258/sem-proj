@@ -8,6 +8,7 @@ Item {
     property int health: 100
     property int mana: 100
     property int weaponId: 0
+    property int score: 0
 
     Spell {
         anchors.top: parent.top
@@ -15,6 +16,16 @@ Item {
         anchors.topMargin: -35
         anchors.leftMargin: -45
         spellId: weaponId
+    }
+    Text {
+        text: score
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: -27
+        anchors.leftMargin: 90
+        style: Text.Outline
+        styleColor: "#AAAAAA"
+        scale: 2
     }
     Rectangle {
         anchors.top: parent.top

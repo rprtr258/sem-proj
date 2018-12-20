@@ -118,6 +118,7 @@ bool Character::update() {
     m_item->setProperty("mana", m_mana);
     m_item->setProperty("attack", m_reload != 0);
     m_item->setProperty("weaponId", m_weaponType);
+    m_item->setProperty("score", m_score);
     return false;
 }
 
