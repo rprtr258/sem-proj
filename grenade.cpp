@@ -17,10 +17,10 @@ Grenade::~Grenade() {
 void Grenade::affect(Character *character) {
     if (character->getId() == m_ownerId)
         return;
-    if (m_dieCounter) {
+    if (m_dieCounter == 17) {
         QVector2D characterPos(character->getBoundingBox().center());
         qreal dist = qint32(m_position.distanceToPoint(characterPos));
-        qreal damage = pow(std::max(0.0, pow(200, 2) - pow(dist, 2)), 1.0 / 4) * m_damage / 100;
+        qreal damage = pow(std::max(0.0, pow(200, 2) - pow(dist, 2)), 1.0 / 2) * m_damage / 100;
         character->hit(damage);
     }
 }
@@ -36,22 +36,21 @@ bool Grenade::update() {
         m_position -= m_speed;
         m_speed /= 100.0;
         qint32 tries = 1000;
-        qreal sz = 20;
-        while (!m_map->isFilled(QRect(qint32(m_position.x() + 30 / 2 - sz / 2 + m_speed.x()), qint32(m_position.y() + 30 / 2 - sz / 2 + m_speed.y()), 20, 20))) {
+        float sz = 30;
+        while (!m_map->isFilled(QRect(qint32(m_position.x() + 30 / 2 - sz / 2 + m_speed.x()), qint32(m_position.y() + 30 / 2 - sz / 2 + m_speed.y()), sz, sz))) {
             m_position += m_speed;
             tries--;
             if (tries == 0)
                 break;
         }
         m_item->setPosition(m_position.toPointF());
-        m_dieCounter = 10;
-        m_speed = QVector2D(0, 0);
+        m_dieCounter = 18;
+        m_speed = QVector2D(0, 0);m_item->setProperty("explosion", true);
         return false;
     }
     if (m_dieCounter == -1)
         m_item->setPosition(m_position.toPointF());
     else {
-        m_item->setProperty("explosion", true);
         m_dieCounter--;
     }
     return (m_dieCounter == 0);

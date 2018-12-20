@@ -12,7 +12,7 @@
 
 class Character : public Creature {
     public:
-        Character(Map *map, Observer *view, QQuickItem *item, QPoint position);
+        Character(Map *map, Bridge *view, QQuickItem *item, QPoint position);
         virtual ~Character() override;
 
         virtual void goLeft();
@@ -25,9 +25,6 @@ class Character : public Creature {
 
         virtual void hit(qreal value);
         void respawn(qint32 x, qint32 y);
-        virtual void setMana(qint32 value) {
-            m_mana = value;
-        }
         virtual bool flipped() {
             return m_spriteFlipped;
         }
@@ -59,13 +56,13 @@ class Character : public Creature {
         QPoint m_coord;
         qint32 m_vspeed;
         qreal m_health;
-        qint32 m_mana;
+        qreal m_mana;
         qint32 m_score = 0;
         qint32 m_reload;
         QRect m_boundingBox;
         QQuickItem *m_item;
         Map *m_map;
-        Observer *m_view;
+        Bridge *m_view;
         Weapon *m_weapon;
         qint32 m_weaponType;
         bool m_goingLeft;

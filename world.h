@@ -10,7 +10,7 @@
 class World {
     Q_DISABLE_COPY(World)
     public:
-        World(Observer *view);
+        World(Bridge *view);
         ~World();
         void update();
         void keyPressEvent(qint32 key);
@@ -21,7 +21,7 @@ class World {
             return m_player;
         }
     private:
-        Observer *m_view;
+        Bridge *m_view;
         Player *m_player = nullptr;
         Bot *m_bot = nullptr;
         Map m_map;

@@ -1,3 +1,3 @@
 #include "observer.h"
 
-Observer::~Observer() {}
+Bridge::~Bridge() {}

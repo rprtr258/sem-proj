@@ -8,7 +8,7 @@ class Player : public QObject, public Character {
     Q_DISABLE_COPY(Player)
 
     public:
-        Player(Map *map, Observer *view, QQuickItem *item, QPoint position);
+        Player(Map *map, Bridge *view, QQuickItem *item, QPoint position);
         QPoint *getPosition() {
             return &m_coord;
         }

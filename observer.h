@@ -5,9 +5,9 @@
 
 #include "creature.h"
 
-class Observer {
+class Bridge {
     public:
-        virtual ~Observer();
+        virtual ~Bridge();
         virtual QQuickItem* createBullet(qint32 x, qint32 y) = 0;
         virtual QQuickItem* createLaser(QVector2D mouseCoord, QVector2D playerCoord) = 0;
         virtual QQuickItem* createGrenade(qint32 x, qint32 y) = 0;

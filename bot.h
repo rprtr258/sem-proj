@@ -15,7 +15,7 @@ class Bot : public Character {
     Q_DISABLE_COPY(Bot)
 
     public:
-        Bot(Map *map, Observer *view, QQuickItem *item, QPoint pos);
+        Bot(Map *map, Bridge *view, QQuickItem *item, QPoint pos);
         void goLeft() override;
         void goRight() override;
         virtual bool update() override;

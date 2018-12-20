@@ -7,7 +7,7 @@ qint32 sign(const qint32 &x) {
     return (x > 0) - (x < 0);
 }
 
-Character::Character(Map *map, Observer *view, QQuickItem *item, QPoint position) : m_map(map), m_view(view) {
+Character::Character(Map *map, Bridge *view, QQuickItem *item, QPoint position) : m_map(map), m_view(view) {
     m_item = item;
     m_health = 100;
     m_mana = 100;
@@ -68,7 +68,7 @@ void Character::changeWeapon() {
 void Character::attack(qint32 mouseX, qint32 mouseY) {
     if (m_reload == 0 and m_mana >= m_weapon->getManaCost()) {
         m_reload = 20;
-        setMana(m_mana - m_weapon->getManaCost());
+        m_mana -= m_weapon->getManaCost();
         QVector2D startCoord = getHandPosition();
         m_weapon->shoot(m_view, QVector2D(mouseX, mouseY), startCoord, m_map, m_id);
     }
@@ -91,7 +91,7 @@ void Character::respawn(qint32 x, qint32 y) {
 
 bool Character::update() {
     m_health = std::min(m_health + 0.2, 100.0);
-    setMana(std::min(m_mana + 1, 100));
+    m_mana = std::min(m_mana + 0.8, 100.0);
     m_vspeed = std::max(m_vspeed - 1, 0);
     m_reload = std::max(m_reload - 1, 0);
 

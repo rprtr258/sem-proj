@@ -5,7 +5,7 @@
 #include <QTimer>
 #include "world.h"
 
-class MainWidget : public QQuickView, public Observer {
+class MainWidget : public QQuickView, public Bridge {
     Q_OBJECT
     public:
         MainWidget();

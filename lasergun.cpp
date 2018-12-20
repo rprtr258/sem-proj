@@ -1,9 +1,9 @@
 #include "lasergun.h"
 
-void LaserGun::shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map, qint32 ownerId) {
+void LaserGun::shoot(Bridge *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map, qint32 ownerId) {
     QVector2D endPoint = calcEndPoint(mouseCoord, playerCoord, map);
     QQuickItem *laserItem = view->createLaser(endPoint, playerCoord);
-    Laser *laser = new Laser(laserItem, endPoint - playerCoord, 20, ownerId);
+    Laser *laser = new Laser(laserItem, playerCoord, endPoint - playerCoord, 20, ownerId);
     view->addCreature(laser);
 }
 
@@ -16,10 +16,10 @@ QVector2D LaserGun::calcEndPoint(QVector2D mouseCoord, QVector2D playerCoord, Ma
 }
 
 bool LaserGun::isInScreen(QVector2D point) {
-    const qint32 topScreenX = 640;
-    const qint32 bottomScreenX = 0;
-    const qint32 topScreenY = 480;
-    const qint32 bottomScreenY = 0;
+    const qint32 topScreenX = 840;
+    const qint32 bottomScreenX = -200;
+    const qint32 topScreenY = 680;
+    const qint32 bottomScreenY = -200;
     return point.x() >= bottomScreenX && point.x() <= topScreenX &&
            point.y() >= bottomScreenY && point.y() <= topScreenY;
 }

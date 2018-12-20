@@ -8,7 +8,7 @@
 class Weapon {
     public:
         virtual ~Weapon();
-        virtual void shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *m_map, qint32 ownerId) = 0;
+        virtual void shoot(Bridge *view, QVector2D mouseCoord, QVector2D playerCoord, Map *m_map, qint32 ownerId) = 0;
         virtual qint32 getManaCost() {
             return m_mana;
         }

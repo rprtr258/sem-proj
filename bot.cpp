@@ -7,7 +7,7 @@ bool isInPlayerBoundingBox(QPoint playerCoord, QVector2D point) {
            point.y() >= playerCoord.y() && point.y() <= playerCoord.y() + 95;
 }
 
-Bot::Bot(Map *map, Observer *view, QQuickItem *item, QPoint pos) : Character (map, view, item, pos) {
+Bot::Bot(Map *map, Bridge *view, QQuickItem *item, QPoint pos) : Character (map, view, item, pos) {
     m_id = 1;
 }
 
@@ -22,10 +22,10 @@ void Bot::goRight() {
 }
 
 bool Bot::update() {
-    QRandomGenerator qrg = qrg.securelySeeded();
+    QRandomGenerator qrg = qrg.securelySeeded();state = BotState::Stand;
     switch (state) {
-        case Attack: {
-            if (canAttack()) { // attack player if can
+        case BotState::Attack: {
+            if (canAttack()) {
                 if (qrg.generate() % 10 > 7) {
                     attack(m_map->getMarkedPoint("player").x() + 27, m_map->getMarkedPoint("player").y() + 40);
                     qint32 weapon = qrg.generate() % 20;
@@ -33,7 +33,7 @@ bool Bot::update() {
                         changeWeapon();
                     if (weapon > 15)
                         changeWeapon();
-                    state = WaitReload;
+                    state = BotState::WaitReload;
                 } else {
                     if (m_map->getMarkedPoint("player").x() <= m_coord.x()) {
                         goLeft();
@@ -45,7 +45,7 @@ bool Bot::update() {
                     }
                 }
             } else if (m_mana < m_weapon->getManaCost()) {
-                state = Flee;
+                state = BotState::Flee;
             } else if (isHeroVisible()) {
                 // chase player
                 if (m_map->getMarkedPoint("player").x() <= m_coord.x()) {
@@ -54,14 +54,14 @@ bool Bot::update() {
                     goRight();
                 }
             } else {
-                state = Walk;
+                state = BotState::Walk;
             }
             break;
         }
 
-        case Flee: {
+        case BotState::Flee: {
             if (m_mana >= 3 * m_weapon->getManaCost()) {
-                state = Attack;
+                state = BotState::Attack;
             } else {
                 if (m_map->getMarkedPoint("player").x() >= m_coord.x()) {
                     goLeft();
@@ -69,16 +69,16 @@ bool Bot::update() {
                     goRight();
                 }
                 if (m_goingLeft && m_map->isFilled(m_boundingBox.translated(-5, 0))) {
-                    state = Stand;
+                    state = BotState::Stand;
                 }
                 if (m_goingRight && m_map->isFilled(m_boundingBox.translated(5, 0))) {
-                    state = Stand;
+                    state = BotState::Stand;
                 }
             }
             break;
         }
 
-        case Walk: {
+        case BotState::Walk: {
             if (not m_goingRight and qrg.generate() % 2)
                 goLeft();
             else if (not m_goingLeft)
@@ -87,7 +87,7 @@ bool Bot::update() {
                 jump();
             }
             if (canAttack()) {
-                state = Attack;
+                state = BotState::Attack;
             } else {
                 if (m_map->isFilled(m_boundingBox.translated(-5, 0))) {
                     goRight();
@@ -104,28 +104,28 @@ bool Bot::update() {
             break;
         }
 
-        case Stand: {
+        case BotState::Stand: {
             stopLeft();
             stopRight();
             if (m_mana >= 2 * m_weapon->getManaCost()) {
                 if (canAttack())
-                    state = Attack;
+                    state = BotState::Attack;
                 else
-                    state = Walk;
+                    state = BotState::Walk;
             }
             break;
         }
 
-        case WaitReload: {
+        case BotState::WaitReload: {
             stopLeft();
             stopRight();
             if (m_reload == 0) {
                 if (canAttack())
-                    state = Attack;
+                    state = BotState::Attack;
                 else if (m_mana < m_weapon->getManaCost())
-                    state = Flee;
+                    state = BotState::Flee;
                 else
-                    state = Walk;
+                    state = BotState::Walk;
             }
             break;
         }

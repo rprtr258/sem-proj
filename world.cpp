@@ -5,7 +5,7 @@
 #include "lasergun.h"
 #include "grenadegun.h"
 
-World::World(Observer *view) : m_view(view) {
+World::World(Bridge *view) : m_view(view) {
     m_map.fillRectangle(-40, 0, 20, 480); // left wall
     m_map.fillRectangle(660, 0, 20, 480); // right wall
     m_map.fillRectangle(-40, 460, 680, 20); // bottom wall
