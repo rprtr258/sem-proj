@@ -12,12 +12,16 @@ Laser::~Laser() {
 }
 
 void Laser::affect(Character *character) {
-    if (character->getId() == m_ownerId)
+    if (character->getId() == m_ownerId or not m_active)
         return;
-    // TODO: check collision with laser
-    //if (character->getBoundingBox().intersects(this)) {
-    //    character->hit(m_damage);
-    //}
+    QRect boundingBox = character->getBoundingBox();
+    if (doesIntersect(boundingBox.topLeft(), boundingBox.topRight()) or
+        doesIntersect(boundingBox.bottomRight(), boundingBox.topRight()) or
+        doesIntersect(boundingBox.bottomRight(), boundingBox.bottomLeft()) or
+        doesIntersect(boundingBox.topLeft(), boundingBox.bottomLeft())) {
+        m_active = false;
+        character->hit(m_damage);
+    }
 }
 
 bool Laser::update() {

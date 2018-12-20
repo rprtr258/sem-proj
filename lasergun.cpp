@@ -3,7 +3,7 @@
 void LaserGun::shoot(Observer *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map, qint32 ownerId) {
     QVector2D endPoint = calcEndPoint(mouseCoord, playerCoord, map);
     QQuickItem *laserItem = view->createLaser(endPoint, playerCoord);
-    Laser *laser = new Laser(laserItem, endPoint - playerCoord, m_damage, ownerId);
+    Laser *laser = new Laser(laserItem, endPoint - playerCoord, 20, ownerId);
     view->addCreature(laser);
 }
 
