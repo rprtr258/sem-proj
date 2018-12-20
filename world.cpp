@@ -9,8 +9,8 @@ World::World(Observer *view) : m_view(view) {
     m_map.fillRectangle(-40, 0, 20, 480); // left wall
     m_map.fillRectangle(660, 0, 20, 480); // right wall
     m_map.fillRectangle(-40, 460, 680, 20); // bottom wall
-    m_map.fillRectangle(-20, 274, 188, 20); // left platform
-    m_map.fillRectangle(473, 274, 187, 20); // right platform
+    m_map.fillRectangle(-20, 274, 188, 10); // left platform
+    m_map.fillRectangle(473, 274, 187, 10); // right platform
     m_map.fillRectangle(256, 113, 128, 20); // top platform
     m_map.fillRectangle(310, 132, 20, 150); // central platform
 }

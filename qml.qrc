@@ -16,5 +16,6 @@
         <file>img/explosion.png</file>
         <file>img/grenade.png</file>
         <file>img/bullet.png</file>
+        <file>img/back.png</file>
     </qresource>
 </RCC>
