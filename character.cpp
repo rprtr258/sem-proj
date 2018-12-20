@@ -17,7 +17,7 @@ Character::Character(Map *map, Observer *view, QQuickItem *item, QPoint position
     m_reload = 0;
     m_weapon = new Gun();
     m_weaponType = 0;
-    m_boundingBox = QRect(m_coord.x(), m_coord.y(), 55, 85);
+    m_boundingBox = QRect(m_coord.x(), m_coord.y(), 55, 90);
     m_spriteFlipped = false;
 }
 
@@ -106,6 +106,7 @@ bool Character::update() {
     m_item->setProperty("health", m_health);
     m_item->setProperty("mana", m_mana);
     m_item->setProperty("attack", m_reload != 0);
+    m_item->setProperty("weaponId", m_weaponType);
     return false;
 }
 

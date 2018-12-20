@@ -13,7 +13,7 @@ Item {
         anchors.fill: parent
         onPaint: {
             var ctx = getContext("2d")
-            ctx.lineWidth = 10;
+            ctx.lineWidth = 6;
             ctx.strokeStyle = "red"
             ctx.beginPath()
             ctx.moveTo(playerX, playerY)

@@ -17,5 +17,7 @@
         <file>img/grenade.png</file>
         <file>img/bullet.png</file>
         <file>img/back.png</file>
+        <file>Spell.qml</file>
+        <file>img/spells.png</file>
     </qresource>
 </RCC>

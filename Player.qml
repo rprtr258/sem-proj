@@ -7,7 +7,15 @@ Item {
     property bool attack: false
     property int health: 100
     property int mana: 100
-    id: player
+    property int weaponId: 0
+
+    Spell {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: -35
+        anchors.leftMargin: -45
+        spellId: weaponId
+    }
     Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
