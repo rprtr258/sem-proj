@@ -75,7 +75,7 @@ Item {
             source: "qrc:/img/ai_sheet.png"
             frameX: 0
             frameY: 79
-            frameWidth: 54
+            frameWidth: 55
             frameHeight: 77
             frameCount: 8
             frameRate: 10
@@ -85,7 +85,7 @@ Item {
             source: "qrc:/img/ai_sheet.png"
             frameX: 0
             frameY: 156
-            frameWidth: 58
+            frameWidth: 62
             frameHeight: 76
             frameCount: 7
             frameRate: 10

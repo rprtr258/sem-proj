@@ -68,7 +68,7 @@ void World::addToUpdateList(Creature *creature) {
 
 void World::update() {
     if (m_player == nullptr) {
-        QPoint position(0, 0);
+        QPoint position(140, 0);
         QQuickItem *playerItem = m_view->createCharacter(position.x(), position.y(), 0);
         m_player = new Player(&m_map, m_view, playerItem, position);
         m_updateList.push_back(m_player);
@@ -102,7 +102,7 @@ void World::update() {
             m_bot->addKill();
         else
             m_player->addKill();
-        m_player->respawn(0, 0);
+        m_player->respawn(140, 0);
         m_bot->respawn(500, 0);
     }
 }

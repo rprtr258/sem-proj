@@ -22,7 +22,7 @@ void Bot::goRight() {
 }
 
 bool Bot::update() {
-    QRandomGenerator qrg = qrg.securelySeeded();state = BotState::Stand;
+    QRandomGenerator qrg = qrg.securelySeeded();
     switch (state) {
         case BotState::Attack: {
             if (canAttack()) {
@@ -60,7 +60,7 @@ bool Bot::update() {
         }
 
         case BotState::Flee: {
-            if (m_mana >= 3 * m_weapon->getManaCost()) {
+            if (m_mana >= std::min(100, 3 * m_weapon->getManaCost())) {
                 state = BotState::Attack;
             } else {
                 if (m_map->getMarkedPoint("player").x() >= m_coord.x()) {

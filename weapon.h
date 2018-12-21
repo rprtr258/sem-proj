@@ -14,8 +14,8 @@ class Weapon {
         }
 
     protected:
-        qint32 const m_damage = 10;
-        qint32 const m_mana = 35;
+        qint32 m_damage = 10;
+        qint32 m_mana = 35;
 };
 
 #endif // WEAPON_H

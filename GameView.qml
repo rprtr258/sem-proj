@@ -13,49 +13,6 @@ Item {
     Image {
         source: "qrc:/img/back.png"
     }
-
-//    Rectangle { // background
-//        x: 0
-//        y: 0
-//        width: 640
-//        height: 480
-//        color: "violet"
-//    }
-//    Rectangle { // bottom wall
-//        x: 0
-//        y: 460
-//        width: 640
-//        height: 20
-//        color: "brown"
-//    }
-//    Rectangle { // left platform
-//        x: 0
-//        y: 274
-//        width: 167
-//        height: 20
-//        color: "brown"
-//    }
-//    Rectangle { // right platform
-//        x: 473
-//        y: 274
-//        width: 167
-//        height: 20
-//        color: "brown"
-//    }
-//    Rectangle { // top platform
-//        x: 256
-//        y: 113
-//        width: 128
-//        height: 20
-//        color: "brown"
-//    }
-//    Rectangle { // central platform
-//        x: 310
-//        y: 132
-//        width: 20
-//        height: 150
-//        color: "brown"
-//    }
     focus: true
     Keys.onPressed: {
         keyPressed(event.key, event.modifier);
@@ -83,6 +40,7 @@ Item {
         source: "qrc:/img/aim.png"
         x: ma.mouseX - width / 2
         y: ma.mouseY - height / 2
+        z: 1000
     }
     Timer {
         id: worldTimer

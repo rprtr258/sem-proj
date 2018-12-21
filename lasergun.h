@@ -6,6 +6,7 @@
 
 class LaserGun : public Weapon {
     public:
+        LaserGun();
         void shoot(Bridge *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map, qint32 ownerId) override;
     private:
         QVector2D calcEndPoint(QVector2D mouseCoord, QVector2D playerCoord, Map *map);

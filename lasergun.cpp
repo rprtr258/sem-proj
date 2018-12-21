@@ -1,5 +1,9 @@
 #include "lasergun.h"
 
+LaserGun::LaserGun() {
+    m_mana = 45;
+}
+
 void LaserGun::shoot(Bridge *view, QVector2D mouseCoord, QVector2D playerCoord, Map *map, qint32 ownerId) {
     QVector2D endPoint = calcEndPoint(mouseCoord, playerCoord, map);
     QQuickItem *laserItem = view->createLaser(endPoint, playerCoord);
