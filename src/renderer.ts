@@ -179,8 +179,8 @@ export class Renderer {
     {
       const ex = this.images["explosion"];
       const gi = this.images["grenade"];
-      for (const {pos, counter: m_dieCounter, exploding} of w.component_grenade.values()) {
-        const frame = m_dieCounter < 0 ? 0 : 18 - m_dieCounter;
+      for (const {pos, counter, exploding} of w.component_grenade.values()) {
+        const frame = counter < 0 ? 0 : 18 - counter;
         if (exploding) {
           const fw = 256, fh = 256, cols = 9;
           const fx = (frame % cols) * fw;
@@ -213,19 +213,20 @@ export class Renderer {
     ctx.strokeStyle = "black";
     ctx.fillStyle = "white";
     {
+      const owners = Object.values(w.component_owner_id).reduce((acc, s) => acc + s.size, 0);
       for (const [i, [line, stat]] of [
         ["bullet", w.component_bullet.size],
         ["delete", w.component_delete.size],
         ["grenade", w.component_grenade.size],
         ["laser", w.component_laser.size],
-        ["owner_id", w.component_owner_id.size],
+        ["owner_id", owners],
         ["weapon", w.component_weapon.size],
         ["total",
           w.component_bullet.size+
           w.component_delete.size+
           w.component_grenade.size+
           w.component_laser.size+
-          w.component_owner_id.size+
+          owners+
           w.component_weapon.size
         ],
       ].entries()) {

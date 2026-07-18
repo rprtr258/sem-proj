@@ -7,24 +7,25 @@ import {GameMap} from "./map.ts";
 import {Bot} from "./bot.ts";
 import {Character} from "./character.ts";
 import {
-  WeaponType,
-  ComponentWeapon,
-  BULLET_DAMAGE, ComponentBullet,
-  calcEnd, ComponentLaser, intersect, LASER_DAMAGE,
-  ComponentGrenade, GRENADE_DAMAGE,
+  WeaponType, ComponentWeapon, damage,
+  ComponentBullet,
+  calcEnd, ComponentLaser, intersect,
+  ComponentGrenade,
 } from "./weapon.ts";
 
 const player_spawn: Vec2 = {x: 140, y: 50};
 const bot_spawn: Vec2 = {x: 500, y: 50};
 
 export class World {
-  player: Character;
-  bot: Bot;
   map: GameMap;
+
   private isKeyPressed = new Set<string>();
   mousePressed = false;
   mouseCoord: Vec2 = {x: 320, y: 240};
-  component_owner_id: Map<Entity, ID> = new Map();
+
+  player: Character;
+  bot: Bot;
+  component_owner_id: Record<ID, Set<Entity>> = {"bot": new Set(), "player": new Set()};
   component_laser: Map<Entity, ComponentLaser> = new Map();
   component_grenade: Map<Entity, ComponentGrenade> = new Map();
   component_bullet: Map<Entity, ComponentBullet> = new Map();
@@ -32,15 +33,7 @@ export class World {
   component_weapon: Map<Entity, ComponentWeapon> = new Map();
 
   constructor() {
-    this.map = new GameMap(
-      rect({x: -40, y:   0}, 20, 480),  // left wall
-      rect({x: 660, y:   0}, 20, 480),  // right wall
-      rect({x: -40, y: 460}, 680, 20),  // bottom wall
-      rect({x: -20, y: 274}, 188, 10),  // left platform
-      rect({x: 473, y: 274}, 187, 10),  // right platform
-      rect({x: 256, y: 113}, 128, 20),  // top platform
-      rect({x: 310, y: 132}, 20, 150),  // central platform
-    );
+    this.map = new GameMap();
     this.player = new Character(player_spawn, "player");
     this.bot = new Bot(bot_spawn);
   }
@@ -85,25 +78,26 @@ export class World {
     // delete entities
     {
       for (const eid of this.component_delete) {
-        this.component_owner_id.delete(eid);
+        for (const s of Object.values(this.component_owner_id))
+          s.delete(eid);
+        this.component_bullet.delete(eid);
         this.component_laser.delete(eid);
         this.component_grenade.delete(eid);
-        this.component_bullet.delete(eid);
         this.component_weapon.delete(eid);
       }
       this.component_delete.clear();
     }
 
     for (const [eid, c] of this.component_bullet) {
-      const character = this.component_owner_id.get(eid) === "player" ? this.bot.character : this.player;
+      const character = this.component_owner_id["player"].has(eid) ? this.bot.character : this.player;
       const bb = character.boundingBox;
       if (rectContains(bb, c.pos)) {
-        character.hit(BULLET_DAMAGE);
+        character.hit(damage[WeaponType.Bullet]);
         this.component_delete.add(eid);
       }
     }
     for (const [eid, c] of this.component_laser) {
-      const character = this.component_owner_id.get(eid) === "player" ? this.bot.character : this.player;
+      const character = this.component_owner_id["player"].has(eid) ? this.bot.character : this.player;
       if (!c.active)
         continue;
 
@@ -115,17 +109,17 @@ export class World {
         intersect(c, bb, add(bb, {x: 0, y: bb.h}))
       ) {
         c.active = false;
-        character.hit(LASER_DAMAGE);
+        character.hit(damage[WeaponType.Laser]);
       }
     }
     for (const [eid, c] of this.component_grenade) {
-      const character = this.component_owner_id.get(eid) === "player" ? this.bot.character : this.player;
+      const character = this.component_owner_id["player"].has(eid) ? this.bot.character : this.player;
       if (c.counter === 17) {
         const dist = vec2Dist(c.pos, add(character.boundingBox, mul({
           x: character.boundingBox.w,
           y: character.boundingBox.h,
         }, 1/2)));
-        character.hit(Math.sqrt(Math.max(0, 200 * 200 - dist * dist)) * GRENADE_DAMAGE / 100);
+        character.hit(Math.sqrt(Math.max(0, 200 * 200 - dist * dist)) * damage[WeaponType.Grenade] / 100);
       }
     }
 
@@ -180,7 +174,7 @@ export class World {
         }
 
         if (c.counter === -1) {
-          const character = this.component_owner_id.get(eid) === "player" ? this.bot.character : this.player;
+          const character = this.component_owner_id["player"].has(eid) ? this.bot.character : this.player;
           if (rectIntersects(bb, character.boundingBox)) {
             c.counter = 18;
             c.speed = { x: 0, y: 0 };
@@ -200,12 +194,14 @@ export class World {
     for (const [wid, c] of this.component_weapon) {
       switch (c.type) {
         case WeaponType.Bullet: {
+          const dir = sub(c.target, c.pos);
           const eid = newEntity();
+          const angle = Math.atan2(dir.y, dir.x) + Math.random() * 0.5 - 0.25;
           this.component_bullet.set(eid, {
             pos: c.pos,
-            dir: mul(vec2Normalized(sub(c.target, c.pos)), 20),
+            dir: mul({x: Math.cos(angle), y: Math.sin(angle)}, 20),
           });
-          this.component_owner_id.set(eid, c.owner_id);
+          this.component_owner_id[c.owner_id].add(eid);
         } break;
         case WeaponType.Laser: {
           const eid = newEntity();
@@ -215,7 +211,7 @@ export class World {
             active: true,
             lifetime: 20,
           });
-          this.component_owner_id.set(eid, c.owner_id);
+          this.component_owner_id[c.owner_id].add(eid);
         } break;
         case WeaponType.Grenade: {
           const eid = newEntity();
@@ -226,7 +222,7 @@ export class World {
             exploding: false,
             speed: mul(direction, 25),
           });
-          this.component_owner_id.set(eid, c.owner_id);
+          this.component_owner_id[c.owner_id].add(eid);
         } break;
       }
       this.component_delete.add(wid);
@@ -236,10 +232,15 @@ export class World {
     this.map.setMarkedPoint("player", this.player.m_coord);
     this.bot.update(this);
     if (this.player.health <= 0.2 || this.bot.character.health <= 0.2) {
-      if (this.player.health <= 0.2)
-        this.bot.character.addKill();
-      else
-        this.player.addKill();
+      (this.player.health <= 0.2 ? this.bot.character : this.player).addKill();
+
+      // clear all projectiles on death
+      for (const s of Object.values(this.component_owner_id))
+        s.clear();
+      this.component_bullet.clear();
+      this.component_laser.clear();
+      this.component_grenade.clear();
+
       this.player.respawn(player_spawn);
       this.bot.character.respawn(bot_spawn);
     }

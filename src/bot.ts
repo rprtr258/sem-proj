@@ -2,7 +2,7 @@ import {Vec2, add, rectContains, rectTranslated} from "./types.ts";
 import {Character} from "./character.ts";
 import {GameMap} from "./map.ts";
 import {World} from "./world.ts";
-import { mana_cost } from "./weapon.ts";
+import {mana_cost} from "./weapon.ts";
 
 enum BotState {
   Attack,

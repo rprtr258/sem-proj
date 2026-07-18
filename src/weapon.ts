@@ -6,8 +6,6 @@ export type ComponentBullet = {
   dir: Vec2,
 };
 
-export const BULLET_DAMAGE = 30;
-
 export type ComponentLaser = {
   pos: Vec2,
   dir: Vec2,
@@ -44,16 +42,12 @@ function inScreen(p: Vec2): boolean {
   return rectContains({x: -200, y: -200, w: 640+200, h: 480+200}, p);
 }
 
-export const LASER_DAMAGE = 20;
-
 export type ComponentGrenade = {
   pos: Vec2,
   speed: Vec2,
   counter: number,
   exploding: boolean,
 };
-
-export const GRENADE_DAMAGE = 10;
 
 export enum WeaponType {
   Bullet,
@@ -67,6 +61,12 @@ export type ComponentWeapon = {
   owner_id: ID,
   pos: Vec2,
   target: Vec2,
+};
+
+export const damage: Record<WeaponType, number> = {
+  [WeaponType.Bullet]: 30,
+  [WeaponType.Laser]: 40,
+  [WeaponType.Grenade]: 10,
 };
 
 export const mana_cost: Record<WeaponType, number> = {

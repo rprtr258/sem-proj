@@ -1,11 +1,19 @@
-import {Rect, Vec2, rectContains, rectIntersects} from "./types";
+import {Rect, Vec2, rect, rectContains, rectIntersects} from "./types";
 
 export class GameMap {
   private m_rects: Rect[];
   private m_markedPoints: Map<string, Vec2> = new Map();
 
-  constructor(...rects: Rect[]) {
-    this.m_rects = rects;
+  constructor() {
+    this.m_rects = [
+      rect({x: -40, y:   0}, 20, 480),  // left wall
+      rect({x: 660, y:   0}, 20, 480),  // right wall
+      rect({x: -40, y: 460}, 680, 20),  // bottom wall
+      rect({x: -20, y: 274}, 188, 10),  // left platform
+      rect({x: 473, y: 274}, 187, 10),  // right platform
+      rect({x: 256, y: 113}, 128, 20),  // top platform
+      rect({x: 310, y: 132}, 20, 150),  // central platform
+    ];
   }
 
   get rects(): readonly Rect[] {
