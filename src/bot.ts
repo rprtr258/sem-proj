@@ -1,8 +1,8 @@
 import {Vec2, add, rectContains, rectTranslated} from "./types.ts";
 import {Character} from "./character.ts";
 import {GameMap} from "./map.ts";
-import {Projectile} from "./projectile.ts";
 import {World} from "./world.ts";
+import { mana_cost } from "./weapon.ts";
 
 enum BotState {
   Attack,
@@ -20,8 +20,8 @@ export class Bot {
   character: Character;
   private state = BotState.Attack;
 
-  constructor(position: Vec2, fn: (c: Projectile) => void) {
-    this.character = new Character(position, "bot", fn);
+  constructor(position: Vec2) {
+    this.character = new Character(position, "bot");
   }
 
   goLeft(): void {
@@ -58,7 +58,7 @@ export class Bot {
             this.character.jump(map);
           }
         }
-      } else if (this.character.mana < this.character.m_weapon.m_mana) {
+      } else if (this.character.mana < mana_cost[this.character.weaponId]) {
         this.state = BotState.Flee;
       } else if (this.isHeroVisible(map)) {
         const pp = map.getMarkedPoint("player");
@@ -73,7 +73,7 @@ export class Bot {
     }
 
     case BotState.Flee: {
-      if (this.character.mana >= Math.min(100, 3 * this.character.m_weapon.m_mana)) {
+      if (this.character.mana >= Math.min(100, 3 * mana_cost[this.character.weaponId])) {
         this.state = BotState.Attack;
       } else {
         const pp = map.getMarkedPoint("player");
@@ -117,7 +117,7 @@ export class Bot {
     case BotState.Stand: {
       this.character.stopLeft();
       this.character.stopRight();
-      if (this.character.mana >= 2 * this.character.m_weapon.m_mana) {
+      if (this.character.mana >= 2 * mana_cost[this.character.weaponId]) {
         this.state =
           this.canAttack(map) ? BotState.Attack :
           BotState.Walk;
@@ -131,7 +131,7 @@ export class Bot {
       if (this.character.m_reload === 0) {
         this.state =
           this.canAttack(map) ? BotState.Attack :
-          this.character.mana < this.character.m_weapon.m_mana ? BotState.Flee :
+          this.character.mana < mana_cost[this.character.weaponId] ? BotState.Flee :
           BotState.Walk
       }
       break;
@@ -161,6 +161,6 @@ export class Bot {
   }
 
   private canAttack(map: GameMap): boolean {
-    return this.isHeroVisible(map) && this.character.mana >= this.character.m_weapon.m_mana && this.character.m_reload === 0;
+    return this.isHeroVisible(map) && this.character.mana >= mana_cost[this.character.weaponId] && this.character.m_reload === 0;
   }
 }

@@ -1,10 +1,6 @@
-import {Vec2, Rect, sign, rect, rectTranslated, clamp, ID, add} from "./types.ts";
+import {Vec2, Rect, sign, rect, rectTranslated, clamp, ID, add, newEntity} from "./types.ts";
 import {GameMap} from "./map.ts";
-import {Weapon} from "./weapon.ts";
-import {LaserGun} from "./laser.ts";
-import {GrenadeGun} from "./grenade.ts";
-import {Gun} from "./bullet.ts";
-import {Projectile} from "./projectile.ts";
+import {WeaponType, mana_cost, reload} from "./weapon.ts";
 import {World} from "./world.ts";
 
 export class Character {
@@ -16,32 +12,22 @@ export class Character {
   score = 0;
   m_reload = 0;
   boundingBox: Rect = { x: 0, y: 0, w: 55, h: 90 };
-  weaponId = 0;
+  weaponId: WeaponType;
   m_goingLeft = false;
   m_goingRight = false;
   mirrored = false;
   inAir = true;
-  protected m_addProjectile: (c: Projectile) => void;
 
-  constructor(position: Vec2, id: ID, fn: (c: Projectile) => void) {
+  constructor(position: Vec2, id: ID) {
     this.m_coord = {...position};
     this.boundingBox = rect(position, 55, 90);
-    this.weaponId = 0;
-    this.m_addProjectile = fn;
+    this.weaponId = WeaponType.Bullet;
     this.m_id = id;
   }
 
   // alias for m_coord so world/renderer can read position
   get x(): number { return this.m_coord.x; }
   get y(): number { return this.m_coord.y; }
-
-  get m_weapon(): Weapon {
-    return {
-      0: Gun,
-      1: LaserGun,
-      2: GrenadeGun,
-    }[this.weaponId]!;
-  }
 
   goLeft(): void { this.m_goingLeft = true; }
   stopLeft(): void { this.m_goingLeft = false; }
@@ -54,15 +40,22 @@ export class Character {
   }
 
   changeWeapon(): void {
-    this.weaponId = (this.weaponId + 1) % 3;
+    this.weaponId = (this.weaponId + 1) % 3 as WeaponType;
   }
 
   attack(w: World, p: Vec2): void {
-    if (this.m_reload === 0 && this.mana >= this.m_weapon.m_mana) {
-      this.m_reload = 20;
-      this.mana -= this.m_weapon.m_mana;
+    const mana = mana_cost[this.weaponId];
+    if (this.m_reload === 0 && this.mana >= mana) {
+      this.m_reload = reload[this.weaponId];
+      this.mana -= mana;
       const hand = this.getHandPosition();
-      this.m_addProjectile(this.m_weapon.shoot(p, hand, w));
+      w.component_weapon.set(newEntity(), {
+        type: this.weaponId,
+        mana: mana,
+        owner_id: this.m_id,
+        pos: hand,
+        target: p,
+      });
     }
   }
 

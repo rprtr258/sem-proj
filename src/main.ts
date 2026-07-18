@@ -1,9 +1,6 @@
 import {mul, Vec2} from "./types";
 import {World} from "./world";
 import {Renderer} from "./renderer";
-import {Bullet} from "./bullet";
-import {Laser} from "./laser";
-import {Grenade} from "./grenade";
 
 function main() {
   const cvs = document.getElementById("game") as HTMLCanvasElement;
@@ -35,16 +32,28 @@ function main() {
   cvs.addEventListener("mousemove", e => {
     const r = cvs.getBoundingClientRect();
     mouseGame = renderer.screenToGame({x: e.clientX - r.left, y: e.clientY - r.top});
+    world.mouse_moved(mouseGame);
   });
 
   cvs.addEventListener("mousedown", e => {
     const r = cvs.getBoundingClientRect();
-    const g = renderer.screenToGame({x: e.clientX - r.left, y: e.clientY - r.top});
-    world.click(g.x, g.y);
+    mouseGame = renderer.screenToGame({x: e.clientX - r.left, y: e.clientY - r.top});
+    world.mousePressed = true;
+    world.mouseCoord = mouseGame;
+  });
+  cvs.addEventListener("mouseup", () => {
+    world.mouse_released();
+  });
+  cvs.addEventListener("mouseleave", () => {
+    world.mouse_released();
   });
 
   cvs.addEventListener("contextmenu", e => e.preventDefault());
   cvs.style.cursor = "none";
+  window.addEventListener("blur", () => {
+    world.player.stopLeft();
+    world.player.stopRight();
+  });
 
   // --- game loop ---
   let lastTime = 0;

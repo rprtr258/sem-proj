@@ -5,7 +5,7 @@
     "typecheck": "tsc --noEmit",
     "build": "bun build --target browser --outdir dist src/main.ts",
     "start": "bun run dev-server.ts",
-    "dev": "bun run build && bun run start"
+    "dev": "bun run typecheck && bun run start"
   },
   "devDependencies": {
     "typescript": "^7.0.2"

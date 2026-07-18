@@ -129,7 +129,6 @@ export class Renderer {
     const map = w.map;
     const player = w.player;
     const bot = w.bot.character;
-    const projectiles = w.projectiles;
 
     this.updateAnim(dt, player, this.playerAnim!);
     this.updateAnim(dt, bot, this.botAnim!);
@@ -186,7 +185,7 @@ export class Renderer {
           const fw = 256, fh = 256, cols = 9;
           const fx = (frame % cols) * fw;
           const fy = Math.floor(frame / cols) * fh;
-          ctx.drawImage(ex, fx, fy, fw, fh, pos.x - 100, pos.y - 100, 200, 200);
+          ctx.drawImage(ex, fx, fy, fw, fh, pos.x - 100, pos.y - 150, 200, 200);
         } else {
           ctx.drawImage(gi, pos.x, pos.y, 30, 30);
         }
@@ -205,7 +204,36 @@ export class Renderer {
     }
 
     ctx.drawImage(this.images["aim"], m.x - 16, m.y - 16, 32, 32);
+
     ctx.restore();
+
+    // debug
+    ctx.font = "14px monospace";
+    ctx.lineWidth = 0.4;
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "white";
+    {
+      for (const [i, [line, stat]] of [
+        ["bullet", w.component_bullet.size],
+        ["delete", w.component_delete.size],
+        ["grenade", w.component_grenade.size],
+        ["laser", w.component_laser.size],
+        ["owner_id", w.component_owner_id.size],
+        ["weapon", w.component_weapon.size],
+        ["total",
+          w.component_bullet.size+
+          w.component_delete.size+
+          w.component_grenade.size+
+          w.component_laser.size+
+          w.component_owner_id.size+
+          w.component_weapon.size
+        ],
+      ].entries()) {
+        const text = `${line}: ${stat}`;
+        ctx.fillText(text, 0, 20 + i * 20);
+        ctx.strokeText(text, 0, 20 + i * 20);
+      }
+    }
   }
 
   private drawHUD(ctx: CanvasRenderingContext2D, c: Character): void {
@@ -219,15 +247,15 @@ export class Renderer {
     ctx.drawImage(this.images["mana"], 0, 0, HUD_W/100*mana, HUD_H, c.x + barOffset, c.y-30 + 10, mana, 8);
 
     const sw = 17, sh = 28;
-    ctx.drawImage(this.images["spells"], c.weaponId * sw, 0, sw, sh, c.x - 40, c.y - 35, sw, sh);
+    ctx.drawImage(this.images["spells"], c.weaponId * sw, 0, sw, sh, c.x - 43, c.y - 35, sw, sh);
 
     // Score text - positioned like QML: (90, -27) relative to character
     ctx.font = "bold 14px monospace";
     ctx.lineWidth = 2;
     ctx.strokeStyle = "#AAAAAA";
     ctx.fillStyle = "white";
-    ctx.strokeText(`${c.score}`, c.x + 90, c.y - 12);
-    ctx.fillText(`${c.score}`, c.x + 90, c.y - 12);
+    ctx.strokeText(`${c.score}`, c.x + 90, c.y - 15);
+    ctx.fillText(`${c.score}`, c.x + 90, c.y - 15);
   }
 
   gameToScreen(p: Vec2): Vec2 {
