@@ -63,10 +63,13 @@ const assets = [
   "aim", "hp", "mana", "spells",
 ];
 
+const cameraSpeed = 10;
+
 export class Renderer {
   private ctx: CanvasRenderingContext2D;
   private scale = 1;
   private o: Vec2 = {x: 0, y: 0};
+  private camera: Vec2 = mul({x: GAME_W, y: GAME_H}, 1/2);
 
   private images: Record<string, HTMLImageElement> = {};
   private playerAnim: SpriteAnim<"standing" | "running" | "jumping" | "attack"> | null = null;
@@ -142,9 +145,13 @@ export class Renderer {
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, W, H);
 
+    const target = add(player, mul({x: player.boundingBox.w, y: player.boundingBox.h}, 1/2));
+    this.camera = add(this.camera, mul(sub(target, this.camera), 1/cameraSpeed));
+
     ctx.save();
     ctx.translate(this.o.x, this.o.y);
     ctx.scale(this.scale, this.scale);
+    ctx.translate(this.cameraOffset.x, this.cameraOffset.y);
 
     // background
     const bg = this.images["back"];
@@ -261,11 +268,15 @@ export class Renderer {
     ctx.fillText(`${c.score}`, c.x + 90, c.y - 15);
   }
 
+  private get cameraOffset(): Vec2 {
+    return sub(mul({x: GAME_W, y: GAME_H}, 1/2), this.camera);
+  }
+
   gameToScreen(p: Vec2): Vec2 {
-    return add(mul(p, this.scale), this.o);
+    return add(mul(add(p, this.cameraOffset), this.scale), this.o);
   }
 
   screenToGame(p: Vec2): Vec2 {
-    return mul(sub(p, this.o), 1 / this.scale);
+    return sub(mul(sub(p, this.o), 1 / this.scale), this.cameraOffset);
   }
 }
