@@ -1,4 +1,4 @@
-import {Vec2, add, rectContains, rectTranslated} from "./types.ts";
+import {Vec2, add, rectContains, rectTranslated, sub, vec2Normalized} from "./types.ts";
 import {Character} from "./character.ts";
 import {GameMap} from "./map.ts";
 import {World} from "./world.ts";
@@ -142,18 +142,16 @@ export class Bot {
 
   private isHeroVisible(map: GameMap): boolean {
     const pp = map.getMarkedPoint("player");
-    const playerCenter = { x: pp.x + 27, y: pp.y + 47 };
+    const playerCenter = add(pp, {x: 27, y: 47});
     const pos = this.character.getHandPosition();
-    const dx = playerCenter.x - pos.x;
-    const dy = playerCenter.y - pos.y;
-    const len = Math.sqrt(dx * dx + dy * dy);
+    const d = sub(playerCenter, pos);
+    const len = Math.sqrt(d.x * d.x + d.y * d.y);
     if (len === 0)
       return false;
-    const dir = { x: dx / len, y: dy / len };
-    let p = { x: pos.x, y: pos.y };
+    const dir = vec2Normalized(d);
+    let p = {...pos};
     while (!map.isFilled(p)) {
-      p.x += dir.x;
-      p.y += dir.y;
+      p = add(p, dir);
       if (isInPlayerBB(pp, p))
         return true;
     }
