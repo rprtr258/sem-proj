@@ -33,7 +33,11 @@ await build();
 watch("./src", { recursive: true }, async (_event, filename) => {
   if (filename && filename.endsWith(".ts")) {
     console.log(`${filename} changed, rebuilding...`);
-    await build();
+    try {
+      await build();
+    } catch (e) {
+      console.error(`Failed to build: ${e}`);
+    }
   }
 });
 console.log("Watching src/ for changes...");
