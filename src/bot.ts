@@ -55,7 +55,7 @@ export class Bot {
           else
             this.goRight();
           if (!map.isFilledRect(rectTranslated(this.character.boundingBox, 0, -60))) {
-            this.character.jump(map);
+            this.character.fly();
           }
         }
       } else if (this.character.mana < mana_cost[this.character.weaponId]) {
@@ -95,7 +95,7 @@ export class Bot {
       else if (!this.character.m_goingLeft)
         this.goRight();
       if (!map.isFilledRect(rectTranslated(this.character.boundingBox, 0, -60))) {
-        this.character.jump(map);
+        this.character.fly();
       }
       if (this.canAttack(map)) {
         this.state = BotState.Attack;

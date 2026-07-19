@@ -9,10 +9,12 @@ export class Character {
   protected m_vspeed = 0;
   health = 100;
   mana = 100;
+  fly_energy = 100;
   score = 0;
   m_reload = 0;
   boundingBox: Rect = { x: 0, y: 0, w: 55, h: 90 };
   weaponId: WeaponType;
+  holding_jump = false;
   m_goingLeft = false;
   m_goingRight = false;
   mirrored = false;
@@ -34,9 +36,8 @@ export class Character {
   goRight(): void { this.m_goingRight = true; }
   stopRight(): void { this.m_goingRight = false; }
 
-  jump(map: GameMap): void {
-    if (map.isFilledRect(rectTranslated(this.boundingBox, 0, 1)))
-      this.m_vspeed = 30;
+  fly(): void {
+    this.holding_jump = true;
   }
 
   changeWeapon(): void {
@@ -68,6 +69,7 @@ export class Character {
     this.boundingBox = rect(p, 55, 90);
     this.health = 100;
     this.mana = 100;
+    this.fly_energy = 100;
     this.m_goingLeft = this.m_goingRight = false;
     this.m_vspeed = 0;
     this.m_reload = 0;
@@ -80,6 +82,22 @@ export class Character {
   update(map: GameMap): void {
     this.health = clamp(this.health + 0.2, 0, 100);
     this.mana = clamp(this.mana + 0.8, 0, 100);
+    const FLY_WASTE = 1.5;
+    this.fly_energy = clamp(this.fly_energy + (() => {
+      if (this.holding_jump && this.fly_energy > FLY_WASTE) {
+        this.m_vspeed = 18;
+        return -FLY_WASTE;
+      } else if (this.holding_jump) {
+        return 0;
+      } else if (map.isFilledRect(rectTranslated(this.boundingBox, 0, 1))) {
+        return 20; // restore fast when on ground
+      } else if (this.m_vspeed <= 10) {
+        return 0.5; // restore slowly when falling
+      } else {
+        return 0;
+      }
+    })(), 0, 100);
+    this.holding_jump = false;
     this.m_vspeed = Math.max(this.m_vspeed - 1, 0);
     this.m_reload = Math.max(this.m_reload - 1, 0);
 

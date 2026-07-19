@@ -39,21 +39,21 @@ export class World {
   }
 
   keyPressEvent(key: string): void {
-    if (this.isKeyPressed.has(key)) return;
+    if (this.isKeyPressed.has(key))
+      return;
     this.isKeyPressed.add(key);
     switch (key) {
-      case "KeyA": this.player?.goLeft();       break;
-      case "KeyD": this.player?.goRight();      break;
-      case "KeyW": this.player?.jump(this.map); break;
-      case "Tab":  this.player?.changeWeapon(); break;
+      case "KeyA": this.player.goLeft();       break;
+      case "KeyD": this.player.goRight();      break;
+      case "Tab":  this.player.changeWeapon(); break;
     }
   }
 
   keyReleaseEvent(key: string): void {
     this.isKeyPressed.delete(key);
     switch (key) {
-      case "KeyA": this.player?.stopLeft();  break;
-      case "KeyD": this.player?.stopRight(); break;
+      case "KeyA": this.player.stopLeft();  break;
+      case "KeyD": this.player.stopRight(); break;
     }
   }
 
@@ -71,6 +71,7 @@ export class World {
   }
 
   update(): void {
+    this.player.holding_jump = this.isKeyPressed.has("KeyW");
     if (this.mousePressed) {
       this.player.attack(this, this.mouseCoord);
     }
@@ -161,11 +162,9 @@ export class World {
           c.speed = mul(c.speed, 0.01);
           let tries = 1000;
           const sz = 30;
-          while (!this.map.isFilledRect(rect(add(add(c.pos, c.speed), { x: 15 - sz / 2, y: 15 - sz / 2 }), sz, sz))) {
+          while (tries > 0 && !this.map.isFilledRect(rect(add(add(c.pos, c.speed), { x: 15 - sz / 2, y: 15 - sz / 2 }), sz, sz))) {
             c.pos = add(c.pos, c.speed);
             tries--;
-            if (tries === 0)
-              continue;
           }
           c.counter = 18;
           c.speed = { x: 0, y: 0 };

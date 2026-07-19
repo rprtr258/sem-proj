@@ -244,8 +244,10 @@ export class Renderer {
     const mana = Math.max(c.mana, 0);
     const barOffset = -(100 - c.boundingBox.w) / 2;
 
-    ctx.drawImage(this.images["hp"],   0, 0, HUD_W/100*hp,   HUD_H, c.x + barOffset, c.y-30,      hp,   8);
-    ctx.drawImage(this.images["mana"], 0, 0, HUD_W/100*mana, HUD_H, c.x + barOffset, c.y-30 + 10, mana, 8);
+    ctx.drawImage(this.images["hp"],   0, 0, HUD_W/100*hp,   HUD_H, c.x + barOffset, c.y-30,      hp,      8);
+    ctx.drawImage(this.images["mana"], 0, 0, HUD_W/100*mana, HUD_H, c.x + barOffset, c.y-30 + 10, mana,    8);
+    ctx.fillStyle = "orange";
+    ctx.fillRect(c.x + barOffset, c.y-30 + 20, c.fly_energy, 8);
 
     const sw = 17, sh = 28;
     ctx.drawImage(this.images["spells"], c.weaponId * sw, 0, sw, sh, c.x - 43, c.y - 35, sw, sh);
