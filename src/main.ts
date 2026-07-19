@@ -17,7 +17,6 @@ function main() {
 
   const renderer = new Renderer(ctx, () => requestAnimationFrame(gameLoop));
   const world = new World();
-  let mouseGame: Vec2 = mul({x: 640, y: 480}, 1/2);
 
   // --- input ---
   document.addEventListener("keydown", e => {
@@ -29,17 +28,18 @@ function main() {
     world.keyReleaseEvent(e.code);
   });
 
-  cvs.addEventListener("mousemove", e => {
+  function mouseRaw(e: MouseEvent): Vec2 {
     const r = cvs.getBoundingClientRect();
-    mouseGame = renderer.screenToGame({x: e.clientX - r.left, y: e.clientY - r.top});
-    world.mouse_moved(mouseGame);
+    return {x: e.clientX - r.left, y: e.clientY - r.top};
+  }
+
+  cvs.addEventListener("mousemove", e => {
+    world.mouse_moved(renderer.screenToGame(mouseRaw(e)));
   });
 
   cvs.addEventListener("mousedown", e => {
-    const r = cvs.getBoundingClientRect();
-    mouseGame = renderer.screenToGame({x: e.clientX - r.left, y: e.clientY - r.top});
     world.mousePressed = true;
-    world.mouseCoord = mouseGame;
+    world.mouse_moved(renderer.screenToGame(mouseRaw(e)));
   });
   cvs.addEventListener("mouseup", () => {
     world.mouse_released();
@@ -63,7 +63,7 @@ function main() {
     lastTime = timestamp;
 
     world.update();
-    renderer.render(dt, world, mouseGame);
+    renderer.render(dt, world);
 
     requestAnimationFrame(gameLoop);
   }

@@ -125,7 +125,7 @@ export class Renderer {
     charAnim.update(dt);
   }
 
-  render(dt: number, w: World, m: Vec2): void {
+  render(dt: number, w: World): void {
     const map = w.map;
     const player = w.player;
     const bot = w.bot.character;
@@ -203,7 +203,7 @@ export class Renderer {
       }
     }
 
-    ctx.drawImage(this.images["aim"], m.x - 16, m.y - 16, 32, 32);
+    ctx.drawImage(this.images["aim"], w.mouseCoord.x - 16, w.mouseCoord.y - 16, 32, 32);
 
     ctx.restore();
 
