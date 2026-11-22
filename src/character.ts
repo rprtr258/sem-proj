@@ -149,9 +149,11 @@ export class Character {
     let dx = speed;
     const delta = sign(speed);
     let newRect = rectTranslated(this.boundingBox, dx, 0);
+    // retreat toward the start when blocked, never past it — the old probe
+    // walked away until it cleared the solid's far side and teleported there
     while (field.isSolidRect(newRect) && dx !== 0) {
-      dx -= delta;
-      newRect = rectTranslated(newRect, -delta, 0);
+      dx = delta > 0 ? Math.max(0, dx - 1) : Math.min(0, dx + 1);
+      newRect = rectTranslated(this.boundingBox, dx, 0);
     }
     if (dx === 0)
       return;
@@ -164,8 +166,8 @@ export class Character {
     const delta = sign(speed);
     let newRect = rectTranslated(this.boundingBox, 0, dy);
     while (field.isSolidRect(newRect) && dy !== 0) {
-      dy -= delta;
-      newRect = rectTranslated(newRect, 0, -delta);
+      dy = delta > 0 ? Math.max(0, dy - 1) : Math.min(0, dy + 1);
+      newRect = rectTranslated(this.boundingBox, 0, dy);
       this.m_vspeed = 0;
     }
     if (dy === 0)
