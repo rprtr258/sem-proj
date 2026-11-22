@@ -1,6 +1,5 @@
 import {RunState, Wand} from "./wand.ts";
 import {spellById} from "./spells.ts";
-import {RARITY_PRICE, Rarity} from "./spells.ts";
 
 // NA1 build code (GDD §7.9): "NA1:" + base64(JSON) describing wands, slots
 // and inventory so a run can be shared/re-entered.
@@ -30,7 +29,7 @@ export function encodeBuild(run: RunState): string {
     v: 1,
     active: run.activeWand,
     wands: run.wands.map(w => ({slots: [...w.slots]})),
-    inv: run.inventory.map(i => i.spellId),
+    inv: [...run.inventory],
   };
   return "NA1:" + toBase64(JSON.stringify(data));
 }
@@ -56,13 +55,4 @@ export function decodeBuild(code: string): {active: number; wands: Wand[]; inv: 
   } catch {
     return null;
   }
-}
-
-// price assigned to imported spells (rarity band midpoint) so selling works
-export function importPrice(spellId: string): number {
-  const spell = spellById(spellId);
-  if (!spell)
-    return 0;
-  const [lo, hi] = RARITY_PRICE[spell.rarity as Rarity];
-  return Math.round((lo + hi) / 2);
 }

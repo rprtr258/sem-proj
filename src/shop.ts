@@ -90,7 +90,7 @@ export class Shop {
       return false;
     run.gold -= price;
     if (card.kind === "spell") {
-      run.inventory.push({spellId: card.spellId, price: card.price});
+      run.inventory.push(card.spellId);
       card.sold = true;
     } else if (card.kind === "wand") {
       run.addWand();
@@ -103,15 +103,6 @@ export class Shop {
     return true;
   }
 
-  sellInventoryItem(index: number, run: RunState): boolean {
-    const item = run.inventory[index];
-    if (!item)
-      return false;
-    run.gold += Math.round(item.price / 2);
-    run.inventory.splice(index, 1);
-    return true;
-  }
-
   sellWand(wandIdx: number, run: RunState): boolean {
     // at least one wand must remain
     if (run.wands.length <= 1 || wandIdx < 0 || wandIdx >= run.wands.length)
@@ -121,7 +112,7 @@ export class Shop {
     // spells unequip back to inventory
     for (const slot of run.wands[wandIdx].slots)
       if (slot)
-        run.inventory.push({spellId: slot, price: 0});
+        run.inventory.push(slot);
     run.wands.splice(wandIdx, 1);
     if (run.activeWand >= run.wands.length)
       run.activeWand = 0;

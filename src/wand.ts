@@ -15,11 +15,6 @@ export type Wand = {
   cursor: number; // next spell to cast; wands fire spells sequentially
 };
 
-export type InventoryItem = {
-  spellId: string;
-  price: number; // rolled shop price; sell price is 50%
-};
-
 export const WAND_PRICE: Record<number, number> = {4: 60, 6: 140, 8: 260};
 
 // tier price for any slot count: the table covers 4/6/8, beyond that +120
@@ -39,7 +34,7 @@ export class RunState {
   mana = MANA_MAX;
   activeWand = 0;
   wands: Wand[] = [{slots: [null, null, null, null], cursor: 0}];
-  inventory: {spellId: string; price: number}[] = [];
+  inventory: string[] = [];
   // global slot count: raised by the shop expand card, inherited by every
   // newly bought wand
   wandSlots = 4;

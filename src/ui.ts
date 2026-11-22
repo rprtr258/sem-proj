@@ -2,7 +2,7 @@ import {RunState, Wand} from "./wand.ts";
 import {Shop, ShopCard} from "./shop.ts";
 import {spellById} from "./spells.ts";
 import {spellIconSvg} from "./icons.ts";
-import {encodeBuild, decodeBuild, importPrice} from "./buildcode.ts";
+import {encodeBuild, decodeBuild} from "./buildcode.ts";
 import {t, pick, getLang, Lang} from "./i18n.ts";
 
 // DOM overlays for the non-arena screens. The canvas stays mounted; ui hides
@@ -13,7 +13,6 @@ export type Handlers = {
   continueToHub(): void;
   reroll(): void;
   buy(i: number): void;
-  sellItem(i: number): void;
   sellWand(i: number): void;
   activateWand(i: number): void;
   setLang(l: Lang): void;
@@ -200,10 +199,17 @@ export class Ui {
 
   private renderShopTab(run: RunState, shop: Shop): void {
     const body = this.root.querySelector("#tab-shop")!;
+    const byIndex = shop.cards.map((c, i) => ({c, i}));
+    const spellCards = byIndex.filter(({c}) => c.kind === "spell");
+    // permanent fixtures get their own row below the rolled spell offers
+    const fixtureCards = byIndex.filter(({c}) => c.kind !== "spell");
     body.innerHTML = `
       <div class="shoprow">
-        ${shop.cards.map((c, i) => this.cardHtml(run, shop, c, i)).join("")}
+        ${spellCards.map(({c, i}) => this.cardHtml(run, shop, c, i)).join("")}
         <button id="reroll" class="reroll">${t("shop.reroll")} ◉ ${shop.rerollCost}</button>
+      </div>
+      <div class="shoprow">
+        ${fixtureCards.map(({c, i}) => this.cardHtml(run, shop, c, i)).join("")}
       </div>`;
     body.querySelectorAll("[data-buy]").forEach(el => {
       const i = Number((el as HTMLElement).dataset.buy);
@@ -248,9 +254,9 @@ export class Ui {
         <div class="invside">
           <div class="dim">${t("assembly.inventory")}</div>
           <div class="invitems">
-            ${run.inventory.map((it, i) => `
+            ${run.inventory.map((id, i) => `
               <div class="invitem" data-inv="${i}">
-                ${spellIconSvg(it.spellId)}
+                ${spellIconSvg(id)}
               </div>`).join("")}
           </div>
           <div class="buildcode">
@@ -280,7 +286,7 @@ export class Ui {
       status.textContent = "OK";
       run.wands = decoded.wands.map(w => ({slots: [...w.slots], cursor: 0}));
       run.activeWand = decoded.active;
-      run.inventory = decoded.inv.map(id => ({spellId: id, price: importPrice(id)}));
+      run.inventory = decoded.inv;
       this.refresh(run);
     });
   }
@@ -303,10 +309,10 @@ export class Ui {
       el.addEventListener("pointerdown", ev => {
         const e = ev as PointerEvent;
         const i = Number((el as HTMLElement).dataset.inv);
-        drag = {spellId: run.inventory[i].spellId, from: {kind: "inv", index: i}};
+        drag = {spellId: run.inventory[i], from: {kind: "inv", index: i}};
         startGhost(e);
       });
-      this.attachTooltip(el as HTMLElement, () => this.spellTooltipHtml(run.inventory[Number((el as HTMLElement).dataset.inv)]?.spellId ?? ""));
+      this.attachTooltip(el as HTMLElement, () => this.spellTooltipHtml(run.inventory[Number((el as HTMLElement).dataset.inv)] ?? ""));
     });
     root.querySelectorAll(".slot").forEach(el => {
       el.addEventListener("pointerdown", ev => {
@@ -349,12 +355,12 @@ export class Ui {
         removeDragged();
         // swapped-out spell returns to inventory
         if (old)
-          run.inventory.push({spellId: old, price: 0});
+          run.inventory.push(old);
         run.wands[wi].slots[si] = drag.spellId;
       } else if ((e.target as HTMLElement)?.closest(".invitems")) {
         const old = drag.spellId;
         removeDragged();
-        run.inventory.push({spellId: old, price: 0});
+        run.inventory.push(old);
       }
       ghost?.remove();
       ghost = null;
@@ -369,22 +375,18 @@ export class Ui {
     body.innerHTML = `
       <div class="invlist">
         ${run.inventory.length === 0 ? `<div class="dim">${t("inventory.empty")}</div>` : ""}
-        ${run.inventory.map((it, i) => {
-          const s = spellById(it.spellId)!;
+        ${run.inventory.map((id, i) => {
+          const s = spellById(id)!;
           return `
             <div class="invrow" data-row="${i}">
               ${spellIconSvg(s.id)}
-              <span><b>${pick(s.name)}</b> ${equipped.has(it.spellId) ? `<span class="dim">(${t("inventory.equipped")})</span>` : ""}</span>
-              <span class="price">◉ ${Math.round(it.price / 2)}</span>
-              <button class="sell mini" data-sell="${i}">${t("inventory.sell")}</button>
+              <span><b>${pick(s.name)}</b> ${equipped.has(id) ? `<span class="dim">(${t("inventory.equipped")})</span>` : ""}</span>
             </div>`;
         }).join("")}
       </div>`;
-    body.querySelectorAll("[data-sell]").forEach(b =>
-      b.addEventListener("click", () => this.h.sellItem(Number((b as HTMLElement).dataset.sell))));
     body.querySelectorAll("[data-row]").forEach(el => {
-      const it = run.inventory[Number((el as HTMLElement).dataset.row)];
-      this.attachTooltip(el as HTMLElement, () => this.spellTooltipHtml(it.spellId));
+      const id = run.inventory[Number((el as HTMLElement).dataset.row)];
+      this.attachTooltip(el as HTMLElement, () => this.spellTooltipHtml(id));
     });
   }
 

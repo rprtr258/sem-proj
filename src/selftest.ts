@@ -65,12 +65,6 @@ function hasNaN(field: Field): boolean {
   }
   check(bought, "shop: bought an affordable card");
   check(run.gold < g0, "shop: gold decreased");
-  const soldItem = run.inventory[0];
-  if (soldItem) {
-    const g1 = run.gold;
-    shop.sellInventoryItem(0, run);
-    check(run.gold === g1 + Math.round(soldItem.price / 2), "shop: sell refunds 50%");
-  }
   const cost0 = shop.rerollCost;
   shop.reroll(run);
   check(shop.rerollCost === cost0 + 2, "shop: reroll cost +2");
@@ -106,7 +100,7 @@ function hasNaN(field: Field): boolean {
   run.gold += 1000;
   for (let s = 0; s < 4; s++)
     run.wands[0].slots[s] = "compression_sphere";
-  run.inventory.push({spellId: "compression_sphere", price: 20});
+  run.inventory.push("compression_sphere");
 
   const world = new World(new Field(), run, 1, mulberry32(3));
   world.player.health = 100000; // focus the test on casting/kills, not dodging
@@ -206,7 +200,7 @@ function hasNaN(field: Field): boolean {
   run.wandSlots = 6;
   run.addWand();
   run.wands[1].slots[2] = "grenade";
-  run.inventory.push({spellId: "spark", price: 18});
+  run.inventory.push("spark");
   run.activeWand = 1;
   const code = encodeBuild(run);
   const decoded = decodeBuild(code);

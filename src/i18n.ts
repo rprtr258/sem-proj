@@ -38,7 +38,6 @@ const STRINGS = {
   "assembly.importBad": {ru: "Неверный код билда", en: "Invalid build code"},
 
   "inventory.empty": {ru: "Пусто — купите заклинания в магазине", en: "Empty — buy spells in the shop"},
-  "inventory.sell": {ru: "Продать", en: "Sell"},
   "inventory.equipped": {ru: "экипировано", en: "equipped"},
 
   "tooltip.mana": {ru: "мана", en: "mana"},

@@ -43,10 +43,6 @@ function main() {
       shop.buy(i, run);
       ui.show("hub", {run, shop});
     },
-    sellItem(i) {
-      shop.sellInventoryItem(i, run);
-      ui.show("hub", {run, shop});
-    },
     sellWand(i) {
       shop.sellWand(i, run);
       ui.show("hub", {run, shop});
