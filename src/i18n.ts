@@ -23,6 +23,8 @@ const STRINGS = {
   "shop.buy": {ru: "Купить", en: "Buy"},
   "shop.sold": {ru: "Продано", en: "Sold"},
   "shop.wandSlots": {ru: "слотов", en: "slots"},
+  "shop.expand": {ru: "Расширить жезлы", en: "Expand wands"},
+  "shop.expandDesc": {ru: "+2 слота всем жезлам; новые жезлы тоже получат их", en: "+2 slots on all wands; new wands get them too"},
   "shop.spellCount": {ru: "Заклинания", en: "Spells"},
 
   "assembly.wands": {ru: "Жезлы", en: "Wands"},

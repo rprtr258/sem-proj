@@ -1,13 +1,17 @@
 import {SPELLS, Rarity, RARITY_PRICE, RARITY_WEIGHT} from "./spells.ts";
-import {RunState, WAND_PRICE} from "./wand.ts";
+import {RunState, wandPrice} from "./wand.ts";
 
 export type ShopCard =
   | {kind: "spell"; spellId: string; price: number; sold: boolean}
-  | {kind: "wand"; size: number; price: number; sold: boolean};
+  // wand/expand cards carry no state: buyable repeatedly, their prices are
+  // computed from run state at render/buy time, so they update immediately
+  | {kind: "wand"}
+  | {kind: "expand"};
 
 const SPELL_COUNT = 4;
 export const REROLL_BASE = 10;
 export const REROLL_STEP = 2;
+export const WAND_STEP = 20; // wand price rise per wand bought in the run
 
 function rollRarity(rng: () => number): Rarity {
   const r = rng();
@@ -24,12 +28,14 @@ function priceIn(band: [number, number], rng: () => number): number {
   return Math.round(band[0] + rng() * (band[1] - band[0]));
 }
 
-// One shop page: 4 spell cards + 1 wand card. Reroll cost 10, +2 per repeat,
-// resets after each battle (GDD §7.8).
+// One shop page: 4 spell cards + wand card + expand-slots card. Reroll cost
+// 10, +2 per repeat, resets after each battle; reroll re-rolls the spell
+// cards only (GDD §7.8).
 export class Shop {
   cards: ShopCard[] = [];
   rerollCost = REROLL_BASE;
   rerolls = 0;
+  wandsBought = 0; // wand price step counter; lives for the whole run
 
   constructor(private rng: () => number = Math.random) {
     this.generate();
@@ -47,10 +53,9 @@ export class Shop {
       pool.splice(pool.indexOf(spell), 1);
       cards.push({kind: "spell", spellId: spell.id, price: priceIn(RARITY_PRICE[spell.rarity], this.rng), sold: false});
     }
-    // wand card: mostly 4-slot, sometimes 6, rarely 8
-    const wr = this.rng();
-    const size = wr < 0.6 ? 4 : wr < 0.9 ? 6 : 8;
-    cards.push({kind: "wand", size, price: WAND_PRICE[size], sold: false});
+    // wand and expand cards are permanent fixtures, not rolled offers
+    cards.push({kind: "wand"});
+    cards.push({kind: "expand"});
     this.cards = cards;
   }
 
@@ -64,18 +69,37 @@ export class Shop {
     return true;
   }
 
+  // prices are derived, never stored, so a purchase re-prices every card at
+  // once; wand escalation persists for the whole run
+  cardPrice(card: ShopCard, run: RunState): number {
+    if (card.kind === "wand")
+      return wandPrice(run.wandSlots) + WAND_STEP * this.wandsBought;
+    if (card.kind === "expand")
+      return wandPrice(run.wandSlots + 2);
+    return card.price;
+  }
+
   buy(i: number, run: RunState): boolean {
     const card = this.cards[i];
-    if (!card || card.sold || run.gold < card.price)
+    if (!card)
       return false;
+    if (card.kind === "spell" && card.sold)
+      return false;
+    const price = this.cardPrice(card, run);
+    if (run.gold < price)
+      return false;
+    run.gold -= price;
     if (card.kind === "spell") {
-      run.gold -= card.price;
       run.inventory.push({spellId: card.spellId, price: card.price});
+      card.sold = true;
+    } else if (card.kind === "wand") {
+      run.addWand();
+      this.wandsBought++;
     } else {
-      run.gold -= card.price;
-      run.addWand(card.size);
+      run.wandSlots += 2;
+      for (const w of run.wands)
+        w.slots.push(null, null);
     }
-    card.sold = true;
     return true;
   }
 
@@ -93,7 +117,7 @@ export class Shop {
     if (run.wands.length <= 1 || wandIdx < 0 || wandIdx >= run.wands.length)
       return false;
     const size = run.wands[wandIdx].slots.length;
-    run.gold += Math.round(WAND_PRICE[size] / 2);
+    run.gold += Math.round(wandPrice(size) / 2);
     // spells unequip back to inventory
     for (const slot of run.wands[wandIdx].slots)
       if (slot)

@@ -22,6 +22,12 @@ export type InventoryItem = {
 
 export const WAND_PRICE: Record<number, number> = {4: 60, 6: 140, 8: 260};
 
+// tier price for any slot count: the table covers 4/6/8, beyond that +120
+// per extra +2 slots (10 → 380, 12 → 500, …)
+export function wandPrice(size: number): number {
+  return WAND_PRICE[size] ?? WAND_PRICE[8] + 120 * ((size - 8) / 2);
+}
+
 // Everything that persists across a run: economy, roster, attempts, score.
 // Lives outside the combat World so shop/assembly screens can edit it while
 // no arena exists.
@@ -34,13 +40,16 @@ export class RunState {
   activeWand = 0;
   wands: Wand[] = [{slots: [null, null, null, null], cursor: 0}];
   inventory: {spellId: string; price: number}[] = [];
+  // global slot count: raised by the shop expand card, inherited by every
+  // newly bought wand
+  wandSlots = 4;
 
   stars: number[] = []; // per round, 1..3
   hpLostThisRound = false;
   diedThisRound = false;
 
-  addWand(slotCount: number): void {
-    this.wands.push({slots: Array(slotCount).fill(null), cursor: 0});
+  addWand(): void {
+    this.wands.push({slots: Array(this.wandSlots).fill(null), cursor: 0});
   }
 
   get activeWandObj(): Wand {

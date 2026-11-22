@@ -1,4 +1,4 @@
-import {Vec2, add, mul, sub, vec2Normalized, rectIntersects} from "./types.ts";
+import {Vec2, add, mul, sub, rectIntersects, Rect} from "./types.ts";
 import {Field} from "./field.ts";
 
 // Rarity bands (GDD §7.8): common 15-25, uncommon 40-60, rare 90-120, epic 180-250
@@ -12,15 +12,15 @@ export const RARITY_PRICE: Record<Rarity, [number, number]> = {
 };
 
 // Anything that can cast: player or enemy mage-operator
-export interface Caster {
+export type Caster = {
   readonly isPlayer: boolean;
   center(): Vec2;
   mirrored: boolean;
-}
+};
 
 // The part of World the cast functions use; keeps spells decoupled from the
 // world class and the world DOM-free for the headless selftest.
-export interface SpellWorld {
+export type SpellWorld = {
   readonly field: Field;
   casterOfPlayer(): Caster;
   enemyViews(): readonly {center(): Vec2; boundingBox: {x: number; y: number; w: number; h: number}}[];
@@ -30,7 +30,7 @@ export interface SpellWorld {
   // damage enemies (and optionally the player — FF heat school) in a radius
   damageInRadius(p: Vec2, radius: number, dmg: number, hitPlayer: boolean, knock: number): void;
   random(): number;
-}
+};
 
 export type ProjectileSpec = {
   kind: "bullet" | "bolt" | "heatbolt" | "iceshard" | "grenade";
@@ -303,7 +303,7 @@ export const SPELLS: SpellDef[] = [
 ];
 
 // bounding box of a segment (for laser-vs-enemy overlap)
-export function lineRect(a: Vec2, b: Vec2): {x: number; y: number; w: number; h: number} {
+export function lineRect(a: Vec2, b: Vec2): Rect {
   return {
     x: Math.min(a.x, b.x),
     y: Math.min(a.y, b.y),

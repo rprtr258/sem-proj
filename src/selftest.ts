@@ -59,8 +59,7 @@ function hasNaN(field: Field): boolean {
   const g0 = run.gold;
   let bought = false;
   for (let i = 0; i < shop.cards.length && !bought; i++) {
-    const card = shop.cards[i];
-    if (card.price <= run.gold) {
+    if (shop.cardPrice(shop.cards[i], run) <= run.gold) {
       bought = shop.buy(i, run);
     }
   }
@@ -77,12 +76,32 @@ function hasNaN(field: Field): boolean {
   check(shop.rerollCost === cost0 + 2, "shop: reroll cost +2");
 }
 
+// --- 2b. wand card repeatable with rising price, expand card global slots ---
+{
+  const run = new RunState();
+  const shop = new Shop(mulberry32(21));
+  run.gold = 500;
+  const wandIdx = shop.cards.findIndex(c => c.kind === "wand");
+  const expIdx = shop.cards.findIndex(c => c.kind === "expand");
+  check(wandIdx === 4 && expIdx === 5, "shop: wand+expand cards follow spells");
+  check(shop.cardPrice(shop.cards[expIdx], run) === 140, "shop: expand costs next tier");
+  check(shop.buy(expIdx, run), "shop: bought expand");
+  check(run.wandSlots === 6 && run.wands.every(w => w.slots.length === 6), "shop: expand widens all wands");
+  check(shop.cardPrice(shop.cards[wandIdx], run) === 140, "shop: wand price follows tier immediately");
+  check(shop.buy(wandIdx, run), "shop: wand card stays buyable");
+  check(run.wands.length === 2 && run.wands[1].slots.length === 6, "shop: new wand inherits global slots");
+  check(shop.cardPrice(shop.cards[wandIdx], run) === 160, "shop: wand price +step per buy");
+  shop.reroll(run);
+  check(shop.cardPrice(shop.cards[wandIdx], run) === 160 &&
+    shop.cardPrice(shop.cards[expIdx], run) === 260, "shop: reroll keeps wand/expand prices");
+}
+
 // --- 3. full loop: buy -> assemble -> fight wave -> win ---
 {
   const run = new RunState();
   const shop = new Shop(mulberry32(11));
   // buy the wand card and equip a sphere through inventory
-  shop.buy(4, run); // wand card is last
+  shop.buy(4, run); // wand card
   // equip 4 spheres (as if bought): simulate purchase via gold
   run.gold += 1000;
   for (let s = 0; s < 4; s++)
@@ -184,7 +203,8 @@ function hasNaN(field: Field): boolean {
 {
   const run = new RunState();
   run.wands[0].slots[0] = "compression_sphere";
-  run.addWand(6);
+  run.wandSlots = 6;
+  run.addWand();
   run.wands[1].slots[2] = "grenade";
   run.inventory.push({spellId: "spark", price: 18});
   run.activeWand = 1;

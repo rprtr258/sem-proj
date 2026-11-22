@@ -3,7 +3,7 @@ import {Shop, ShopCard} from "./shop.ts";
 import {spellById} from "./spells.ts";
 import {spellIconSvg} from "./icons.ts";
 import {encodeBuild, decodeBuild, importPrice} from "./buildcode.ts";
-import {t, pick, getLang, setLang, Lang} from "./i18n.ts";
+import {t, pick, getLang, Lang} from "./i18n.ts";
 
 // DOM overlays for the non-arena screens. The canvas stays mounted; ui hides
 // it outside the arena. All game actions are delegated via the Handlers below.
@@ -140,7 +140,7 @@ export class Ui {
         this.root.querySelectorAll(".tabbody").forEach(x => (x as HTMLElement).style.display = "none");
         (this.root.querySelector(`#tab-${(b as HTMLElement).dataset.tab}`) as HTMLElement).style.display = "";
       }));
-    this.renderShopTab(shop);
+    this.renderShopTab(run, shop);
     this.renderAssemblyTab(run);
     this.renderInventoryTab(run);
   }
@@ -165,10 +165,10 @@ export class Ui {
       `<span class="dim">${t("tooltip.mana")}: ${s.mana}</span>`;
   }
 
-  private cardHtml(card: ShopCard, i: number): string {
-    if (card.sold)
-      return `<div class="card sold"><div class="dim">${t("shop.sold")}</div></div>`;
+  private cardHtml(run: RunState, shop: Shop, card: ShopCard, i: number): string {
     if (card.kind === "spell") {
+      if (card.sold)
+        return `<div class="card sold"><div class="dim">${t("shop.sold")}</div></div>`;
       const s = spellById(card.spellId)!;
       return `
         <div class="card" data-buy="${i}">
@@ -179,21 +179,30 @@ export class Ui {
           <button class="buy">${t("shop.buy")}</button>
         </div>`;
     }
+    if (card.kind === "wand")
+      return `
+        <div class="card wandcard" data-buy="${i}">
+          ${spellIconSvg("wand")}
+          <div><b>${t("hub.tabAssembly")}</b></div>
+          <div>${run.wandSlots} ${t("shop.wandSlots")}</div>
+          <div class="price">◉ ${shop.cardPrice(card, run)}</div>
+          <button class="buy">${t("shop.buy")}</button>
+        </div>`;
     return `
       <div class="card wandcard" data-buy="${i}">
         ${spellIconSvg("wand")}
-        <div><b>${t("hub.tabAssembly")}</b></div>
-        <div>${card.size} ${t("shop.wandSlots")}</div>
-        <div class="price">◉ ${card.price}</div>
+        <div><b>${t("shop.expand")}</b></div>
+        <div>+2 ${t("shop.wandSlots")}</div>
+        <div class="price">◉ ${shop.cardPrice(card, run)}</div>
         <button class="buy">${t("shop.buy")}</button>
       </div>`;
   }
 
-  private renderShopTab(shop: Shop): void {
+  private renderShopTab(run: RunState, shop: Shop): void {
     const body = this.root.querySelector("#tab-shop")!;
     body.innerHTML = `
       <div class="shoprow">
-        ${shop.cards.map((c, i) => this.cardHtml(c, i)).join("")}
+        ${shop.cards.map((c, i) => this.cardHtml(run, shop, c, i)).join("")}
         <button id="reroll" class="reroll">${t("shop.reroll")} ◉ ${shop.rerollCost}</button>
       </div>`;
     body.querySelectorAll("[data-buy]").forEach(el => {
@@ -202,7 +211,13 @@ export class Ui {
       btn.addEventListener("click", () => this.h.buy(i));
       this.attachTooltip(el as HTMLElement, () => {
         const card = shop.cards[i];
-        return card && card.kind === "spell" ? this.spellTooltipHtml(card.spellId) : `${card.size} ${t("shop.wandSlots")}`;
+        if (!card)
+          return "";
+        if (card.kind === "spell")
+          return this.spellTooltipHtml(card.spellId);
+        if (card.kind === "wand")
+          return `${run.wandSlots} ${t("shop.wandSlots")}`;
+        return t("shop.expandDesc");
       });
     });
     body.querySelector("#reroll")!.addEventListener("click", () => this.h.reroll());
@@ -383,7 +398,7 @@ export class Ui {
     this.renderAssemblyTab(run);
     this.renderInventoryTab(run);
     if (shop)
-      this.renderShopTab(shop);
+      this.renderShopTab(run, shop);
   }
 
   private splash(round: number): void {
