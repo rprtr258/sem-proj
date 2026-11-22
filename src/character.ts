@@ -1,7 +1,12 @@
-import {Vec2, Rect, sign, rect, rectTranslated, clamp, ID, add, newEntity} from "./types.ts";
-import {GameMap} from "./map.ts";
+import {Vec2, Rect, sign, rect, rectTranslated, clamp, ID, add, mul, newEntity, SolidProvider} from "./types.ts";
 import {WeaponType, mana_cost, reload} from "./weapon.ts";
 import {World} from "./world.ts";
+import {Field} from "./field.ts";
+
+// wind (cells/tick) -> px/tick drift applied to the body
+const WIND_DRIFT = 0.8;
+// px/tick spent digging out when a wave solidifies around the character
+const UNBURY_STEP = 1;
 
 export class Character {
   protected m_id: ID;
@@ -12,6 +17,8 @@ export class Character {
   fly_energy = 100;
   score = 0;
   m_reload = 0;
+  // decaying impulse from blasts (grenade shove, laser yank)
+  m_knockback: Vec2 = {x: 0, y: 0};
   boundingBox: Rect = { x: 0, y: 0, w: 55, h: 90 };
   weaponId: WeaponType;
   holding_jump = false;
@@ -64,6 +71,10 @@ export class Character {
     this.health = Math.max(0, this.health - value);
   }
 
+  applyKnockback(v: Vec2): void {
+    this.m_knockback = add(this.m_knockback, v);
+  }
+
   respawn(p: Vec2): void {
     this.m_coord = {...p};
     this.boundingBox = rect(p, 55, 90);
@@ -73,13 +84,14 @@ export class Character {
     this.m_goingLeft = this.m_goingRight = false;
     this.m_vspeed = 0;
     this.m_reload = 0;
+    this.m_knockback = {x: 0, y: 0};
     this.mirrored = false;
   }
 
   get id(): ID { return this.m_id; }
   addKill(): void { this.score++; }
 
-  update(map: GameMap): void {
+  update(solid: SolidProvider, field: Field): void {
     this.health = clamp(this.health + 0.2, 0, 100);
     this.mana = clamp(this.mana + 0.8, 0, 100);
     const FLY_WASTE = 1.5;
@@ -89,7 +101,7 @@ export class Character {
         return -FLY_WASTE;
       } else if (this.holding_jump) {
         return 0;
-      } else if (map.isFilledRect(rectTranslated(this.boundingBox, 0, 1))) {
+      } else if (solid.isFilledRect(rectTranslated(this.boundingBox, 0, 1))) {
         return 20; // restore fast when on ground
       } else if (this.m_vspeed <= 10) {
         return 0.5; // restore slowly when falling
@@ -101,31 +113,43 @@ export class Character {
     this.m_vspeed = Math.max(this.m_vspeed - 1, 0);
     this.m_reload = Math.max(this.m_reload - 1, 0);
 
+    const wind = field.velocityInRect(this.boundingBox);
+
     if (this.m_goingLeft !== this.m_goingRight) {
       if (this.m_goingLeft) {
         if (!this.mirrored)
           this.flipSprite();
-        this.moveHorizontal(map, -5);
+        this.moveHorizontal(solid, -5);
       }
       if (this.m_goingRight) {
         if (this.mirrored)
           this.flipSprite();
-        this.moveHorizontal(map, 5);
+        this.moveHorizontal(solid, 5);
       }
     }
-    this.inAir = !map.isFilledRect(rectTranslated(this.boundingBox, 0, 1));
-    this.moveVertical(map, 10 - this.m_vspeed);
+    // gusts push the body even while standing
+    this.moveHorizontal(solid, wind.x * WIND_DRIFT);
+    this.inAir = !solid.isFilledRect(rectTranslated(this.boundingBox, 0, 1));
+    this.moveVertical(solid, (10 - this.m_vspeed) + wind.y * WIND_DRIFT + this.m_knockback.y);
+    this.moveHorizontal(solid, this.m_knockback.x);
+    this.m_knockback = mul(this.m_knockback, 0.8);
+    // a wave can solidify engulfing the character; dig upward until free
+    let unbury = 12;
+    while (unbury-- > 0 && solid.isFilledRect(this.boundingBox)) {
+      this.m_coord.y -= UNBURY_STEP;
+      this.boundingBox.y -= UNBURY_STEP;
+    }
   }
 
   protected flipSprite(): void {
     this.mirrored = !this.mirrored;
   }
 
-  protected moveHorizontal(map: GameMap, speed: number): void {
+  protected moveHorizontal(solid: SolidProvider, speed: number): void {
     let dx = speed;
     const delta = sign(speed);
     let newRect = rectTranslated(this.boundingBox, dx, 0);
-    while (map.isFilledRect(newRect) && dx !== 0) {
+    while (solid.isFilledRect(newRect) && dx !== 0) {
       dx -= delta;
       newRect = rectTranslated(newRect, -delta, 0);
     }
@@ -135,11 +159,11 @@ export class Character {
     this.boundingBox.x += dx;
   }
 
-  protected moveVertical(map: GameMap, speed: number): void {
+  protected moveVertical(solid: SolidProvider, speed: number): void {
     let dy = speed;
     const delta = sign(speed);
     let newRect = rectTranslated(this.boundingBox, 0, dy);
-    while (map.isFilledRect(newRect) && dy !== 0) {
+    while (solid.isFilledRect(newRect) && dy !== 0) {
       dy -= delta;
       newRect = rectTranslated(newRect, 0, -delta);
       this.m_vspeed = 0;

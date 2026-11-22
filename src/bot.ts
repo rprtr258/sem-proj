@@ -137,7 +137,7 @@ export class Bot {
       break;
     }
     }
-    this.character.update(map);
+    this.character.update(w.solid, w.field);
   }
 
   private isHeroVisible(map: GameMap): boolean {

@@ -49,6 +49,11 @@ export type Rect = {
   h: number,
 };
 
+// collision source: static map alone, or map composed with the wave field
+export interface SolidProvider {
+  isFilledRect(r: Rect): boolean;
+}
+
 export function rect(p: Vec2, w: number, h: number): Rect {
   return {x: p.x, y: p.y, w, h};
 }

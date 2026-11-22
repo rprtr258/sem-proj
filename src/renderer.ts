@@ -1,6 +1,7 @@
 import {add, mul, sub, Rect, Vec2} from "./types.ts";
 import {Character} from "./character.ts";
 import {World} from "./world.ts";
+import {FIELD_CELL, FIELD_COLS, FIELD_ORIGIN, FIELD_ROWS, FIELD_SOLID_THRESHOLD} from "./field.ts";
 
 const GAME_W = 640;
 const GAME_H = 480;
@@ -78,9 +79,21 @@ export class Renderer {
   private totalImages = 0;
   private onReadyCb: (() => void);
 
+  private fieldCvs: HTMLCanvasElement;
+  private fieldCtx: CanvasRenderingContext2D;
+  private fieldImg: ImageData;
+  private fieldBuf: Uint32Array;
+
   constructor(ctx: CanvasRenderingContext2D, cb: () => void) {
     this.ctx = ctx;
     this.onReadyCb = cb;
+
+    this.fieldCvs = document.createElement("canvas");
+    this.fieldCvs.width = FIELD_COLS;
+    this.fieldCvs.height = FIELD_ROWS;
+    this.fieldCtx = this.fieldCvs.getContext("2d")!;
+    this.fieldImg = this.fieldCtx.createImageData(FIELD_COLS, FIELD_ROWS);
+    this.fieldBuf = new Uint32Array(this.fieldImg.data.buffer);
   }
 
   loadAssets(): void {
@@ -162,6 +175,8 @@ export class Renderer {
     for (const r of map.rects)
       ctx.fillRect(r.x, r.y, r.w, r.h);
 
+    this.drawField(ctx, w);
+
     // characters
     this.playerAnim?.draw(ctx, {x: player.x, y: player.y, w: 55, h: 95}, player.mirrored);
     this.drawHUD(ctx, player);
@@ -241,6 +256,64 @@ export class Renderer {
         ctx.fillText(text, 0, 20 + i * 20);
         ctx.strokeText(text, 0, 20 + i * 20);
       }
+    }
+  }
+
+  // wave field tint (blue = push, red = pull, dense = solid terrain) and
+  // wind vector arrows (prototype-style, toggled with V, on by default)
+  private drawField(ctx: CanvasRenderingContext2D, w: World): void {
+    const wave = w.field.waveField;
+    const base = w.field.baseField;
+    const buf = this.fieldBuf;
+    for (let i = 0; i < buf.length; i++) {
+      if (base[i] >= FIELD_SOLID_THRESHOLD) {
+        buf[i] = 0; // static geometry is already drawn as map rects
+        continue;
+      }
+      const wv = wave[i];
+      let r = 0, g = 0, b = 0, a = 0;
+      if (wv >= FIELD_SOLID_THRESHOLD) {
+        // wave-solid terrain, prototype tint: bluish scaled by density
+        const intensity = Math.min(255, 100 + wv * 90);
+        a = 200;
+        r = intensity * 0.7;
+        g = intensity * 0.85;
+        b = intensity;
+      } else if (wv > 0.02) {
+        a = Math.min(220, wv * 300);
+        b = Math.min(255, 60 + wv * 160);
+        g = Math.min(160, wv * 100);
+      } else if (wv < -0.02) {
+        a = Math.min(220, -wv * 300);
+        r = Math.min(255, -wv * 240);
+        g = Math.min(70, -wv * 55);
+      }
+      buf[i] = ((a | 0) << 24) | ((b | 0) << 16) | ((g | 0) << 8) | (r | 0);
+    }
+    this.fieldCtx.putImageData(this.fieldImg, 0, 0);
+    ctx.drawImage(this.fieldCvs, FIELD_ORIGIN.x, FIELD_ORIGIN.y, FIELD_COLS * FIELD_CELL, FIELD_ROWS * FIELD_CELL);
+
+    if (w.showVectors) {
+      const velX = w.field.velXField;
+      const velY = w.field.velYField;
+      ctx.strokeStyle = "rgba(140, 255, 190, 0.45)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let gy = 2; gy < FIELD_ROWS - 2; gy += 4) {
+        for (let gx = 2; gx < FIELD_COLS - 2; gx += 4) {
+          const idx = gy * FIELD_COLS + gx;
+          const vx = velX[idx], vy = velY[idx];
+          const mag = Math.hypot(vx, vy);
+          if (mag > 0.04) {
+            const sx = FIELD_ORIGIN.x + (gx + 0.5) * FIELD_CELL;
+            const sy = FIELD_ORIGIN.y + (gy + 0.5) * FIELD_CELL;
+            const len = Math.min(10, mag * 16);
+            ctx.moveTo(sx, sy);
+            ctx.lineTo(sx + vx / mag * len, sy + vy / mag * len);
+          }
+        }
+      }
+      ctx.stroke();
     }
   }
 
