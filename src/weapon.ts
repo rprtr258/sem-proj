@@ -1,5 +1,5 @@
 import {ID, Vec2, vec2Cross, add, sub, rectContains, vec2Normalized} from "./types.ts";
-import {GameMap} from "./map.ts";
+import {Field} from "./field.ts";
 
 export type ComponentBullet = {
   pos: Vec2,
@@ -28,11 +28,11 @@ export function intersect(c: ComponentLaser, b1: Vec2, b2: Vec2): boolean {
   return true;
 }
 
-export function calcEnd(mouseCoord: Vec2, playerCoord: Vec2, map: GameMap): Vec2 {
+export function calcEnd(mouseCoord: Vec2, playerCoord: Vec2, field: Field): Vec2 {
   const d = sub(mouseCoord, playerCoord);
   const dir = vec2Normalized(d);
   let pos = {...playerCoord};
-  while (!map.isFilled(pos) && inScreen(pos)) {
+  while (!field.isSolid(pos) && inScreen(pos)) {
     pos = add(pos, dir);
   }
   return pos;

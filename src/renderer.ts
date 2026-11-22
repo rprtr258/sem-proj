@@ -142,7 +142,6 @@ export class Renderer {
   }
 
   render(dt: number, w: World): void {
-    const map = w.map;
     const player = w.player;
     const bot = w.bot.character;
 
@@ -169,11 +168,6 @@ export class Renderer {
     // background
     const bg = this.images["back"];
     ctx.drawImage(bg, 0, 0, GAME_W, GAME_H);
-
-    // map platforms
-    ctx.fillStyle = "#444";
-    for (const r of map.rects)
-      ctx.fillRect(r.x, r.y, r.w, r.h);
 
     this.drawField(ctx, w);
 
@@ -267,7 +261,7 @@ export class Renderer {
     const buf = this.fieldBuf;
     for (let i = 0; i < buf.length; i++) {
       if (base[i] >= FIELD_SOLID_THRESHOLD) {
-        buf[i] = 0; // static geometry is already drawn as map rects
+        buf[i] = 0xff444444; // static terrain: opaque gray
         continue;
       }
       const wv = wave[i];

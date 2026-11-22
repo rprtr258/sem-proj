@@ -1,6 +1,5 @@
 import {Vec2, add, rectContains, rectTranslated, sub, vec2Normalized} from "./types.ts";
 import {Character} from "./character.ts";
-import {GameMap} from "./map.ts";
 import {World} from "./world.ts";
 import {mana_cost} from "./weapon.ts";
 
@@ -35,12 +34,11 @@ export class Bot {
   }
 
   update(w: World): void {
-    const map = w.map;
     switch (this.state) {
     case BotState.Attack: {
-      if (this.canAttack(map)) {
+      if (this.canAttack(w)) {
         if (Math.random() * 10 > 7) {
-          const pp = map.getMarkedPoint("player");
+          const pp = w.getMarkedPoint("player");
           this.character.attack(w, add(pp, {x: 27, y: 40}));
           const weapon = Math.random() * 20;
           if (weapon > 10)
@@ -49,19 +47,19 @@ export class Bot {
             this.character.changeWeapon();
           this.state = BotState.WaitReload;
         } else {
-          const pp = map.getMarkedPoint("player");
+          const pp = w.getMarkedPoint("player");
           if (pp.x <= this.character.m_coord.x)
             this.goLeft();
           else
             this.goRight();
-          if (!map.isFilledRect(rectTranslated(this.character.boundingBox, 0, -60))) {
+          if (!w.field.isSolidRect(rectTranslated(this.character.boundingBox, 0, -60))) {
             this.character.fly();
           }
         }
       } else if (this.character.mana < mana_cost[this.character.weaponId]) {
         this.state = BotState.Flee;
-      } else if (this.isHeroVisible(map)) {
-        const pp = map.getMarkedPoint("player");
+      } else if (this.isHeroVisible(w)) {
+        const pp = w.getMarkedPoint("player");
         if (pp.x <= this.character.m_coord.x)
           this.goLeft();
         else
@@ -76,13 +74,13 @@ export class Bot {
       if (this.character.mana >= Math.min(100, 3 * mana_cost[this.character.weaponId])) {
         this.state = BotState.Attack;
       } else {
-        const pp = map.getMarkedPoint("player");
+        const pp = w.getMarkedPoint("player");
         if (pp.x >= this.character.m_coord.x) this.goLeft();
         else this.goRight();
-        if (this.character.m_goingLeft && map.isFilledRect(rectTranslated(this.character.boundingBox, -5, 0))) {
+        if (this.character.m_goingLeft && w.field.isSolidRect(rectTranslated(this.character.boundingBox, -5, 0))) {
           this.state = BotState.Stand;
         }
-        if (this.character.m_goingRight && map.isFilledRect(rectTranslated(this.character.boundingBox, 5, 0))) {
+        if (this.character.m_goingRight && w.field.isSolidRect(rectTranslated(this.character.boundingBox, 5, 0))) {
           this.state = BotState.Stand;
         }
       }
@@ -94,15 +92,15 @@ export class Bot {
         this.goLeft();
       else if (!this.character.m_goingLeft)
         this.goRight();
-      if (!map.isFilledRect(rectTranslated(this.character.boundingBox, 0, -60))) {
+      if (!w.field.isSolidRect(rectTranslated(this.character.boundingBox, 0, -60))) {
         this.character.fly();
       }
-      if (this.canAttack(map)) {
+      if (this.canAttack(w)) {
         this.state = BotState.Attack;
       } else {
-        if (map.isFilledRect(rectTranslated(this.character.boundingBox, -5, 0))) {
+        if (w.field.isSolidRect(rectTranslated(this.character.boundingBox, -5, 0))) {
           this.goRight();
-        } else if (map.isFilledRect(rectTranslated(this.character.boundingBox, 5, 0))) {
+        } else if (w.field.isSolidRect(rectTranslated(this.character.boundingBox, 5, 0))) {
           this.goLeft();
         } else if (Math.floor(Math.random() * 70) === 0) {
           if (this.character.m_goingLeft)
@@ -119,7 +117,7 @@ export class Bot {
       this.character.stopRight();
       if (this.character.mana >= 2 * mana_cost[this.character.weaponId]) {
         this.state =
-          this.canAttack(map) ? BotState.Attack :
+          this.canAttack(w) ? BotState.Attack :
           BotState.Walk;
       }
       break;
@@ -130,18 +128,18 @@ export class Bot {
       this.character.stopRight();
       if (this.character.m_reload === 0) {
         this.state =
-          this.canAttack(map) ? BotState.Attack :
+          this.canAttack(w) ? BotState.Attack :
           this.character.mana < mana_cost[this.character.weaponId] ? BotState.Flee :
           BotState.Walk
       }
       break;
     }
     }
-    this.character.update(w.solid, w.field);
+    this.character.update(w.field);
   }
 
-  private isHeroVisible(map: GameMap): boolean {
-    const pp = map.getMarkedPoint("player");
+  private isHeroVisible(w: World): boolean {
+    const pp = w.getMarkedPoint("player");
     const playerCenter = add(pp, {x: 27, y: 47});
     const pos = this.character.getHandPosition();
     const d = sub(playerCenter, pos);
@@ -150,7 +148,7 @@ export class Bot {
       return false;
     const dir = vec2Normalized(d);
     let p = {...pos};
-    while (!map.isFilled(p)) {
+    while (!w.field.isSolid(p)) {
       p = add(p, dir);
       if (isInPlayerBB(pp, p))
         return true;
@@ -158,7 +156,7 @@ export class Bot {
     return false;
   }
 
-  private canAttack(map: GameMap): boolean {
-    return this.isHeroVisible(map) && this.character.mana >= mana_cost[this.character.weaponId] && this.character.m_reload === 0;
+  private canAttack(w: World): boolean {
+    return this.isHeroVisible(w) && this.character.mana >= mana_cost[this.character.weaponId] && this.character.m_reload === 0;
   }
 }

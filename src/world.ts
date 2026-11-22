@@ -1,10 +1,8 @@
 import {
   Vec2, add, mul, sub, vec2Dist, vec2Normalized,
   rect, rectContains, rectIntersects,
-  Rect, SolidProvider,
   Entity, newEntity, ID,
 } from "./types.ts";
-import {GameMap} from "./map.ts";
 import {Bot} from "./bot.ts";
 import {Character} from "./character.ts";
 import {Field, FIELD_CELL} from "./field.ts";
@@ -30,11 +28,10 @@ const BULLET_TRAIL = {radius: 8, power: 0.2};
 const GRENADE_VORTEX_TRAIL = {radius: 42, strength: 0.45};
 
 export class World {
-  map: GameMap;
   field: Field;
-  // static geometry composed with temporary wave-solids
-  solid: SolidProvider;
   showVectors = true;
+
+  private m_markedPoints: Map<string, Vec2> = new Map();
 
   private isKeyPressed = new Set<string>();
   mousePressed = false;
@@ -50,11 +47,7 @@ export class World {
   component_weapon: Map<Entity, ComponentWeapon> = new Map();
 
   constructor() {
-    this.map = new GameMap();
-    this.field = new Field(this.map.rects);
-    this.solid = {
-      isFilledRect: (r: Rect) => this.map.isFilledRect(r) || this.field.isSolidRect(r),
-    };
+    this.field = new Field();
     this.player = new Character(player_spawn, "player");
     this.bot = new Bot(bot_spawn);
   }
@@ -90,6 +83,17 @@ export class World {
 
   mouse_released(): void {
     this.mousePressed = false;
+  }
+
+  setMarkedPoint(name: string, p: Vec2): void {
+    this.m_markedPoints.set(name, p);
+  }
+
+  getMarkedPoint(name: string): Vec2 {
+    const p = this.m_markedPoints.get(name);
+    if (!p)
+      throw new Error(`marked point "${name}" not found`);
+    return p;
   }
 
   update(): void {
@@ -162,7 +166,7 @@ export class World {
         if (
           c.pos.x < -200 || c.pos.x > 640+200 ||
           c.pos.y < -200 || c.pos.y > 480+200 ||
-          this.solid.isFilledRect(rect(c.pos, 1, 1))
+          this.field.isSolidRect(rect(c.pos, 1, 1))
         ) {
           if (!this.component_delete.has(eid))
             this.weaponBlast(c.pos, WeaponType.Bullet);
@@ -195,12 +199,12 @@ export class World {
         c.pos = add(c.pos, c.speed);
 
         const bb = rect(c.pos, 30, 30);
-        if ((c.pos.x < -200 || c.pos.x > 640+200 || c.pos.y < -200 || c.pos.y > 480+200 || this.solid.isFilledRect(bb)) && c.counter === -1) {
+        if ((c.pos.x < -200 || c.pos.x > 640+200 || c.pos.y < -200 || c.pos.y > 480+200 || this.field.isSolidRect(bb)) && c.counter === -1) {
           c.pos = sub(c.pos, c.speed);
           c.speed = mul(c.speed, 0.01);
           let tries = 1000;
           const sz = 30;
-          while (tries > 0 && !this.solid.isFilledRect(rect(add(add(c.pos, c.speed), { x: 15 - sz / 2, y: 15 - sz / 2 }), sz, sz))) {
+          while (tries > 0 && !this.field.isSolidRect(rect(add(add(c.pos, c.speed), { x: 15 - sz / 2, y: 15 - sz / 2 }), sz, sz))) {
             c.pos = add(c.pos, c.speed);
             tries--;
           }
@@ -242,7 +246,7 @@ export class World {
         } break;
         case WeaponType.Laser: {
           const eid = newEntity();
-          const dir = sub(calcEnd(c.target, c.pos, this.map), c.pos);
+          const dir = sub(calcEnd(c.target, c.pos, this.field), c.pos);
           this.component_laser.set(eid, {
             pos: c.pos,
             dir: dir,
@@ -269,8 +273,8 @@ export class World {
 
     this.field.tick();
 
-    this.player.update(this.solid, this.field);
-    this.map.setMarkedPoint("player", this.player.m_coord);
+    this.player.update(this.field);
+    this.setMarkedPoint("player", this.player.m_coord);
     this.bot.update(this);
     // characters that leave the world (flying over a side wall and falling
     // out) return to their initial position

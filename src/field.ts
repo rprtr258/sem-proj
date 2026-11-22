@@ -1,6 +1,18 @@
-import {Rect, Vec2} from "./types.ts";
+import {Rect, Vec2, rect} from "./types.ts";
 
-// Field covers the whole playable area (map walls included) plus a margin
+// static terrain: the density field is the only collision geometry, so the
+// walls and platforms live here as base density
+const TERRAIN: readonly Rect[] = [
+  rect({x: -40, y:   0}, 20, 480),  // left wall
+  rect({x: 660, y:   0}, 20, 480),  // right wall
+  rect({x: -40, y: 460}, 680, 20),  // bottom wall
+  rect({x: -20, y: 274}, 188, 10),  // left platform
+  rect({x: 473, y: 274}, 187, 10),  // right platform
+  rect({x: 256, y: 113}, 128, 20),  // top platform
+  rect({x: 310, y: 132}, 20, 150),  // central platform
+];
+
+// Field covers the whole playable area plus a margin
 export const FIELD_ORIGIN = {x: -40, y: 0};
 export const FIELD_CELL = 4;
 export const FIELD_COLS = 180; // -40..680 px
@@ -29,7 +41,7 @@ export class Field {
   private nextVelX: Float32Array;
   private nextVelY: Float32Array;
 
-  constructor(walls: readonly Rect[]) {
+  constructor() {
     const size = FIELD_COLS * FIELD_ROWS;
     this.baseDensity = new Float32Array(size);
     this.waveCurr = new Float32Array(size);
@@ -40,7 +52,7 @@ export class Field {
     this.nextVelX = new Float32Array(size);
     this.nextVelY = new Float32Array(size);
 
-    for (const r of walls) {
+    for (const r of TERRAIN) {
       const x0 = Math.max(0, Math.floor((r.x - FIELD_ORIGIN.x) / FIELD_CELL));
       const x1 = Math.min(FIELD_COLS - 1, Math.floor((r.x + r.w - FIELD_ORIGIN.x) / FIELD_CELL));
       const y0 = Math.max(0, Math.floor((r.y - FIELD_ORIGIN.y) / FIELD_CELL));
@@ -49,6 +61,8 @@ export class Field {
         for (let x = x0; x <= x1; x++)
           this.baseDensity[y * FIELD_COLS + x] = 1;
     }
+    // tick() never touches border cells; seed them so solidity holds there too
+    this.totalDensity.set(this.baseDensity);
   }
 
   get waveField(): Float32Array { return this.waveCurr; }
@@ -180,6 +194,15 @@ export class Field {
         if (this.totalDensity[y * FIELD_COLS + x] >= FIELD_SOLID_THRESHOLD)
           return true;
     return false;
+  }
+
+  // point query for raycasts (laser aim, bot line-of-sight)
+  isSolid(p: Vec2): boolean {
+    const gx = Math.floor((p.x - FIELD_ORIGIN.x) / FIELD_CELL);
+    const gy = Math.floor((p.y - FIELD_ORIGIN.y) / FIELD_CELL);
+    if (gx < 0 || gx >= FIELD_COLS || gy < 0 || gy >= FIELD_ROWS)
+      return false;
+    return this.totalDensity[gy * FIELD_COLS + gx] >= FIELD_SOLID_THRESHOLD;
   }
 
   tick(): void {
