@@ -5,7 +5,7 @@ import {
   FIELD_SOLID_THRESHOLD, MAT_WATER, MAT_ICE, MAT_STEAM,
 } from "./field.ts";
 import {ARCHETYPES} from "./enemies.ts";
-import {SPELLS} from "./spells.ts";
+import {spellIconImage} from "./icons.ts";
 import {t} from "./i18n.ts";
 
 export const GAME_W = 960;
@@ -265,10 +265,14 @@ export class Renderer {
       ctx.fillRect(x, y, 36, 36);
       const spellId = wand.slots[s];
       if (spellId) {
-        const def = SPELLS.find(sp => sp.id === spellId)!;
-        ctx.fillStyle = s === wand.cursor ? "#ffe080" : "#eee";
-        ctx.font = "16px serif";
-        ctx.fillText(def.rune, x + 13, y + 24);
+        const icon = spellIconImage(spellId);
+        if (icon.complete && icon.naturalWidth > 0) {
+          ctx.drawImage(icon, x + 6, y + 6, 24, 24);
+          if (s === wand.cursor) {
+            ctx.fillStyle = "rgba(255,224,128,0.18)";
+            ctx.fillRect(x + 1, y + 1, 34, 34);
+          }
+        }
       }
       ctx.strokeStyle = s === wand.cursor ? "#ffe080" : "#666";
       ctx.strokeRect(x + 0.5, y + 0.5, 35, 35);

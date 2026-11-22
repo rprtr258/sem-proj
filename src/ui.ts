@@ -1,6 +1,7 @@
 import {RunState, Wand} from "./wand.ts";
 import {Shop, ShopCard} from "./shop.ts";
 import {spellById} from "./spells.ts";
+import {spellIconSvg} from "./icons.ts";
 import {encodeBuild, decodeBuild, importPrice} from "./buildcode.ts";
 import {t, pick, getLang, setLang, Lang} from "./i18n.ts";
 
@@ -171,6 +172,7 @@ export class Ui {
       const s = spellById(card.spellId)!;
       return `
         <div class="card" data-buy="${i}">
+          ${spellIconSvg(card.spellId)}
           <div class="spellname">${pick(s.name)}</div>
           <div class="dim">[${s.rarity}]</div>
           <div class="price">◉ ${card.price}</div>
@@ -179,7 +181,7 @@ export class Ui {
     }
     return `
       <div class="card wandcard" data-buy="${i}">
-        <div class="rune">杖</div>
+        ${spellIconSvg("wand")}
         <div><b>${t("hub.tabAssembly")}</b></div>
         <div>${card.size} ${t("shop.wandSlots")}</div>
         <div class="price">◉ ${card.price}</div>
@@ -209,7 +211,7 @@ export class Ui {
   private wandHtml(run: RunState, w: Wand, wandIdx: number): string {
     const slots = w.slots.map((spellId, slot) => `
       <div class="slot" data-wand="${wandIdx}" data-slot="${slot}">
-        ${spellId ? `<span class="rune" draggable="false" data-spell="${spellId}">${spellById(spellId)!.rune}</span>` : ""}
+        ${spellId ? spellIconSvg(spellId) : ""}
       </div>`).join("");
     return `
       <div class="wand ${wandIdx === run.activeWand ? "active" : ""}">
@@ -233,7 +235,7 @@ export class Ui {
           <div class="invitems">
             ${run.inventory.map((it, i) => `
               <div class="invitem" data-inv="${i}">
-                <span class="rune" data-spell="${it.spellId}">${spellById(it.spellId)!.rune}</span>
+                ${spellIconSvg(it.spellId)}
               </div>`).join("")}
           </div>
           <div class="buildcode">
@@ -307,7 +309,7 @@ export class Ui {
     const startGhost = (e: PointerEvent) => {
       ghost = document.createElement("div");
       ghost.className = "ghost";
-      ghost.textContent = spellById(drag!.spellId)!.rune;
+      ghost.innerHTML = spellIconSvg(drag!.spellId);
       document.body.appendChild(ghost);
       moveGhost(e);
       e.preventDefault();
@@ -315,8 +317,8 @@ export class Ui {
     const moveGhost = (ev: Event) => {
       const pe = ev as PointerEvent;
       if (ghost) {
-        ghost.style.left = `${pe.clientX - 16}px`;
-        ghost.style.top = `${pe.clientY - 16}px`;
+        ghost.style.left = `${pe.clientX - 12}px`;
+        ghost.style.top = `${pe.clientY - 12}px`;
       }
     };
 
@@ -356,7 +358,7 @@ export class Ui {
           const s = spellById(it.spellId)!;
           return `
             <div class="invrow" data-row="${i}">
-              <span class="rune">${s.rune}</span>
+              ${spellIconSvg(s.id)}
               <span><b>${pick(s.name)}</b> ${equipped.has(it.spellId) ? `<span class="dim">(${t("inventory.equipped")})</span>` : ""}</span>
               <span class="price">◉ ${Math.round(it.price / 2)}</span>
               <button class="sell mini" data-sell="${i}">${t("inventory.sell")}</button>

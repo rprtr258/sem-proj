@@ -49,7 +49,6 @@ export type SpellDef = {
   rarity: Rarity;
   mana: number; // mana cost per cast (old mana system, no per-slot cooldown)
   friendlyFire: boolean; // direct damage also hits the caster's side
-  rune: string;
   name: {ru: string; en: string};
   desc: {ru: string; en: string};
   cast: (w: SpellWorld, caster: Caster, target: Vec2) => void;
@@ -73,7 +72,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "common",
     mana: 10,
     friendlyFire: false,
-    rune: "О",
     name: {ru: "Сфера сжатия", en: "Compression sphere"},
     desc: {
       ru: "Импульс стягивания в точке курсора: давит врагов к центру и бьёт ударом сжатия.",
@@ -90,7 +88,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "uncommon",
     mana: 14,
     friendlyFire: false,
-    rune: "Ф",
     name: {ru: "Фазовый разряд", en: "Phase discharge"},
     desc: {
       ru: "Три чередующихся импульса стягивания/расталкивания вокруг курсора.",
@@ -106,7 +103,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "uncommon",
     mana: 16,
     friendlyFire: false,
-    rune: "В",
     name: {ru: "Вихрь", en: "Vortex"},
     desc: {
       ru: "Торнадо в точке курсора на ~1.5с: закручивает воздух, поднимает и швыряет врагов.",
@@ -122,7 +118,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "rare",
     mana: 20,
     friendlyFire: false,
-    rune: "У",
     name: {ru: "Ударная волна", en: "Shockwave"},
     desc: {
       ru: "Кольцо давления вокруг мага: отбрасывает и контузит всех рядом.",
@@ -140,7 +135,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "common",
     mana: 8,
     friendlyFire: true,
-    rune: "И",
     name: {ru: "Искра", en: "Spark"},
     desc: {
       ru: "Разгорячённый сгусток: поджигает воздух в точке попадания (жжёт и вас тоже).",
@@ -168,7 +162,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "uncommon",
     mana: 12,
     friendlyFire: true,
-    rune: "Л",
     name: {ru: "Ледяная игла", en: "Ice needle"},
     desc: {
       ru: "Холодная игла: замораживает воду в лёд-платформы и замедляет врагов.",
@@ -196,7 +189,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "rare",
     mana: 18,
     friendlyFire: true,
-    rune: "Т",
     name: {ru: "Тепловой насос", en: "Heat pump"},
     desc: {
       ru: "2с качает тепло из зоны у курсора к магу: заморозка местности, жар вокруг вас.",
@@ -212,7 +204,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "epic",
     mana: 24,
     friendlyFire: true,
-    rune: "П",
     name: {ru: "Паровой взрыв", en: "Steam blast"},
     desc: {
       ru: "Мощнее у воды: мгновенно испаряет её, взрыв пара жжёт ВСЁ вокруг, включая вас.",
@@ -234,7 +225,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "common",
     mana: 10,
     friendlyFire: false,
-    rune: "П",
     name: {ru: "Пуля", en: "Bullet"},
     desc: {
       ru: "Быстрая пуля по прямой, слегка толкает воздух за собой.",
@@ -262,7 +252,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "uncommon",
     mana: 30,
     friendlyFire: false,
-    rune: "Л",
     name: {ru: "Лазер", en: "Laser"},
     desc: {
       ru: "Мгновенный луч по прямой до препятствия, тянет воздух вдоль луча.",
@@ -290,7 +279,6 @@ export const SPELLS: SpellDef[] = [
     rarity: "rare",
     mana: 20,
     friendlyFire: false,
-    rune: "Г",
     name: {ru: "Граната", en: "Grenade"},
     desc: {
       ru: "Граната по параболе: взрыв с торнадо-импульсом, сильный отброс.",
